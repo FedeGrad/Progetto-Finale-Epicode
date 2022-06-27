@@ -33,7 +33,7 @@ public class Comune {
 	private Long id;
 	private String nome;
 	private String cap;
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@ManyToOne(cascade = { CascadeType.MERGE})
 //	 @ManyToOne
 	@JoinColumn(name = "id_provincia")
 	private Provincia provincia;

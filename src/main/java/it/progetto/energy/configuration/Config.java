@@ -3,6 +3,7 @@ package it.progetto.energy.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -19,6 +20,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Configuration
+@EnableAsync
 @OpenAPIDefinition
 @SecurityScheme(
 		name = "bearerAuth",

@@ -25,6 +25,7 @@ public interface ClienteRepository extends PagingAndSortingRepository<Cliente, L
 
 	public Page<Cliente> findByNomeContattoAllIgnoreCase(String nomeContatto, Pageable page);
 	public Page<Cliente> findByNomeContattoContainingAllIgnoreCase(String nomeContatto, Pageable page);
+	public List<Cliente> findByNomeContattoContains(String nome);
 
 	public List<Cliente> findByFatturatoAnnuale(Double fatturatoAnnuale);
 	public Page<Cliente> findByFatturatoAnnuale(Double fatturatoAnnuale, Pageable page);

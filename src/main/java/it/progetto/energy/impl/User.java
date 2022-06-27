@@ -44,11 +44,9 @@ public class User {
 	@Size(max = 120)
 	private String password;
 	
-	@NotBlank
 	@Size(max = 120)
 	private String nome;
 	
-	@NotBlank
 	@Size(max = 120)
 	private String cognome;
 	
@@ -59,15 +57,16 @@ public class User {
 	private boolean accountAttivo = false;
 	
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST} )
-	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST } )
+	@JoinTable(name = "user_roles", 
+	joinColumns = @JoinColumn(name = "user_id"), 
+	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<Role>();
 	
-	public User(Long id, @NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 120) String password,
+	public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 120) String password,
 				@NotBlank @Size(max = 120) String email, @NotBlank @Size(max = 120) String nome, 
 				@NotBlank @Size(max = 120) String cognome) {
 		super();
-		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.nome =nome;

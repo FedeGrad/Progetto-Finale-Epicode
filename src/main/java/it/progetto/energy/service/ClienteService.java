@@ -171,8 +171,10 @@ public class ClienteService {
 	 */
 	public void inserisciCliente(ClienteDTO dto) throws WrongInsertException {
 		Cliente cliente = new Cliente();
+		cliente.setDataDiNascita(dto.getDataDiNascita());
 		cliente.setDataInserimento(LocalDate.now());
 		cliente.setDataUltimoContatto(LocalDate.now());
+		cliente.setAnni(Period.between(cliente.getDataDiNascita(), LocalDate.now()).getYears());
 		switch (dto.getTipologia().toUpperCase()) {
 			case "PA":
 				cliente.setTipologia(Tipologia.PA);
@@ -278,16 +280,17 @@ public class ClienteService {
 		}
 	}
 	
-	public void aggiornaDataNascita() {
-		List<Cliente> clienti = (List<Cliente>) clienteRepo.findAll();
-		for (Cliente cliente : clienti) {
-			cliente.setAnni(Period.between(LocalDate.now(), cliente.getDataDiNascita()));
-			clienteRepo.save(cliente);
-		}
-		try {
-			Thread.sleep(2000l);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
+//	public void aggiornaDataNascita() {
+//		List<Cliente> clienti = (List<Cliente>) clienteRepo.findAll();
+//		for (Cliente cliente : clienti) {
+//			cliente.setAnni(Period.between(LocalDate.now(), cliente.getDataDiNascita()).getYears());
+//			clienteRepo.save(cliente);
+//		}
+//		try {
+//			Thread.sleep(2000l);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
 }

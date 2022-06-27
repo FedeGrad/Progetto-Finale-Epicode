@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.Constraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -42,7 +43,7 @@ public class Cliente {
 	private String partitaIva;
 	private String email;
 	private LocalDate dataDiNascita;
-	private Period anni;
+	private int anni;
 	private LocalDate dataInserimento;
 	private LocalDate dataUltimoContatto;
 	private BigDecimal fatturatoAnnuale;
@@ -56,11 +57,11 @@ public class Cliente {
 	private String telefonoContatto;
 	// @JsonIgnore
 	// @ToStringExclude
-	@OneToOne(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@OneToOne(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.PERSIST})
 	private IndirizzoOperativo indirizzoOperativo;
 	// @JsonIgnore
 	// @ToStringExclude
-	@OneToOne(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@OneToOne(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.PERSIST})
 	private IndirizzoLegale indirizzoLegale;
 	@JsonIgnore
 	@ToStringExclude

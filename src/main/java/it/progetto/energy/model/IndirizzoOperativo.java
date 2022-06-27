@@ -35,12 +35,12 @@ public class IndirizzoOperativo {
 	private String cap;
 	@JsonIgnore
 	@ToStringExclude
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@ManyToOne(cascade = { CascadeType.MERGE })
 	// @ManyToOne
 	@JoinColumn(name = "id_comune", referencedColumnName = "id")
 	private Comune comune;
 	@JsonIgnore
-	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE })
 	private Cliente cliente;
 
 }
