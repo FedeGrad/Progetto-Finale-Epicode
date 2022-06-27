@@ -1,6 +1,7 @@
 package it.progetto.energy.service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -276,5 +277,17 @@ public class ClienteService {
 			throw new NotFoundException("Il Cliente id" + id + " non esiste");
 		}
 	}
+	
+	public void aggiornaDataNascita() {
+		List<Cliente> clienti = (List<Cliente>) clienteRepo.findAll();
+		for (Cliente cliente : clienti) {
+			cliente.setAnni(Period.between(LocalDate.now(), cliente.getDataDiNascita()));
+			clienteRepo.save(cliente);
+		}
+		try {
+			Thread.sleep(2000l);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 }

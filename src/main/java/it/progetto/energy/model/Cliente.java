@@ -3,6 +3,7 @@ package it.progetto.energy.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,8 @@ public class Cliente {
 	private String ragioneSociale;
 	private String partitaIva;
 	private String email;
+	private LocalDate dataDiNascita;
+	private Period anni;
 	private LocalDate dataInserimento;
 	private LocalDate dataUltimoContatto;
 	private BigDecimal fatturatoAnnuale;

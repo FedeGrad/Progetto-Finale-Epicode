@@ -8,7 +8,7 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -58,11 +58,12 @@ public class ClienteDTO {
 	@NotBlank
 	@Schema(example = " ", type = "string")
 	private String cognomeContatto;
+	@Schema(example = "20/01/2000", type = "string")
+	@JsonFormat(pattern = DATE_PATTERN)
+	private LocalDate dataDiNascita;
 	@Schema(example = "0000000000", type = "string")
 	private String telefonoContatto;
 	private Long iDindirizzoOperativo;
 	private Long iDindirizzoLegale;
 	
-	
-
 }
