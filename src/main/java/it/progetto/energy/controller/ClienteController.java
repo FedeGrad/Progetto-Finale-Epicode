@@ -19,6 +19,7 @@ import org.webjars.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.ClienteDTO;
 import it.progetto.energy.dto.ClienteModificaDTO;
 import it.progetto.energy.dto.DataDTO;
@@ -33,8 +34,10 @@ import lombok.Data;
 @RequestMapping("/cliente")
 //@Data
 //@AllArgsConstructor
+@Tag(name = "Controller Cliente", description = "Gestione dei clienti")
 public class ClienteController {
 
+	
 	@Autowired
 	ClienteService clienteServ;
 	@Autowired
