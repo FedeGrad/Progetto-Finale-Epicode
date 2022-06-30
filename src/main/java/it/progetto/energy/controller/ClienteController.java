@@ -37,7 +37,6 @@ import lombok.Data;
 @Tag(name = "Controller Cliente", description = "Gestione dei clienti")
 public class ClienteController {
 
-	
 	@Autowired
 	ClienteService clienteServ;
 	@Autowired
@@ -48,7 +47,7 @@ public class ClienteController {
 	@ApiResponse(responseCode = "404", description = "Nessuna Cliente trovato")
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping
+	@GetMapping("/")
 	public ResponseEntity getAllClienti() {
 		return ResponseEntity.ok(clienteServ.getAllClienti());
 	}
@@ -112,7 +111,7 @@ public class ClienteController {
 	public ResponseEntity getClienteByProvincia(@RequestBody RicercaProvinciaDTO dto) {
 		return ResponseEntity.ok(clienteServ.getClientiByProvincia(dto));
 	}
-
+	
 	@Operation(summary = "inserisce un Cliente nel sistema", description = "inserisce un Cliente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Cliente inserito correttamente")
 	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.UserDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.impl.Role;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@Tag(name = "Controller User", description = "Gestione User e accessi")
 public class UserRuoliService {
 
 	@Autowired

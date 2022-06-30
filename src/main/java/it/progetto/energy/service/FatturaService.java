@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.FatturaDTO;
 import it.progetto.energy.dto.FatturaModificaDTO;
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 //@Data
 //@AllArgsConstructor
 @Slf4j
+@Tag(name = "Controller Fattura", description = "Gestione delle fatture")
 public class FatturaService {
 
 	@Autowired
@@ -154,7 +156,7 @@ public class FatturaService {
 	 */
 	public void modificaFattura(FatturaModificaDTO dto) throws NotFoundException {
 		if (fatturaRepo.existsById(dto.getIdFattura())) {
-			Fattura fattura = new Fattura();
+			Fattura fattura = fatturaRepo.findById(dto.getIdFattura()).get();
 			String stato = dto.getStato();
 			switch (stato.toUpperCase()) {
 				case "PAGATA ":

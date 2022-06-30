@@ -16,67 +16,65 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public abstract class BasicTests {
 
-	  @LocalServerPort
-	    protected int port;
+	@LocalServerPort
+	protected int port;
 
-	    @Autowired
-	    protected TestRestTemplate restTemplate;
+	@Autowired
+	protected TestRestTemplate restTemplate;
 
-	    protected abstract String getEntryPoint();
-	    
-		protected String getAdminToken() {
-			String url = "http://localhost:" + port + "/api/auth/login/jwt";
-			LoginRequest login = new LoginRequest();
-			login.setUserName("federico");
-			login.setPassword("fox");
-			log.info("---------------------"+login);
-			HttpEntity<LoginRequest> loginRequest = new HttpEntity<LoginRequest>(login);
-			String jwt = restTemplate.postForObject(url, loginRequest, String.class);
-			log.info("---------------------"+jwt);
-			return jwt;
-		}
-		
-		protected String getUserToken() {
-			String url = "http://localhost:" + port + "/api/auth/login/jwt";
-			LoginRequest login = new LoginRequest();
-			login.setUserName("ilCane");
-			login.setPassword("fox");
-			log.info("---------------------"+login);
-			HttpEntity<LoginRequest> loginRequest = new HttpEntity<LoginRequest>(login);
-			String jwt = restTemplate.postForObject(url, loginRequest, String.class);
-			log.info("---------------------"+jwt);
-			return jwt;
-		}
-		
-		protected HttpHeaders getAdminHeader() {
-			HttpHeaders header = new HttpHeaders();
-			String jwt = getAdminToken();
-			header.set("Authorization", "Bearer " + jwt);
-			return header;
-		}
+	protected abstract String getEntryPoint();
 
-		protected HttpHeaders getUserHeader() {
-			HttpHeaders header = new HttpHeaders();
-			String jwt = getUserToken();
-			header.set("Authorization", "Bearer " + jwt);
-			return header;
-		}
+	protected String getAdminToken() {
+		String url = "http://localhost:" + port + "/api/auth/login/jwt";
+		LoginRequest login = new LoginRequest();
+		login.setUserName("federico");
+		login.setPassword("fox");
+		log.info("---------------------" + login);
+		HttpEntity<LoginRequest> loginRequest = new HttpEntity<LoginRequest>(login);
+		String jwt = restTemplate.postForObject(url, loginRequest, String.class);
+		log.info("---------------------" + jwt);
+		return jwt;
+	}
 
-	    protected HttpEntity getUnauthorizedEntity() {
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.set("Authorization", "");
-	        HttpEntity<String> jwtEntity = new HttpEntity<String>(headers);
-	        return jwtEntity;
-	    }
+	protected String getUserToken() {
+		String url = "http://localhost:" + port + "/api/auth/login/jwt";
+		LoginRequest login = new LoginRequest();
+		login.setUserName("user");
+		login.setPassword("123");
+		log.info("---------------------" + login);
+		HttpEntity<LoginRequest> loginRequest = new HttpEntity<LoginRequest>(login);
+		String jwt = restTemplate.postForObject(url, loginRequest, String.class);
+		log.info("---------------------" + jwt);
+		return jwt;
+	}
 
-	    protected HttpEntity getAuthorizedEntity() {
-	        String jwt = getAdminToken();
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.set("Authorization", "Bearer " + jwt);
-	        HttpEntity<String> jwtEntity = new HttpEntity<String>(headers);
-	        return jwtEntity;
-	    }
+	protected HttpHeaders getAdminHeader() {
+		HttpHeaders header = new HttpHeaders();
+		String jwt = getAdminToken();
+		header.set("Authorization", "Bearer " + jwt);
+		return header;
+	}
 
-	
-	
+	protected HttpHeaders getUserHeader() {
+		HttpHeaders header = new HttpHeaders();
+		String jwt = getUserToken();
+		header.set("Authorization", "Bearer " + jwt);
+		return header;
+	}
+
+	protected HttpEntity getUnauthorizedEntity() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "");
+		HttpEntity<String> jwtEntity = new HttpEntity<String>(headers);
+		return jwtEntity;
+	}
+
+	protected HttpEntity getAuthorizedEntity() {
+		String jwt = getAdminToken();
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer " + jwt);
+		HttpEntity<String> jwtEntity = new HttpEntity<String>(headers);
+		return jwtEntity;
+	}
+
 }

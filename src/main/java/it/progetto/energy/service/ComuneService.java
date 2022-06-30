@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.ComuneDTO;
 import it.progetto.energy.dto.ComuneModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 //@Data
 //@AllArgsConstructor
 @Slf4j
+@Tag(name = "Controller Comune", description = "Gestione dei comuni")
 public class ComuneService {
 	@Autowired
 	ComuneRepository comuneRepo;

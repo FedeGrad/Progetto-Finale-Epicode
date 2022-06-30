@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.ProvinciaDTO;
 import it.progetto.energy.dto.ProvinciaModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 //@Data
 //@AllArgsConstructor
 @Slf4j
+@Tag(name = "Controller Provincia", description = "Gestione delle Province")
 public class ProvinciaService {
 
 	@Autowired

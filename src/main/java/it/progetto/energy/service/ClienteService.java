@@ -195,8 +195,6 @@ public class ClienteService {
 		} else {
 			throw new WrongInsertException("Errore inserimento dati");
 		}
-		// BeanUtils.copyProperties(dto, cliente);
-		// clienteRepo.save(cliente);
 		log.info("Il Cliente inserito in data: " + cliente.getDataInserimento() + " è stato salvato");
 		IndirizzoLegale indirizzoLegtrovato = indirizzoLegServ.associaIndirizzoLegale(dto.getIDindirizzoLegale());
 		cliente.setIndirizzoLegale(indirizzoLegtrovato);
@@ -279,18 +277,5 @@ public class ClienteService {
 			throw new NotFoundException("Il Cliente id" + id + " non esiste");
 		}
 	}
-	
-//	public void aggiornaDataNascita() {
-//		List<Cliente> clienti = (List<Cliente>) clienteRepo.findAll();
-//		for (Cliente cliente : clienti) {
-//			cliente.setAnni(Period.between(LocalDate.now(), cliente.getDataDiNascita()).getYears());
-//			clienteRepo.save(cliente);
-//		}
-//		try {
-//			Thread.sleep(2000l);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//	}
 	
 }

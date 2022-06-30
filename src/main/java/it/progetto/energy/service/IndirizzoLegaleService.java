@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.IndirizzoDTO;
 import it.progetto.energy.dto.IndirizzoModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 //@Data
 //@AllArgsConstructor
 @Slf4j
+@Tag(name = "Controller Indirizzi Legali", description = "Gestione degli indirizzi legali")
 public class IndirizzoLegaleService {
 
 	@Autowired
