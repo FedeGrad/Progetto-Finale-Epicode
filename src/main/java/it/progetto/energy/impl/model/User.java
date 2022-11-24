@@ -1,4 +1,4 @@
-package it.progetto.energy.impl;
+package it.progetto.energy.impl.model;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -55,16 +55,15 @@ public class User {
 	private String email;
 	
 	private boolean accountAttivo = false;
-	
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST } )
 	@JoinTable(name = "user_roles", 
 	joinColumns = @JoinColumn(name = "user_id"), 
 	inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<Role>();
+	private Set<RoleAccess> roles = new HashSet<RoleAccess>();
 	
 	public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 120) String password,
-				@NotBlank @Size(max = 120) String email, @NotBlank @Size(max = 120) String nome, 
+				@NotBlank @Size(max = 120) String email, @NotBlank @Size(max = 120) String nome,
 				@NotBlank @Size(max = 120) String cognome) {
 		super();
 		this.username = username;

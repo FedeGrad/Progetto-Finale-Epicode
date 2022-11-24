@@ -26,6 +26,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.EntityManager;
+
 @Service
 //@Data
 //@AllArgsConstructor
@@ -169,7 +171,7 @@ public class ClienteService {
 	 * @param dto
 	 * @throws WrongInsertException
 	 */
-	public void inserisciCliente(ClienteDTO dto) throws WrongInsertException {
+	public long inserisciCliente(ClienteDTO dto) throws WrongInsertException {
 		Cliente cliente = new Cliente();
 		cliente.setDataDiNascita(dto.getDataDiNascita());
 		cliente.setDataInserimento(LocalDate.now());
@@ -207,6 +209,7 @@ public class ClienteService {
 		log.info("Indirizzo Operativo associato");
 		clienteRepo.save(cliente);
 		log.info(cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " salvato");
+		return cliente.getId();
 	}
 
 	/**

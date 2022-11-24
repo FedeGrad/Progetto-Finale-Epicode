@@ -1,5 +1,6 @@
 package it.progetto.energy.model;
 
+import java.io.File;
 import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jdk.jfr.Percentage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,9 +36,17 @@ public class Fattura {
 	private LocalDate data;
 	private Double importo;
 	private Integer numero;
+	private File file;
+	private Double importoIVA;
+	@Percentage
+	private Double percentualeIVA;
+	private Double importoSconto;
+	@Percentage
+	private Double percentualeSconto;
+
 	@Enumerated(EnumType.STRING)
 	private StatoFattura stato;
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH  })
 	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 

@@ -1,4 +1,4 @@
-package it.progetto.energy.impl;
+package it.progetto.energy.impl.dto;
 
 import java.util.List;
 

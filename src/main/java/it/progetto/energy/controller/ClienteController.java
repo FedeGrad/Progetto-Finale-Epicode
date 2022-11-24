@@ -119,8 +119,8 @@ public class ClienteController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity inserisciCliente(@Valid @RequestBody ClienteDTO dto) throws WrongInsertException {
-		clienteServ.inserisciCliente(dto);
-		return ResponseEntity.ok("Cliente inserito");
+		Long idClienteInserito = clienteServ.inserisciCliente(dto);
+		return ResponseEntity.ok("Cliente inserito, iD n° " + idClienteInserito);
 	}
 
 	@Operation(summary = "Modifica un Cliente nel sistema", description = "")

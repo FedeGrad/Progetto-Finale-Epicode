@@ -1,26 +1,25 @@
 package it.progetto.energy.service;
 
-import java.time.LocalDate;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
+import it.progetto.energy.dto.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.FatturaDTO;
-import it.progetto.energy.dto.FatturaModificaDTO;
-import it.progetto.energy.dto.RangeDTO;
 import it.progetto.energy.model.Cliente;
 import it.progetto.energy.model.Fattura;
 import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.repository.FatturaRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -28,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 //@AllArgsConstructor
 @Slf4j
 @Tag(name = "Controller Fattura", description = "Gestione delle fatture")
-public class FatturaService {
+public class FatturaService extends FileService{
 
 	@Autowired
 	FatturaRepository fatturaRepo;
@@ -37,7 +36,7 @@ public class FatturaService {
 
 	/**
 	 * Recupera tutte le fatture
-	 * 
+	 *
 	 * @deprecated
 	 * @return
 	 */
@@ -47,7 +46,7 @@ public class FatturaService {
 
 	/**
 	 * Recupera tutte le fatture, paginate
-	 * 
+	 *
 	 * @param page
 	 * @return
 	 */
@@ -57,9 +56,8 @@ public class FatturaService {
 
 	/**
 	 * Recupera tutte le fatture di un CLiente
-	 * 
+	 *
 	 * @param idCliente
-	 * @param page
 	 * @return
 	 */
 	public List<Fattura> getFatturaByCliente(Long idCliente) {
@@ -68,7 +66,7 @@ public class FatturaService {
 
 	/**
 	 * Recupera tutte le fatture di un determinato importo
-	 * 
+	 *
 	 * @param dto
 	 * @param page
 	 * @return
@@ -79,7 +77,7 @@ public class FatturaService {
 
 	/**
 	 * Recupera tutte le fatture in un determinato stato
-	 * 
+	 *
 	 * @param stato
 	 * @param page
 	 * @return
@@ -90,7 +88,7 @@ public class FatturaService {
 
 	/**
 	 * Recupera tutte le fatture per data
-	 * 
+	 *
 	 * @param data
 	 * @param page
 	 * @return
@@ -101,7 +99,7 @@ public class FatturaService {
 
 	/**
 	 * Recupera tutte le fatture per anno
-	 * 
+	 *
 	 * @param anno
 	 * @param page
 	 * @return
@@ -112,10 +110,10 @@ public class FatturaService {
 
 	/**
 	 * Inserisce una Fattura nel sistema
-	 * 
+	 *
 	 * @param dto
 	 */
-	public void inserisciFattura(FatturaDTO dto) {
+	public void inserisciFattura(FatturaDTO dto) throws IOException {
 		Fattura fattura = new Fattura();
 		String stato = dto.getStato();
 		switch (stato.toUpperCase()) {
@@ -139,7 +137,7 @@ public class FatturaService {
 				break;
 		}
 		BeanUtils.copyProperties(dto, fattura);
-		// fatturaRepo.save(fattura);
+		Path root = Paths.get("upload");
 		Cliente cliente = clienteServ.associaCliente(dto.getIdCliente());
 		cliente.getFatture().add(fattura);
 		fattura.setCliente(cliente);
@@ -148,9 +146,22 @@ public class FatturaService {
 		log.info("La Fattura è stata salvata");
 	}
 
+	//TODO IMPLEMENTARE
+	public ResponseEntity<?> inserisciFattuaPDF(FatturaPDFDTO fatturaPDFDTO) throws IOException {
+		Path root = Paths.get("upload");
+		File file = new File(root.toUri());
+		fatturaPDFDTO.getFileFattura().transferTo(file);
+		Fattura fattura = fatturaRepo.findById(fatturaPDFDTO.getIdFattura()).get();
+		fattura.setFile(file);
+		save(fatturaPDFDTO.getFileFattura());
+		log.info("CV SALVATO");
+
+		return ResponseEntity.ok().build();
+	}
+
 	/**
 	 * Modifica una Fattura
-	 * 
+	 *
 	 * @param dto
 	 * @throws NotFoundException
 	 */
@@ -193,7 +204,7 @@ public class FatturaService {
 
 	/**
 	 * Elimina una Fattura
-	 * 
+	 *
 	 * @param id
 	 */
 	public void eliminaFattura(Long id) {

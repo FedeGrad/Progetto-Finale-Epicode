@@ -15,10 +15,10 @@ import org.webjars.NotFoundException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.UserDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.impl.Role;
-import it.progetto.energy.impl.RoleRepository;
-import it.progetto.energy.impl.User;
-import it.progetto.energy.impl.UserRepository;
+import it.progetto.energy.impl.model.RoleAccess;
+import it.progetto.energy.impl.repository.RoleAccessRepository;
+import it.progetto.energy.impl.model.User;
+import it.progetto.energy.impl.repository.UserAccessRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -27,9 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 public class UserRuoliService {
 
 	@Autowired
-	UserRepository userRepo;
+	UserAccessRepository userRepo;
 	@Autowired
-	RoleRepository roleRepo;
+	RoleAccessRepository roleRepo;
 	@Autowired
 	PasswordEncoder passEnc;
 
@@ -70,10 +70,10 @@ public class UserRuoliService {
 				elencoruoli = "ROLE_USER";
 			}
 			String[] listaRuoli = elencoruoli.split(",");
-			Set<Role> ruoli = new HashSet<Role>();
+			Set<RoleAccess> ruoli = new HashSet<RoleAccess>();
 			log.info("Ruoli: " + elencoruoli);
 			for (int i = 0; i < listaRuoli.length; i++) {
-				Role r = roleRepo.findByRoleName(listaRuoli[i]);
+				RoleAccess r = roleRepo.findByRoleName(listaRuoli[i]);
 				if (r != null) {
 					log.info(r.getRoleName().toString());
 					ruoli.add(r);
@@ -105,10 +105,10 @@ public class UserRuoliService {
 				elencoruoli = "ROLE_USER";
 			}
 			String[] listaRuoli = elencoruoli.split(",");
-			Set<Role> ruoli = new HashSet<Role>();
+			Set<RoleAccess> ruoli = new HashSet<RoleAccess>();
 			log.info("Ruoli: " + elencoruoli);
 			for (int i = 0; i < listaRuoli.length; i++) {
-				Role r = roleRepo.findByRoleName(listaRuoli[i]);
+				RoleAccess r = roleRepo.findByRoleName(listaRuoli[i]);
 				if (r != null) {
 					log.info(r.getRoleName().toString());
 					ruoli.add(r);

@@ -1,10 +1,14 @@
-package it.progetto.energy.impl;
+package it.progetto.energy.impl.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import it.progetto.energy.impl.dto.JwtResponse;
+import it.progetto.energy.impl.utils.JwtUtils;
+import it.progetto.energy.impl.model.LoginRequest;
+import it.progetto.energy.impl.configuration.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +31,7 @@ public class AuthController {
 	@Autowired
 	AuthenticationManager authManager;
 	@Autowired
-	JwtUtils jwtUtils;
+    JwtUtils jwtUtils;
 	
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {

@@ -1,45 +1,17 @@
 package it.progetto.energy.runner;
 
-import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-
-import org.springframework.beans.BeanUtils;
+import it.progetto.energy.model.*;
+import it.progetto.energy.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import it.progetto.energy.csv.ComuneCorrettoCSV;
-import it.progetto.energy.csv.IndirizziCSV;
-import it.progetto.energy.csv.ProvinciaCSV;
-import it.progetto.energy.impl.ERole;
-import it.progetto.energy.impl.Role;
-import it.progetto.energy.impl.RoleRepository;
-import it.progetto.energy.impl.User;
-import it.progetto.energy.impl.UserRepository;
-import it.progetto.energy.model.Cliente;
-import it.progetto.energy.model.Comune;
-import it.progetto.energy.model.IndirizzoLegale;
-import it.progetto.energy.model.IndirizzoOperativo;
-import it.progetto.energy.model.Provincia;
-import it.progetto.energy.repository.ClienteRepository;
-import it.progetto.energy.repository.ComuneRepository;
-import it.progetto.energy.repository.IndirizzoLegaleRepository;
-import it.progetto.energy.repository.IndirizzoOperativoRepository;
-import it.progetto.energy.repository.ProvinciaRepository;
+import it.progetto.energy.impl.repository.RoleAccessRepository;
+import it.progetto.energy.impl.repository.UserAccessRepository;
 import it.progetto.energy.thread.AggiornaAnniThread;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 //@Data
 //@AllArgsConstructor
@@ -47,7 +19,9 @@ import lombok.Data;
 public class Runner implements ApplicationRunner {
 
 	@Autowired
-	ClienteRepository clienteRepo;
+	ClienteRepository clienteRepository;
+	@Autowired
+	FatturaRepository fatturaRepository;
 	@Autowired
 	ComuneRepository comuneRepo;
 	@Autowired
@@ -57,20 +31,28 @@ public class Runner implements ApplicationRunner {
 	@Autowired
 	IndirizzoOperativoRepository indiOpRepo;
 	@Autowired
-	UserRepository userRepo;
+	UserAccessRepository userRepo;
 	@Autowired
 	PasswordEncoder passEncod;
 	@Autowired
-	RoleRepository roleRepo;
+	RoleAccessRepository roleRepo;
 	@Autowired
-	@Qualifier("legaleUno")
-	IndirizzoLegale indirizzoLegUno;
+	@Qualifier("clienteDefault")
+	Cliente cliente;
+
+	@Autowired
+	@Qualifier("fatturaDefault")
+	Fattura fattura;
 
 	AggiornaAnniThread thread = new AggiornaAnniThread();
-	
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		
+
+//		clienteRepository.save(cliente);
+//		fatturaRepository.save(fattura);
+
+
 //		thread.run();
 
 		/*
@@ -84,13 +66,13 @@ public class Runner implements ApplicationRunner {
 //		 MappingIterator<List<String>> valueReader2 =
 //		 mapper2.reader(ProvinciaCSV.class).with(ProvinceCSVSchema)
 //		 .readValues(fileProvince);
-//		
+//
 //		 for (Object o : valueReader2.readAll()) {
 //		 Provincia prov = new Provincia();
 //		 BeanUtils.copyProperties(o, prov);
 //		 provinciaRepo.save(prov);
 //		 }
-		
+
 		/*
 		 * IMPORTAZIONE COMUNI
 		 */
@@ -109,7 +91,7 @@ public class Runner implements ApplicationRunner {
 //		 com.setProvincia(provinciaRepo.findBySiglaAllIgnoreCase(comCSV.getSiglaProvincia()));
 //		 comuneRepo.save(com);
 //		 }
-		
+
 		/*
 		 * IMPORTAZIONE INDIRIZZI LEGALI
 		 */
@@ -129,7 +111,7 @@ public class Runner implements ApplicationRunner {
 //		 indiLeg.setComune(comuneRepo.findByNomeAllIgnoreCase(localita));
 //		 indiLegRepo.save(indiLeg);
 //		 }
-		
+
 		/*
 		 * IMPORTAZIONE INDIRIZZI OPERATIVI
 		 */
@@ -148,32 +130,32 @@ public class Runner implements ApplicationRunner {
 //		 indiOp.setComune(comuneRepo.findByNomeAllIgnoreCase(comCSV.getLocalita()));
 //		 indiOpRepo.save(indiOp);
 //		 }
-		
+
 		/*
 		 * INSERIMENTO DELLA PARTE SICUREZZA
 		 */
-//		 Role admin = new Role();
-//		 admin.setRoleName(ERole.ROLE_ADMIN);
-//		 Role user = new Role();
-//		 user.setRoleName(ERole.ROLE_USER);
+//		 RoleAccess admin = new RoleAccess();
+//		 admin.setRoleName(ERoleAccess.ROLE_ADMIN);
+//		 RoleAccess user = new RoleAccess();
+//		 user.setRoleName(ERoleAccess.ROLE_USER);
 //		 User userAdmin = new User();
 //		 User userDefault = new User();
-//		 Set<Role> ruoli = new HashSet();
+//		 Set<RoleAccess> ruoli = new HashSet();
 //		 ruoli.add(admin);
-//		
+//
 //		 userDefault.setUsername("user");
 //		 userDefault.setPassword(BCrypt.hashpw("123", BCrypt.gensalt()));
 //		 userDefault.setEmail("user@libero.it");
 //		 userDefault.getRoles().add(user);
 //		 userDefault.setAccountAttivo(true);
 //		 userRepo.save(userDefault);
-//		
+//
 //		 userAdmin.setRoles(ruoli);
-//		 userAdmin.setNome("federico");
-//		 userAdmin.setCognome("verdi");
-//		 userAdmin.setUsername("federico");
+//		 userAdmin.setNome("Federico");
+//		 userAdmin.setCognome("Gradizzi");
+//		 userAdmin.setUsername("Fedegrad");
 //		 userAdmin.setPassword(passEncod.encode("fox"));
-//		 userAdmin.setEmail("admin@libero.it");
+//		 userAdmin.setEmail("federico.gradizzi@libero.it");
 //		 userAdmin.setAccountAttivo(true);
 //		 userRepo.save(userAdmin);
 

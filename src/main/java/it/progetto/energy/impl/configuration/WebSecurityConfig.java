@@ -1,5 +1,6 @@
-package it.progetto.energy.impl;
+package it.progetto.energy.impl.configuration;
 
+import it.progetto.energy.impl.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,14 +16,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import lombok.extern.slf4j.Slf4j;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 @Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	UserDetailsServiceImpl userDetailsService;
+    UserDetailsServiceImpl userDetailsService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;

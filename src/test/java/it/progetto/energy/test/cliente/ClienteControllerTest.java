@@ -30,7 +30,8 @@ public class ClienteControllerTest extends BasicTests {
 	protected String getEntryPoint() {
 		return "http://localhost:" + port + "/cliente";
 	}
-	
+
+	/**
 	@Test
 	@Order(1)
 	void getAllClienti() {
@@ -45,8 +46,8 @@ public class ClienteControllerTest extends BasicTests {
 		HttpEntity<String> user = new HttpEntity<String>(getUserHeader());
 		response = restTemplate.exchange(url, HttpMethod.GET, user, String.class);
 		assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
-		
+
 	}
-	
+	*/
 
 }

@@ -1,27 +1,23 @@
-package it.progetto.energy.impl;
+package it.progetto.energy.impl.configuration;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import it.progetto.energy.impl.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 public class UserDetailsImpl  implements UserDetails{
 
 	private Long id;
-
 	private String username;
-
 //	private String email;
-
 	@JsonIgnore
 	private String password;
-
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public UserDetailsImpl(Long id, String username, String password,
@@ -30,8 +26,6 @@ public class UserDetailsImpl  implements UserDetails{
 		this.username = username;
 		this.password = password;
 		this.authorities = authorities;
-		
-		
 	}
 
 	public static UserDetailsImpl build(User user) {
@@ -40,7 +34,6 @@ public class UserDetailsImpl  implements UserDetails{
 				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
 				.collect(Collectors.toList());
 
-	
 		return new UserDetailsImpl(
 				user.getId(), 
 				user.getUsername(), 
@@ -56,7 +49,6 @@ public class UserDetailsImpl  implements UserDetails{
 	public Long getId() {
 		return id;
 	}
-
 
 	@Override
 	public String getPassword() {
@@ -87,8 +79,5 @@ public class UserDetailsImpl  implements UserDetails{
 	public boolean isEnabled() {
 		return true;
 	}
-
-
-
 
 }

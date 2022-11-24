@@ -2,14 +2,17 @@ package it.progetto.energy.model;
 
 public enum StatoFattura {
 
-	PAGATA, 
-	NON_PAGATA, 
-	ANNULLATA, 
-	SCADUTA, 
-	DA_RIMBORSARE, 
-	RIMBORSATA;
+	PAGATA("pagata"),
+	NON_PAGATA("non pagata"),
+	ANNULLATA("annullata"),
+	SCADUTA("scaduta"),
+	DA_RIMBORSARE("da rimborsare"),
+	RIMBORSATA("rimborsata");
 
-	private StatoFattura() {
+	String stato;
+
+	private StatoFattura(String stato) {
+		this.stato = stato;
 	}
 
 }

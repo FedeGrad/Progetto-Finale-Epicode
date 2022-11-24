@@ -1,4 +1,4 @@
-package it.progetto.energy.impl;
+package it.progetto.energy.impl.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,12 +20,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="roles")
-public class Role {
+public class RoleAccess {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
-	private ERole roleName;
+	private ERoleAccess roleName;
+
 }

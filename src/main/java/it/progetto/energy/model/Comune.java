@@ -33,8 +33,9 @@ public class Comune {
 	private Long id;
 	private String nome;
 	private String cap;
-	@ManyToOne(cascade = { CascadeType.MERGE})
-//	 @ManyToOne
+	//	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+//	@ManyToOne
 	@JoinColumn(name = "id_provincia")
 	private Provincia provincia;
 	@JsonIgnore

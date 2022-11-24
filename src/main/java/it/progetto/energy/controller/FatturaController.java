@@ -1,32 +1,27 @@
 package it.progetto.energy.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
+import it.progetto.energy.dto.*;
+import it.progetto.energy.service.FileService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.FatturaDTO;
-import it.progetto.energy.dto.FatturaModificaDTO;
-import it.progetto.energy.dto.RangeDTO;
-import it.progetto.energy.dto.StatoDTO;
 import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.repository.FatturaRepository;
@@ -37,8 +32,7 @@ import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/fattura")
-//@Data
-//@AllArgsConstructor
+@Slf4j
 public class FatturaController {
 
 	@Autowired
@@ -83,29 +77,6 @@ public class FatturaController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/getFattureByStato/{stato}")
 	public ResponseEntity getFattureByStato(@RequestBody StatoDTO dto, Pageable page) throws WrongInsertException {
-		// StatoFattura statoF = null;
-		// switch (stato.toUpperCase()) {
-		// case "PAGATA":
-		// statoF = StatoFattura.PAGATA;
-		// break;
-		// case "NON PAGATA":
-		// statoF = StatoFattura.NON_PAGATA;
-		// break;
-		// case "ANNULLATA":
-		// statoF = StatoFattura.ANNULLATA;
-		// break;
-		// case "SCADUTA":
-		// statoF = StatoFattura.SCADUTA;
-		// break;
-		// case "DA RIMBORSARE":
-		// statoF = StatoFattura.DA_RIMBORSARE;
-		// break;
-		// case "RIMBORSATA":
-		// statoF = StatoFattura.RIMBORSATA;
-		// break;
-		// default:
-		// throw new WrongInsertException("errore inserimento");
-		// }
 		StatoFattura statoF = dto.getStato();
 		return ResponseEntity.ok(fatturaServ.getFatturaByStato(statoF, page));
 	}
@@ -141,15 +112,34 @@ public class FatturaController {
 		return ResponseEntity.ok(fatturaServ.getFatturaByImporto(dto, page));
 	}
 
-	@Operation(summary = "inserisce una Fattura nel sistema", description = "inserisce una Fattura nel sistema")
-	@ApiResponse(responseCode = "200", description = "Fattura inserita correttamente")
-	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
+	//TODO DA IMPLEMENTARE
+	@Operation(summary = "crea una Fattura in PDF",
+			description = "inserisci i dati della fattura che verrà creata e aggiunta al DB")
+	@ApiResponse(responseCode = "200", description = "Fattura creata/inserita correttamente")
+	@ApiResponse(responseCode = "500", description = "ERRORE creazione/inserimento")
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping
-	public ResponseEntity inserisciFattura(@Valid @RequestBody FatturaDTO dto) {
+	@PostMapping(value = "/creaFattura",
+			consumes = {MediaType.MULTIPART_MIXED_VALUE})
+	public ResponseEntity<?> creaFattura(@Valid @ModelAttribute FatturaDTO dto) throws IOException {
 		fatturaServ.inserisciFattura(dto);
 		return ResponseEntity.ok("Fattura inserita");
+	}
+
+	//TODO IMPLEMENTARE
+	@Operation(summary = "aggiunge un file fattura",
+			description = "inserisci l'id della fattura pre-creata e il File")
+	@ApiResponse(responseCode = "200", description = "Fattura creata/inserita correttamente")
+	@ApiResponse(responseCode = "500", description = "ERRORE creazione/inserimento")
+	@SecurityRequirement(name = "bearerAuth")
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping(value = "/uploadFattura", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> inserisciFattura(@RequestHeader String token,
+											  @ModelAttribute FatturaPDFDTO fatturaPDFDTO) throws IOException {
+		log.info(token + " " + fatturaPDFDTO.getIdFattura() + " "
+		+ fatturaPDFDTO.getFileFattura().getOriginalFilename());
+		return ResponseEntity.ok().build();
+//				fatturaServ.inserisciFattuaPDF(fatturaPDFDTO);
 	}
 
 	@Operation(summary = "Modifica una Fattura nel sistema", description = "")

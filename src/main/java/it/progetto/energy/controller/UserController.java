@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.progetto.energy.dto.UserDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.impl.UserRepository;
+import it.progetto.energy.impl.repository.UserAccessRepository;
 import it.progetto.energy.service.UserRuoliService;
 
 @RestController
@@ -28,7 +28,7 @@ import it.progetto.energy.service.UserRuoliService;
 public class UserController {
 
 	@Autowired
-	UserRepository userRepo;
+    UserAccessRepository userRepo;
 	@Autowired
 	UserRuoliService userServ;
 

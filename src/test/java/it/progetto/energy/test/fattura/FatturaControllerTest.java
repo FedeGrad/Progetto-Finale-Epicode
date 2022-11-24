@@ -37,6 +37,7 @@ public class FatturaControllerTest extends BasicTests {
 		return "http://localhost:" + port + "/fattura";
 	}
 
+	/**
 	@Test
 	@Order(1)
 	void getAllFatture() {
@@ -53,7 +54,7 @@ public class FatturaControllerTest extends BasicTests {
 		r = restTemplate.exchange(url, HttpMethod.GET, userEntity, String.class);
 		assertThat(r.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
 	}
-
+	*/
 	// @Test
 	// @Order(2)
 	// void inserisciFattura() {

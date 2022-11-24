@@ -34,7 +34,8 @@ public class Provincia {
 	private String regione;
 	@JsonIgnore
 	@ToString.Exclude
-	@OneToMany(mappedBy = "provincia", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@OneToMany(mappedBy = "provincia",
+			cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH })
 	private List<Comune> comuni = new ArrayList<Comune>();
 
 }

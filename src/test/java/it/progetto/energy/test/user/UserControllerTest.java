@@ -7,10 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 
 import it.progetto.energy.BasicTests;
-import it.progetto.energy.impl.LoginRequest;
+import it.progetto.energy.impl.model.LoginRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

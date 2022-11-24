@@ -1,4 +1,4 @@
-package it.progetto.energy.impl;
+package it.progetto.energy.impl.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
+
 	private String userName;
 	private String role;
+
 }

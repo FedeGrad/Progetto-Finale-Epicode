@@ -1,6 +1,5 @@
 package it.progetto.energy;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -9,7 +8,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 
-import it.progetto.energy.impl.LoginRequest;
+import it.progetto.energy.impl.model.LoginRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

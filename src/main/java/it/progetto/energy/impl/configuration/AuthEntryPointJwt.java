@@ -1,4 +1,4 @@
-package it.progetto.energy.impl;
+package it.progetto.energy.impl.configuration;
 
 import java.io.IOException;
 
@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
-
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,

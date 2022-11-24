@@ -1,6 +1,7 @@
 package it.progetto.energy.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,5 +28,6 @@ public interface IndirizzoOperativoRepository extends PagingAndSortingRepository
 
 	public Page<IndirizzoOperativo> findByCap(String cap, Pageable page);
 	public boolean existsByCap(String cap);
+	Optional<IndirizzoOperativo> findById(Long id);
 
 }

@@ -1,9 +1,12 @@
-package it.progetto.energy.impl;
+package it.progetto.energy.impl.utils;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.progetto.energy.impl.configuration.UserDetailsImpl;
+import it.progetto.energy.impl.dto.UserResponse;
+import it.progetto.energy.impl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -22,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtUtils {
 	@Autowired
-	UserService userService;
+    UserService userService;
 	
 	@Value("${application.jwtSecret}")
 	private String jwtSecret;
@@ -68,7 +71,7 @@ public class JwtUtils {
 		} catch (IllegalArgumentException e) {
 			log.error("JWT claims string is empty: {}", e.getMessage());
 		}
-
 		return false;
 	}
+
 }
