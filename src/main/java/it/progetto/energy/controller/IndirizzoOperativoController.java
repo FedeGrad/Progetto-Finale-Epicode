@@ -2,6 +2,7 @@ package it.progetto.energy.controller;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +30,15 @@ import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/indirizzo_operativo")
-//@Data
-//@AllArgsConstructor
+@Tag(name = "Indirizzo Operativo Controller", description = "Gestione degli indirizzi operativi")
 public class IndirizzoOperativoController {
-	@Autowired
-	IndirizzoOperativoRepository indirizzoOpRepo;
+
 	@Autowired
 	IndirizzoOperativoService indirizzoOpServ;
-	
-	@Operation(summary = "Ritorna tutti gli Indirizzi Operativi presenti nel sistema", description = "")
+
+	@Deprecated
+	@Operation(summary = "Ritorno Indirizzi Operativi",
+			description = "Restituisce tutti gli Indirizzi Operativi presenti nel sistema")
 	@ApiResponse(responseCode = "200", description = "Indirizzi Op. trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Indirizzo Op. trovato")
 	@GetMapping
@@ -45,7 +46,8 @@ public class IndirizzoOperativoController {
 		return ResponseEntity.ok(indirizzoOpServ.getAllIndirizziOperativi());
 	}
 
-	@Operation(summary = "Ritorna tutti gli Indirizzi Operativi presenti nel sistema, paginati", description = "")
+	@Operation(summary = "Recupero Indirizzi Operativi per pagina",
+			description = "Restituisce tutti gli Indirizzi Operativi presenti nel sistema per pagina")
 	@ApiResponse(responseCode = "200", description = "Indirizzi Op. trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Indirizzo Op. trovato")
 	@GetMapping("/getIndirizziOpPaginati")
@@ -53,7 +55,8 @@ public class IndirizzoOperativoController {
 		return ResponseEntity.ok(indirizzoOpServ.getAllIndirizziOperativi(page));
 	}
 
-	@Operation(summary = "inserisce un Indirizzo Operativo nel sistema", description = "inserisce un Indirizzo Operativo nel sistema")
+	@Operation(summary = "Inserimento Indirizzo Operativo",
+			description = "Inserisce un Indirizzo Operativo nel sistema")
 	@ApiResponse(responseCode = "200", description = "Indirizzo Op. inserito correttamente nel sistema")
 	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
 	@SecurityRequirement(name = "bearerAuth")
@@ -65,7 +68,8 @@ public class IndirizzoOperativoController {
 		return ResponseEntity.ok("Indirizzo Operativo inserito");
 	}
 
-	@Operation(summary = "Modifica un Indirizzo Operativo nel sistema", description = "")
+	@Operation(summary = "Modifica Indirizzo Operativo",
+			description = "Modifica Indirizzo Operativo presente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Indirizzo Op. modificato")
 	@ApiResponse(responseCode = "404", description = "Indirizzo Op. non trovato")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")
@@ -77,7 +81,8 @@ public class IndirizzoOperativoController {
 		return ResponseEntity.ok("Indirizzo Operativo modificato");
 	}
 
-	@Operation(summary = "Elimina un Indirizzo Operativo nel sistema", description = "")
+	@Operation(summary = "Eliminazione Indirizzo Operativo",
+			description = "Elimina un Indirizzo Operativo presente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Indirizzo Op. eliminato")
 	@ApiResponse(responseCode = "404", description = "Indirizzo Op. non trovato")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")

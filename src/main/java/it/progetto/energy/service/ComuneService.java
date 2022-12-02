@@ -21,19 +21,16 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-//@Data
-//@AllArgsConstructor
 @Slf4j
-@Tag(name = "Controller Comune", description = "Gestione dei comuni")
 public class ComuneService {
+
 	@Autowired
 	ComuneRepository comuneRepo;
 	@Autowired
 	ProvinciaService provinciaServ;
 
 	/**
-	 * Recupera tutti i Comuni, paginati
-	 * 
+	 * Recupera tutti i Comuni per pagina
 	 * @param page
 	 * @return
 	 */
@@ -43,10 +40,10 @@ public class ComuneService {
 
 	/**
 	 * Recupera tutti i Comuni
-	 * 
 	 * @deprecated
 	 * @return
 	 */
+	@Deprecated
 	public List<Comune> getAllComuni() {
 		List<Comune> lista = (List<Comune>) comuneRepo.findAll();
 		if (lista.size() < 0) {
@@ -56,8 +53,7 @@ public class ComuneService {
 	}
 
 	/**
-	 * Associa un Comune by nome
-	 * 
+	 * Associa un Comune per nome
 	 * @param nome
 	 * @return
 	 */
@@ -72,7 +68,6 @@ public class ComuneService {
 
 	/**
 	 * Inserisce un Comune nel sistema
-	 * 
 	 * @param dto
 	 * @throws ElementAlreadyPresentException
 	 */
@@ -90,7 +85,6 @@ public class ComuneService {
 
 	/**
 	 * Modifica un Comune nel sistema
-	 * 
 	 * @param dto
 	 * @throws ElementAlreadyPresentException
 	 */
@@ -100,7 +94,7 @@ public class ComuneService {
 			BeanUtils.copyProperties(dto, comune);
 			Provincia provinciaTrovata = provinciaServ.associaProvincia(dto.getSiglaProvincia());
 			comuneRepo.save(comune);
-			log.info("Il Comune con l'id" + dto.getIdComune() + " è stato modificato");
+			log.info("Il Comune con l'id " + dto.getIdComune() + " è stato modificato");
 		} else {
 			throw new NotFoundException("Il Comune con l'id " + dto.getIdComune() + " non è presente nel sistema");
 		}
@@ -108,7 +102,6 @@ public class ComuneService {
 
 	/**
 	 * Elimina un Comune dal sistema
-	 * 
 	 * @param id
 	 */
 	public void eliminaComune(Long id) {

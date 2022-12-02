@@ -23,10 +23,7 @@ import it.progetto.energy.repository.FatturaRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-//@Data
-//@AllArgsConstructor
 @Slf4j
-@Tag(name = "Controller Fattura", description = "Gestione delle fatture")
 public class FatturaService extends FileService{
 
 	@Autowired
@@ -36,7 +33,6 @@ public class FatturaService extends FileService{
 
 	/**
 	 * Recupera tutte le fatture
-	 *
 	 * @deprecated
 	 * @return
 	 */
@@ -56,39 +52,35 @@ public class FatturaService extends FileService{
 
 	/**
 	 * Recupera tutte le fatture di un CLiente
-	 *
 	 * @param idCliente
 	 * @return
 	 */
 	public List<Fattura> getFatturaByCliente(Long idCliente) {
-		return (List<Fattura>) fatturaRepo.findByCliente(idCliente);
+		return fatturaRepo.findByCliente(idCliente);
 	}
 
 	/**
 	 * Recupera tutte le fatture di un determinato importo
-	 *
-	 * @param dto
+	 * @param rangeDTO
 	 * @param page
 	 * @return
 	 */
-	public Page<Fattura> getFatturaByImporto(RangeDTO dto, Pageable page) {
-		return (Page<Fattura>) fatturaRepo.findByImportoBetween(dto.getImportoMin(), dto.getImportoMax(), page);
+	public Page<Fattura> getFatturaByImporto(RangeDTO rangeDTO, Pageable page) {
+		return fatturaRepo.findByImportoBetween(rangeDTO.getImportoMin(), rangeDTO.getImportoMax(), page);
 	}
 
 	/**
 	 * Recupera tutte le fatture in un determinato stato
-	 *
 	 * @param stato
 	 * @param page
 	 * @return
 	 */
 	public Page<Fattura> getFatturaByStato(StatoFattura stato, Pageable page) {
-		return (Page<Fattura>) fatturaRepo.findByStatoAllIgnoreCase(stato, page);
+		return fatturaRepo.findByStatoAllIgnoreCase(stato, page);
 	}
 
 	/**
 	 * Recupera tutte le fatture per data
-	 *
 	 * @param data
 	 * @param page
 	 * @return
@@ -99,7 +91,6 @@ public class FatturaService extends FileService{
 
 	/**
 	 * Recupera tutte le fatture per anno
-	 *
 	 * @param anno
 	 * @param page
 	 * @return
@@ -110,31 +101,18 @@ public class FatturaService extends FileService{
 
 	/**
 	 * Inserisce una Fattura nel sistema
-	 *
 	 * @param dto
 	 */
 	public void inserisciFattura(FatturaDTO dto) throws IOException {
 		Fattura fattura = new Fattura();
 		String stato = dto.getStato();
-		switch (stato.toUpperCase()) {
-			case "PAGATA":
-				fattura.setStato(StatoFattura.PAGATA);
-				break;
-			case "NON PAGATA":
-				fattura.setStato(StatoFattura.NON_PAGATA);
-				break;
-			case "ANNULLATA":
-				fattura.setStato(StatoFattura.ANNULLATA);
-				break;
-			case "SCADUTA":
-				fattura.setStato(StatoFattura.SCADUTA);
-				break;
-			case "DA RIMBORSARE":
-				fattura.setStato(StatoFattura.DA_RIMBORSARE);
-				break;
-			case "RIMBORSATA":
-				fattura.setStato(StatoFattura.RIMBORSATA);
-				break;
+		switch (stato.toUpperCase().replaceAll(" ", "").trim()) {
+			case "PAGATA": fattura.setStato(StatoFattura.PAGATA); break;
+			case "NONPAGATA": fattura.setStato(StatoFattura.NON_PAGATA);break;
+			case "ANNULLATA": fattura.setStato(StatoFattura.ANNULLATA); break;
+			case "SCADUTA": fattura.setStato(StatoFattura.SCADUTA); break;
+			case "DARIMBORSARE": fattura.setStato(StatoFattura.DA_RIMBORSARE); break;
+			case "RIMBORSATA": fattura.setStato(StatoFattura.RIMBORSATA); break;
 		}
 		BeanUtils.copyProperties(dto, fattura);
 		Path root = Paths.get("upload");
@@ -147,7 +125,7 @@ public class FatturaService extends FileService{
 	}
 
 	//TODO IMPLEMENTARE
-	public ResponseEntity<?> inserisciFattuaPDF(FatturaPDFDTO fatturaPDFDTO) throws IOException {
+	public ResponseEntity<?> inserisciFatturaPDF(FatturaPDFDTO fatturaPDFDTO) throws IOException {
 		Path root = Paths.get("upload");
 		File file = new File(root.toUri());
 		fatturaPDFDTO.getFileFattura().transferTo(file);
@@ -161,7 +139,6 @@ public class FatturaService extends FileService{
 
 	/**
 	 * Modifica una Fattura
-	 *
 	 * @param dto
 	 * @throws NotFoundException
 	 */
@@ -169,28 +146,15 @@ public class FatturaService extends FileService{
 		if (fatturaRepo.existsById(dto.getIdFattura())) {
 			Fattura fattura = fatturaRepo.findById(dto.getIdFattura()).get();
 			String stato = dto.getStato();
-			switch (stato.toUpperCase()) {
-				case "PAGATA ":
-					fattura.setStato(StatoFattura.PAGATA);
-					break;
-				case "NON PAGATA":
-					fattura.setStato(StatoFattura.NON_PAGATA);
-					break;
-				case "ANNULLATA":
-					fattura.setStato(StatoFattura.ANNULLATA);
-					break;
-				case "SCADUTA":
-					fattura.setStato(StatoFattura.SCADUTA);
-					break;
-				case "DA RIMBORSARE":
-					fattura.setStato(StatoFattura.DA_RIMBORSARE);
-					break;
-				case "RIMBORSATA":
-					fattura.setStato(StatoFattura.RIMBORSATA);
-					break;
+			switch (stato.toUpperCase().replaceAll(" ", "").trim()) {
+				case "PAGATA": fattura.setStato(StatoFattura.PAGATA); break;
+				case "NONPAGATA": fattura.setStato(StatoFattura.NON_PAGATA);break;
+				case "ANNULLATA": fattura.setStato(StatoFattura.ANNULLATA); break;
+				case "SCADUTA": fattura.setStato(StatoFattura.SCADUTA); break;
+				case "DARIMBORSARE": fattura.setStato(StatoFattura.DA_RIMBORSARE); break;
+				case "RIMBORSATA": fattura.setStato(StatoFattura.RIMBORSATA); break;
 			}
 			BeanUtils.copyProperties(dto, fattura);
-			// fatturaRepo.save(fattura);
 			Cliente cliente = clienteServ.associaCliente(dto.getIdCliente());
 			cliente.getFatture().add(fattura);
 			fattura.setCliente(cliente);
@@ -204,7 +168,6 @@ public class FatturaService extends FileService{
 
 	/**
 	 * Elimina una Fattura
-	 *
 	 * @param id
 	 */
 	public void eliminaFattura(Long id) {

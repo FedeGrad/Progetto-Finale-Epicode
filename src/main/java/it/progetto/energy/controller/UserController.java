@@ -2,6 +2,7 @@ package it.progetto.energy.controller;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,15 @@ import it.progetto.energy.service.UserRuoliService;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User Controller", description = "Gestione registrazione e accessi")
 public class UserController {
 
 	@Autowired
-    UserAccessRepository userRepo;
-	@Autowired
 	UserRuoliService userServ;
 
-	@Operation(summary = "Ritorna tutti gli Utenti presenti nel sistema", description = "")
+	@Deprecated
+	@Operation(summary = "Recupero Utenti",
+			description = "Restituisce gli Utenti presenti nel sistema")
 	@ApiResponse(responseCode = "200", description = "Utenti trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Utente trovato")
 	@GetMapping
@@ -40,7 +42,8 @@ public class UserController {
 		return ResponseEntity.ok(userServ.getAllUser());
 	}
 
-	@Operation(summary = "Ritorna tutti gli Utenti presenti nel sistema, paginati", description = "")
+	@Operation(summary = "Recupero Utenti per pagina",
+			description = "Restituisce gli Utenti presenti nel sistema per pagina")
 	@ApiResponse(responseCode = "200", description = "Utenti trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Utente trovato")
 	@GetMapping("/getAllUser")
@@ -48,7 +51,8 @@ public class UserController {
 		return ResponseEntity.ok(userServ.getAllUser(page));
 	}
 
-	@Operation(summary = "inserisce un Utente nel sistema", description = "inserisce un Utente nel sistema")
+	@Operation(summary = "Inserimento Utente",
+			description = "Inserisce un Utente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Utente inserito correttamente nel sistema")
 	@ApiResponse(responseCode = "400", description = "Utente gia presente nel sistema")
 	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
@@ -60,7 +64,8 @@ public class UserController {
 		return ResponseEntity.ok("Utente inserito");
 	}
 
-	@Operation(summary = "Modifica un Utente nel sistema", description = "")
+	@Operation(summary = "Modifica Utente",
+			description = "Modifica un Utente presente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Utente modificato")
 	@ApiResponse(responseCode = "404", description = "Utente non trovato")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")
@@ -72,7 +77,8 @@ public class UserController {
 		return ResponseEntity.ok("Utente modificato");
 	}
 
-	@Operation(summary = "Elimina Utente nel sistema", description = "")
+	@Operation(summary = "Eliminazione Utente", 
+			description = "Elimina un Utente presente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Utente eliminato")
 	@ApiResponse(responseCode = "404", description = "Utente non trovato")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")

@@ -32,17 +32,15 @@ import lombok.Data;
 
 @RestController
 @RequestMapping("/cliente")
-//@Data
-//@AllArgsConstructor
-@Tag(name = "Controller Cliente", description = "Gestione dei clienti")
+@Tag(name = "Cliente Controller", description = "Gestione dei clienti")
 public class ClienteController {
 
 	@Autowired
 	ClienteService clienteServ;
-	@Autowired
-	ClienteRepository clienteRepo;
 
-	@Operation(summary = "Recupera tutti i clienti presenti nel sistema", description = "")
+	@Deprecated
+	@Operation(summary = "Recupero Clienti",
+			description = "Restituisce tutti i Clienti presenti nel sistema")
 	@ApiResponse(responseCode = "200", description = "Clienti trovati")
 	@ApiResponse(responseCode = "404", description = "Nessuna Cliente trovato")
 	@SecurityRequirement(name = "bearerAuth")
@@ -52,17 +50,19 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteServ.getAllClienti());
 	}
 
-	@Operation(summary = "Recupera tutti i Clienti presenti nel sistema, paginati", description = "")
+	@Operation(summary = "Recupero Clienti per pagina",
+			description = "Restituisce tutti i Clienti presenti nel sistema per pagina")
 	@ApiResponse(responseCode = "200", description = "Clienti trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/getClientiPaginati")
 	public ResponseEntity getAllCliente(Pageable page) {
-		return ResponseEntity.ok(clienteServ.getClientiPaginati(page));
+		return ResponseEntity.ok(clienteServ.getAllClienti(page));
 	}
 
-	@Operation(summary = "Recupera i Clienti presenti nel sistema filtrati e ordinati per nome", description = "Recupera i Clienti presenti nel sistema filtrati e ordinati per nome")
+	@Operation(summary = "Recupero Clienti per nome",
+			description = "Restituisce i Clienti presenti nel sistema con un determinato nome")
 	@ApiResponse(responseCode = "200", description = "Clienti trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
 	@SecurityRequirement(name = "bearerAuth")
@@ -72,17 +72,19 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteServ.getClientiByNome(nome, page));
 	}
 
-	@Operation(summary = "Recupera i Clienti presenti nel sistema filtrati e ordinati per nome", description = "Recupera i Clienti presenti nel sistema filtrati e ordinati per nome")
+	@Operation(summary = "Recupero Cliente per parte di nome",
+			description = "Restituisce i Clienti presenti nel sistema che contengono il valore passato nel nome")
 	@ApiResponse(responseCode = "200", description = "Clienti trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/getClientiByNameContains/{nome}")
-	public ResponseEntity getClienteByNameContains(@PathVariable("nome") String nome, Pageable page) {
-		return ResponseEntity.ok(clienteServ.getClientiByNomeContain(nome, page));
+	public ResponseEntity getClienteByNameContains(@PathVariable("nome") String nomeContiene, Pageable page) {
+		return ResponseEntity.ok(clienteServ.getClientiByNomeContain(nomeContiene, page));
 	}
 
-	@Operation(summary = "Recupera i Clienti per data di inserimento", description = "Recupera i Clienti per data di inserimento")
+	@Operation(summary = "Recupero Clienti per data",
+			description = "Restituisce i Clienti per data di inserimento")
 	@ApiResponse(responseCode = "200", description = "Clienti trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
 	@SecurityRequirement(name = "bearerAuth")
@@ -92,7 +94,8 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteServ.getClientiByDataInserimento(data, page));
 	}
 
-	@Operation(summary = "Recupera i Clienti per data ultimo contatto", description = "Recupera i Clienti per data ultimo contatto")
+	@Operation(summary = "Recupero Clienti per data ultimo contatto",
+			description = "Restituisce i Clienti per data dell'ultimo contatto")
 	@ApiResponse(responseCode = "200", description = "Clienti trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
 	@SecurityRequirement(name = "bearerAuth")
@@ -102,7 +105,8 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteServ.getClientiByDataUltimoContatto(data, page));
 	}
 
-	@Operation(summary = "Recupera i Clienti presenti nel sistema filtrati e ordinati per provincia", description = "Recupera i Clienti presenti nel sistema filtrati e ordinati per provincia")
+	@Operation(summary = "Recupero Clienti per provincia",
+			description = "Restituisce i Clienti per provincia")
 	@ApiResponse(responseCode = "200", description = "Clienti trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
 	@SecurityRequirement(name = "bearerAuth")
@@ -112,31 +116,33 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteServ.getClientiByProvincia(dto));
 	}
 	
-	@Operation(summary = "inserisce un Cliente nel sistema", description = "inserisce un Cliente nel sistema")
+	@Operation(summary = "Inserimento Cliente",
+			description = "Inserisce un Cliente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Cliente inserito correttamente")
 	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
-	public ResponseEntity inserisciCliente(@Valid @RequestBody ClienteDTO dto) throws WrongInsertException {
-		Long idClienteInserito = clienteServ.inserisciCliente(dto);
-		return ResponseEntity.ok("Cliente inserito, iD n° " + idClienteInserito);
+	public ResponseEntity<?> inserisciCliente(@Valid @RequestBody ClienteDTO dto) throws WrongInsertException {
+		return clienteServ.inserisciCliente(dto);
 	}
 
-	@Operation(summary = "Modifica un Cliente nel sistema", description = "")
+	@Operation(summary = "Modifica Cliente",
+			description = "Modifica un Cliente presente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Cliente modificato")
 	@ApiResponse(responseCode = "404", description = "Cliente non trovato")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
-	public ResponseEntity modificaCliente(@Valid @RequestBody ClienteModificaDTO modificaDTO)
+	public ResponseEntity<?> modificaCliente(@Valid @RequestBody ClienteModificaDTO modificaDTO)
 			throws NotFoundException, WrongInsertException {
 		clienteServ.modificaCliente(modificaDTO);
 		return ResponseEntity.ok("Cliente modificato");
 	}
 
-	@Operation(summary = "Elimina un Cliente nel sistema", description = "")
+	@Operation(summary = "Eliminazione Cliente",
+			description = "Elimina un cliente tramite l'ID")
 	@ApiResponse(responseCode = "200", description = "Cliente eliminato")
 	@ApiResponse(responseCode = "404", description = "Cliente non trovato")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")

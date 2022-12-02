@@ -23,10 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-//@Data
-//@AllArgsConstructor
 @Slf4j
-@Tag(name = "Controller Provincia", description = "Gestione delle Province")
 public class ProvinciaService {
 
 	@Autowired
@@ -34,7 +31,6 @@ public class ProvinciaService {
 
 	/**
 	 * Recupera tutte le Province
-	 * 
 	 * @deprecated
 	 * @return
 	 */
@@ -43,20 +39,18 @@ public class ProvinciaService {
 	}
 
 	/**
-	 * Recupera tutte le Province, paginate
-	 * 
+	 * Recupera tutte le Province per pagina
 	 * @param page
 	 * @return
 	 */
 	public Page<Provincia> getAllProvince(Pageable page) {
-		return (Page<Provincia>) provinciaRepo.findAll(page);
+		return provinciaRepo.findAll(page);
 	}
 
 	/**
-	 * Associa una Provincia
-	 * 
+	 * Recupera una provincia tramite la sigla
 	 * @param sigla
-	 * @return
+	 * @return Provincia
 	 */
 	public Provincia associaProvincia(String sigla) {
 		if (provinciaRepo.existsBySiglaAllIgnoreCase(sigla)) {
@@ -69,14 +63,13 @@ public class ProvinciaService {
 
 	/**
 	 * Inserisce una Provincia
-	 * 
-	 * @param dto
+	 * @param provinciaDTO
 	 * @throws ElementAlreadyPresentException
 	 */
-	public void inserisciProvincia(ProvinciaDTO dto) throws ElementAlreadyPresentException {
-		if (!provinciaRepo.existsBySiglaAllIgnoreCase(dto.getSigla())) {
+	public void inserisciProvincia(ProvinciaDTO provinciaDTO) throws ElementAlreadyPresentException {
+		if (!provinciaRepo.existsBySiglaAllIgnoreCase(provinciaDTO.getSigla())) {
 			Provincia provincia = new Provincia();
-			BeanUtils.copyProperties(dto, provincia);
+			BeanUtils.copyProperties(provinciaDTO, provincia);
 			provinciaRepo.save(provincia);
 			log.info("La provincia è stata salvata");
 		} else {
@@ -86,23 +79,22 @@ public class ProvinciaService {
 
 	/**
 	 * Modifica una Provincia
-	 * 
-	 * @param dto
+	 * @param provinciaModificaDTO
 	 */
-	public void modificaProvincia(ProvinciaModificaDTO dto) {
-		if (provinciaRepo.existsBySiglaAllIgnoreCase(dto.getSigla())) {
-			Provincia provincia = provinciaRepo.findBySiglaAllIgnoreCase(dto.getSigla());
-			BeanUtils.copyProperties(dto, provincia);
+	public void modificaProvincia(ProvinciaModificaDTO provinciaModificaDTO) {
+		if (provinciaRepo.existsBySiglaAllIgnoreCase(provinciaModificaDTO.getSigla())) {
+			Provincia provincia = provinciaRepo.findBySiglaAllIgnoreCase(provinciaModificaDTO.getSigla());
+			BeanUtils.copyProperties(provinciaModificaDTO, provincia);
 			provinciaRepo.save(provincia);
 			log.info("La Provincia è stata modificata");
 		} else {
-			throw new NotFoundException("La Provincia " + dto.getSigla() + " non è presente nel sistema");
+			throw new NotFoundException(
+					"La Provincia sigla " + provinciaModificaDTO.getSigla() + " non è presente nel sistema");
 		}
 	}
 
 	/**
 	 * Elimina una Provincia
-	 * 
 	 * @param id
 	 */
 	public void eliminaProvincia(Long id) {

@@ -21,10 +21,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-//@Data
-//@AllArgsConstructor
 @Slf4j
-@Tag(name = "Controller Indirizzi Legali", description = "Gestione degli indirizzi legali")
 public class IndirizzoLegaleService {
 
 	@Autowired
@@ -34,29 +31,27 @@ public class IndirizzoLegaleService {
 
 	/**
 	 * Recupera tutti gli Indirizzi Legali
-	 * 
 	 * @deprecated
 	 * @return
 	 */
+	@Deprecated
 	public List<IndirizzoLegale> getAllIndirizziLegali() {
 		return (List<IndirizzoLegale>) indiLegRepo.findAll();
 	}
 
 	/**
-	 * Recupera tutti gli Indirizzi Legali, paginati
-	 * 
+	 * Recupera tutti gli Indirizzi Legali per pagina
 	 * @param page
 	 * @return
 	 */
-	public Page<IndirizzoLegale> getIndirizziLegPaginati(Pageable page) {
+	public Page<IndirizzoLegale> getAllIndirizziLegali(Pageable page) {
 		return (Page<IndirizzoLegale>) indiLegRepo.findAll(page);
 	}
 
 	/**
-	 * Associa un Indirizzo Legale
-	 * 
+	 * Recupera un indirizzo Legale per ID
 	 * @param id
-	 * @return
+	 * @return IndirizzoLegale
 	 */
 	public IndirizzoLegale associaIndirizzoLegale(Long id) {
 		if (indiLegRepo.existsById(id)) {
@@ -69,7 +64,6 @@ public class IndirizzoLegaleService {
 
 	/**
 	 * Inserisce un Indirizzo Legale
-	 * 
 	 * @param dto
 	 * @throws ElementAlreadyPresentException
 	 */
@@ -92,8 +86,8 @@ public class IndirizzoLegaleService {
 
 	/**
 	 * Modifica un Indirizzo Legale
-	 * 
 	 * @param dto
+	 * @throws NotFoundException
 	 */
 	public void modificaIndirizzoLegale(IndirizzoModificaDTO dto) {
 		if (indiLegRepo.existsById(dto.getIdIndirizzo())) {
@@ -111,8 +105,8 @@ public class IndirizzoLegaleService {
 
 	/**
 	 * Elimina un Indirizzo Legale
-	 * 
 	 * @param id
+	 * @throws NotFoundException
 	 */
 	public void eliminaIndirizzoLegale(Long id) {
 		if (indiLegRepo.existsById(id)) {

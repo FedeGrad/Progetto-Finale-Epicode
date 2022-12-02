@@ -2,6 +2,7 @@ package it.progetto.energy.controller;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -26,22 +27,15 @@ import it.progetto.energy.service.IndirizzoLegaleService;
 
 @RestController
 @RequestMapping("/indirizzo_legale")
+@Tag(name = "Indirizzo Legale Controller", description = "Gestione degli indirizzi legali")
 public class IndirizzoLegaleController {
 
 	@Autowired
-	IndirizzoLegaleRepository indirizzoLegRepo;
-	@Autowired
 	IndirizzoLegaleService indirizzoLegServ;
 
-	@Operation(summary = "Ritorna tutti gli Indirizzi Legali presenti nel sistema, paginati", description = "")
-	@ApiResponse(responseCode = "200", description = "Indirizzi Leg. trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Indirizzo Leg. trovato")
-	@GetMapping("/getIndirizziLegPaginati")
-	public ResponseEntity getAllIndirizziLeg(Pageable page) {
-		return ResponseEntity.ok(indirizzoLegServ.getIndirizziLegPaginati(page));
-	}
-
-	@Operation(summary = "Ritorna tutti gli Indirizzi Legali presenti nel sistema", description = "")
+	@Deprecated
+	@Operation(summary = "Ritorna tutti gli Indirizzi Legali presenti nel sistema",
+			description = "")
 	@ApiResponse(responseCode = "200", description = "Indirizzi Leg. trovati")
 	@ApiResponse(responseCode = "404", description = "Nessun Indirizzo Leg. trovato")
 	@GetMapping
@@ -49,20 +43,31 @@ public class IndirizzoLegaleController {
 		return ResponseEntity.ok(indirizzoLegServ.getAllIndirizziLegali());
 	}
 
-	@Operation(summary = "inserisce un Indirizzo Legale nel sistema", description = "inserisce un Indirizzo Legale nel sistema")
-	@ApiResponse(responseCode = "200", description = "Indirizzo Leg. inserito correttamente nel sistema")
+	@Operation(summary = "Recupero Indirizzi Legali",
+			description = "Restituisce tutti gli Indirizzi Legali presenti nel sistema per pagina")
+	@ApiResponse(responseCode = "200", description = "Indirizzi Leg. trovati")
+	@ApiResponse(responseCode = "404", description = "Nessun Indirizzo Leg. trovato")
+	@GetMapping("/getIndirizziLegPaginati")
+	public ResponseEntity getAllIndirizziLeg(Pageable page) {
+		return ResponseEntity.ok(indirizzoLegServ.getAllIndirizziLegali(page));
+	}
+
+	@Operation(summary = "Inserimento Indirizzo Legale",
+			description = "Inserisce un Indirizzo Legale nel sistema")
+	@ApiResponse(responseCode = "200", description = "Indirizzo Leg. inserito correttamente")
 	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping
-	public ResponseEntity inserisciIndirizzoLeg(@Valid @RequestBody IndirizzoDTO dto)
+	public ResponseEntity<?> inserisciIndirizzoLeg(@Valid @RequestBody IndirizzoDTO dto)
 			throws ElementAlreadyPresentException {
 		System.out.println(dto.getVia() + dto.getCap() + dto.getCivico() + dto.getLocalita());
 		indirizzoLegServ.inserisciIndirizzoLegale(dto);
 		return ResponseEntity.ok("Indirizzo Legale inserito");
 	}
 
-	@Operation(summary = "Modifica un Indirizzo Legale nel sistema", description = "")
+	@Operation(summary = "Modifica Indirizzo Legale",
+			description = "Modifica un Indirizzo Legale presente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Indirizzo Leg. modificato")
 	@ApiResponse(responseCode = "404", description = "Indirizzo Leg. non trovato")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")
@@ -74,7 +79,8 @@ public class IndirizzoLegaleController {
 		return ResponseEntity.ok("Indirizzo Legale modificato");
 	}
 
-	@Operation(summary = "Elimina un Indirizzo Legale nel sistema", description = "")
+	@Operation(summary = "Eliminazione Indirizzo Legale",
+			description = "Elimina un Indirizzo Legale presente nel sistema tramite ID")
 	@ApiResponse(responseCode = "200", description = "Indirizzo Leg. eliminato")
 	@ApiResponse(responseCode = "404", description = "Indirizzo Leg. non trovato")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")

@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.*;
 import it.progetto.energy.service.FileService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,14 +34,15 @@ import lombok.NoArgsConstructor;
 @RestController
 @RequestMapping("/fattura")
 @Slf4j
+@Tag(name = "Fattura Controller", description = "Gestione delle fatture")
 public class FatturaController {
 
 	@Autowired
-	FatturaRepository comuneRepo;
-	@Autowired
 	FatturaService fatturaServ;
 
-	@Operation(summary = "Ritorna tutte le Fatture presenti nel sistema", description = "")
+	@Deprecated
+	@Operation(summary = "Recupera Fatture",
+			description = "Restituisce tutte le Fatture presenti nel sistema")
 	@ApiResponse(responseCode = "200", description = "Fatture trovate")
 	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
 	@SecurityRequirement(name = "bearerAuth")
@@ -50,7 +52,8 @@ public class FatturaController {
 		return ResponseEntity.ok(fatturaServ.getAllFatture());
 	}
 
-	@Operation(summary = "Ritorna tutte le Fatture presenti nel sistema, paginate", description = "")
+	@Operation(summary = "Recupera Fatture per pagina",
+			description = "Restituisce tutte le Fatture presenti nel sistema per pagina")
 	@ApiResponse(responseCode = "200", description = "Fatture trovate")
 	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
 	@SecurityRequirement(name = "bearerAuth")
@@ -60,7 +63,8 @@ public class FatturaController {
 		return ResponseEntity.ok(fatturaServ.getAllFatture(page));
 	}
 
-	@Operation(summary = "Ritorna tutte le Fatture riferite ad un singolo cliente", description = "")
+	@Operation(summary = "Recupera fatture per ID",
+			description = "Restituisce tutte le Fatture di un Cliente tramite l'ID Cliente")
 	@ApiResponse(responseCode = "200", description = "Fatture trovate")
 	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
 	@SecurityRequirement(name = "bearerAuth")
@@ -70,7 +74,8 @@ public class FatturaController {
 		return ResponseEntity.ok(fatturaServ.getFatturaByCliente(id));
 	}
 
-	@Operation(summary = "Ritorna tutte le Fatture in un determinato stato", description = "")
+	@Operation(summary = "Recupera Fatture per stato",
+			description = "Restituisce tutte le Fatture in un determinato stato")
 	@ApiResponse(responseCode = "200", description = "Fatture trovate")
 	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
 	@SecurityRequirement(name = "bearerAuth")
@@ -81,7 +86,8 @@ public class FatturaController {
 		return ResponseEntity.ok(fatturaServ.getFatturaByStato(statoF, page));
 	}
 
-	@Operation(summary = "Ritorna tutte le Fatture riferite ad una specifica data", description = "")
+	@Operation(summary = "Recupera Fatture per data",
+			description = "Restituisce tutte le Fatture per data")
 	@ApiResponse(responseCode = "200", description = "Fatture trovate")
 	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
 	@SecurityRequirement(name = "bearerAuth")
@@ -92,7 +98,8 @@ public class FatturaController {
 		return ResponseEntity.ok(fatturaServ.getFatturaByData(data, page));
 	}
 
-	@Operation(summary = "Ritorna tutte le Fatture riferite ad un anno", description = "")
+	@Operation(summary = "Recupera Fatture per anno",
+			description = "Restituisce tutte le Fatture di un determinato anno")
 	@ApiResponse(responseCode = "200", description = "Fatture trovate")
 	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
 	@SecurityRequirement(name = "bearerAuth")
@@ -102,19 +109,20 @@ public class FatturaController {
 		return ResponseEntity.ok(fatturaServ.getFatturaByAnno(anno, page));
 	}
 
-	@Operation(summary = "Ritorna tutte le Fatture in un range di importi ", description = "")
+	@Operation(summary = "Recupera Fatture by range",
+			description = "Restituisce tutte le Fatture in un range")
 	@ApiResponse(responseCode = "200", description = "Fatture trovate")
 	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/getFattureByRange")
-	public ResponseEntity getFAttureByRange(@RequestBody RangeDTO dto, Pageable page) {
+	public ResponseEntity getFattureByRange(@RequestBody RangeDTO dto, Pageable page) {
 		return ResponseEntity.ok(fatturaServ.getFatturaByImporto(dto, page));
 	}
 
 	//TODO DA IMPLEMENTARE
-	@Operation(summary = "crea una Fattura in PDF",
-			description = "inserisci i dati della fattura che verrà creata e aggiunta al DB")
+	@Operation(summary = "Crea Fattura in PDF",
+			description = "Inserisci i dati della fattura che verrà creata e aggiunta al DB")
 	@ApiResponse(responseCode = "200", description = "Fattura creata/inserita correttamente")
 	@ApiResponse(responseCode = "500", description = "ERRORE creazione/inserimento")
 	@SecurityRequirement(name = "bearerAuth")
@@ -127,8 +135,8 @@ public class FatturaController {
 	}
 
 	//TODO IMPLEMENTARE
-	@Operation(summary = "aggiunge un file fattura",
-			description = "inserisci l'id della fattura pre-creata e il File")
+	@Operation(summary = "Aggiunge Fattura File",
+			description = "Inserisci l'id della fattura pre-creata e il File")
 	@ApiResponse(responseCode = "200", description = "Fattura creata/inserita correttamente")
 	@ApiResponse(responseCode = "500", description = "ERRORE creazione/inserimento")
 	@SecurityRequirement(name = "bearerAuth")
@@ -142,7 +150,8 @@ public class FatturaController {
 //				fatturaServ.inserisciFattuaPDF(fatturaPDFDTO);
 	}
 
-	@Operation(summary = "Modifica una Fattura nel sistema", description = "")
+	@Operation(summary = "Modifica Fattura",
+			description = "Modifica una Fattura presente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Fattura modificata")
 	@ApiResponse(responseCode = "404", description = "Fattura non trovata")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")
@@ -154,7 +163,8 @@ public class FatturaController {
 		return ResponseEntity.ok("Fattura modificata");
 	}
 
-	@Operation(summary = "Elimina una Fattura nel sistema", description = "")
+	@Operation(summary = "Elimina Fattura",
+			description = "Elimina una Fattura presente nel sistema")
 	@ApiResponse(responseCode = "200", description = "Fattura eliminata")
 	@ApiResponse(responseCode = "404", description = "Fattura non trovata")
 	@ApiResponse(responseCode = "500", description = "Errore modifica")

@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -29,8 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.EntityManager;
 
 @Service
-//@Data
-//@AllArgsConstructor
 @Slf4j
 public class ClienteService {
 
@@ -43,27 +42,25 @@ public class ClienteService {
 
 	/**
 	 * Recupera tutti i Clienti
-	 * 
 	 * @deprecated
 	 * @return
 	 */
+	@Deprecated
 	public List<Cliente> getAllClienti() {
 		return (List<Cliente>) clienteRepo.findAll();
 	}
 
 	/**
-	 * Recupera tutti i Clienti, paginati
-	 * 
+	 * Recupera tutti i Clienti, per pagina
 	 * @param page
 	 * @return
 	 */
-	public Page<Cliente> getClientiPaginati(Pageable page) {
+	public Page<Cliente> getAllClienti(Pageable page) {
 		return (Page<Cliente>) clienteRepo.findAll(page);
 	}
 
 	/**
 	 * Recupera i Clienti per nome
-	 * 
 	 * @param nome
 	 * @param page
 	 * @return
@@ -73,18 +70,16 @@ public class ClienteService {
 	}
 
 	/**
-	 * Recupera i Clienti che contengono il valore passato come parametro, nel nome
-	 * 
-	 * @param nome
+	 * Recupera i Clienti che nel nome è presente il valore passato nel parametro, nel nome
+	 * @param nomeContiene
 	 * @return
 	 */
-	public Page<Cliente> getClientiByNomeContain(String nome, Pageable page) {
-		return (Page<Cliente>) clienteRepo.findByNomeContattoContainingAllIgnoreCase(nome, page);
+	public Page<Cliente> getClientiByNomeContain(String nomeContiene, Pageable page) {
+		return (Page<Cliente>) clienteRepo.findByNomeContattoContainingAllIgnoreCase(nomeContiene, page);
 	}
 
 	/**
 	 * Recupera i Clienti con uno specifico fatturato
-	 * 
 	 * @param fatturato
 	 * @param page
 	 * @return
@@ -95,40 +90,35 @@ public class ClienteService {
 
 	/**
 	 * Recupera i Clienti registrati in una determinata data
-	 * 
 	 * @param dataInserimento
 	 * @param page
 	 * @return
 	 */
-	public Page<Cliente> getClientiByDataInserimento(DataDTO data, Pageable page) {
-		return (Page<Cliente>) clienteRepo.findByDataInserimento(data.getData(), page);
+	public Page<Cliente> getClientiByDataInserimento(DataDTO dataInserimento, Pageable page) {
+		return (Page<Cliente>) clienteRepo.findByDataInserimento(dataInserimento.getData(), page);
 	}
 
 	/**
 	 * Recupera i Clienti contattati in una determinata data
-	 * 
-	 * @param dataUltimoContatto
+	 * @param dataUltContatto
 	 * @param page
 	 * @return
 	 */
-	public Page<Cliente> getClientiByDataUltimoContatto(DataDTO data, Pageable page) {
-		return (Page<Cliente>) clienteRepo.findByDataUltimoContatto(data.getData(), page);
+	public Page<Cliente> getClientiByDataUltimoContatto(DataDTO dataUltContatto, Pageable page) {
+		return (Page<Cliente>) clienteRepo.findByDataUltimoContatto(dataUltContatto.getData(), page);
 	}
 
 	/**
 	 * Recupera i Clienti di una specifica provincia
-	 * 
-	 * @param provincia
-	 * @param page
+	 * @param ricercaProvinciaDTO
 	 * @return
 	 */
-	public List<Cliente> getClientiByProvincia(RicercaProvinciaDTO dto) {
-		return (List<Cliente>) clienteRepo.findByProvinciaAllIgnoreCase(dto.getProvincia());
+	public List<Cliente> getClientiByProvincia(RicercaProvinciaDTO ricercaProvinciaDTO) {
+		return (List<Cliente>) clienteRepo.findByProvinciaAllIgnoreCase(ricercaProvinciaDTO.getProvincia());
 	}
 
 	/**
 	 * Associa un cliente by id
-	 * 
 	 * @param id
 	 * @return
 	 */
@@ -142,8 +132,7 @@ public class ClienteService {
 	}
 
 	/**
-	 * Varie RegEx che verificano: eMail, numero e partita Iva di un utente
-	 * 
+	 * RegEx per: [0]eMail, [1]numero, [2]partita Iva di un Utente
 	 * @param valori
 	 * @return
 	 */
@@ -155,11 +144,11 @@ public class ClienteService {
 			return false;
 		}
 		while (!valori[3].matches("[0-9]{11}")) {
-			log.info("Errore inserimeto partita IVA");
+			log.info("Errore inserimento partita IVA");
 			return false;
 		}
 		while (!valori[4].matches("[0-9]{10,12}") || !valori[5].matches("[0-9]{10,12}")) {
-			log.info("Errore inserimeto telefono");
+			log.info("Errore inserimento telefono");
 			return false;
 		}
 		return true;
@@ -167,54 +156,44 @@ public class ClienteService {
 
 	/**
 	 * Inserisce un Cliente nel sistema
-	 * 
-	 * @param dto
+	 * @param clienteDTO
 	 * @throws WrongInsertException
 	 */
-	public long inserisciCliente(ClienteDTO dto) throws WrongInsertException {
+	public ResponseEntity<?> inserisciCliente(ClienteDTO clienteDTO) throws WrongInsertException {
 		Cliente cliente = new Cliente();
-		cliente.setDataDiNascita(dto.getDataDiNascita());
+		cliente.setDataDiNascita(clienteDTO.getDataDiNascita());
 		cliente.setDataInserimento(LocalDate.now());
 		cliente.setDataUltimoContatto(LocalDate.now());
 		cliente.setAnni(Period.between(cliente.getDataDiNascita(), LocalDate.now()).getYears());
-		switch (dto.getTipologia().toUpperCase()) {
-			case "PA":
-				cliente.setTipologia(Tipologia.PA);
-				break;
-			case "SAS":
-				cliente.setTipologia(Tipologia.SAS);
-				break;
-			case "SPA":
-				cliente.setTipologia(Tipologia.SPA);
-				break;
-			case "SRL":
-				cliente.setTipologia(Tipologia.SRL);
-				break;
+		switch (clienteDTO.getTipologia().toUpperCase()) {
+			case "PA": cliente.setTipologia(Tipologia.PA); break;
+			case "SAS": cliente.setTipologia(Tipologia.SAS); break;
+			case "SPA": cliente.setTipologia(Tipologia.SPA); break;
+			case "SRL": cliente.setTipologia(Tipologia.SRL); break;
 		}
-		if (controlloDatiCliente(dto.getEmail(), dto.getEmailContatto(), dto.getPec(), dto.getPartitaIva(),
-				dto.getTelefono(), dto.getTelefonoContatto())) {
-			BeanUtils.copyProperties(dto, cliente);
+		if (controlloDatiCliente(clienteDTO.getEmail(), clienteDTO.getEmailContatto(), clienteDTO.getPec(), clienteDTO.getPartitaIva(),
+				clienteDTO.getTelefono(), clienteDTO.getTelefonoContatto())) {
+			BeanUtils.copyProperties(clienteDTO, cliente);
 		} else {
 			throw new WrongInsertException("Errore inserimento dati");
 		}
 		log.info("Il Cliente inserito in data: " + cliente.getDataInserimento() + " è stato salvato");
-		IndirizzoLegale indirizzoLegtrovato = indirizzoLegServ.associaIndirizzoLegale(dto.getIDindirizzoLegale());
+		IndirizzoLegale indirizzoLegtrovato = indirizzoLegServ.associaIndirizzoLegale(clienteDTO.getIDindirizzoLegale());
 		cliente.setIndirizzoLegale(indirizzoLegtrovato);
 		indirizzoLegtrovato.setCliente(cliente);
 		log.info("Indirizzo Legale associato");
 		IndirizzoOperativo indirizzoOptrovato = indirizzoOpServ
-				.associaIndirizzoOperativo(dto.getIDindirizzoOperativo());
+				.associaIndirizzoOperativo(clienteDTO.getIDindirizzoOperativo());
 		cliente.setIndirizzoOperativo(indirizzoOptrovato);
 		indirizzoOptrovato.setCliente(cliente);
 		log.info("Indirizzo Operativo associato");
 		clienteRepo.save(cliente);
 		log.info(cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " salvato");
-		return cliente.getId();
+		return ResponseEntity.ok("Cliente creato id=" + cliente.getId());
 	}
 
 	/**
 	 * Modifica un Cliente nel sistema
-	 * 
 	 * @param dto
 	 * @throws NotFoundException
 	 * @throws WrongInsertException
@@ -224,18 +203,10 @@ public class ClienteService {
 			Cliente cliente = clienteRepo.findById(dto.getIdCliente()).get();
 			cliente.setDataUltimoContatto(LocalDate.now());
 			switch (dto.getTipologia()) {
-				case "PA":
-					cliente.setTipologia(Tipologia.PA);
-					break;
-				case "SAS":
-					cliente.setTipologia(Tipologia.SAS);
-					break;
-				case "SPA":
-					cliente.setTipologia(Tipologia.SPA);
-					break;
-				case "SRL":
-					cliente.setTipologia(Tipologia.SRL);
-					break;
+				case "PA": cliente.setTipologia(Tipologia.PA); break;
+				case "SAS": cliente.setTipologia(Tipologia.SAS); break;
+				case "SPA": cliente.setTipologia(Tipologia.SPA); break;
+				case "SRL": cliente.setTipologia(Tipologia.SRL); break;
 			}
 			if (controlloDatiCliente(dto.getEmail(), dto.getEmailContatto(), dto.getPec(), dto.getPartitaIva(),
 					dto.getTelefono(), dto.getTelefonoContatto())) {
@@ -243,12 +214,7 @@ public class ClienteService {
 			} else {
 				throw new WrongInsertException("Errore inserimento dati");
 			}
-			// BeanUtils.copyProperties(dto, cliente);
-			// clienteRepo.save(cliente);
 			log.info("Il Cliente in data: " + cliente.getDataUltimoContatto() + " è stato modificato");
-//			if(dto.getIDindirizzoLegale().equals("")) {
-//				
-//			}
 			IndirizzoLegale indirizzoLegtrovato = indirizzoLegServ.associaIndirizzoLegale(dto.getIDindirizzoLegale());
 				cliente.setIndirizzoLegale(indirizzoLegtrovato);
 				indirizzoLegtrovato.setCliente(cliente);
@@ -267,7 +233,6 @@ public class ClienteService {
 
 	/**
 	 * Elimina un cliente
-	 * 
 	 * @param id
 	 */
 	public void eliminaCliente(Long id) {

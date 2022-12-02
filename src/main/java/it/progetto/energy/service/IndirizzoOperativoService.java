@@ -22,10 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-//@Data
-//@AllArgsConstructor
 @Slf4j
-@Tag(name = "Controller Indirizzi Operativi", description = "Gestione degli indirizzi operativi")
 public class IndirizzoOperativoService {
 
 	@Autowired
@@ -41,18 +38,21 @@ public class IndirizzoOperativoService {
 	public List<IndirizzoOperativo> getAllIndirizziOperativi() {
 		return (List<IndirizzoOperativo>) indiOpRepo.findAll();
 	}
+
 	/**
-	 * Recupera tutti gli Indirizzi Operativi, paginati
+	 * Recupera tutti gli Indirizzi Operativi per pagina
 	 * @param page
 	 * @return
 	 */
 	public Page<IndirizzoOperativo> getAllIndirizziOperativi(Pageable page) {
 		return (Page<IndirizzoOperativo>) indiOpRepo.findAll(page);
 	}
+
 	/**
-	 * Associa un Indirizzo Operativo
+	 * Recupera un Indirizzo Operativo tramite ID
 	 * @param id
 	 * @return
+	 * @throw NotFoundException
 	 */
 	public IndirizzoOperativo associaIndirizzoOperativo(Long id) {
 		if (indiOpRepo.existsById(id)) {
@@ -62,6 +62,7 @@ public class IndirizzoOperativoService {
 			throw new NotFoundException("Indirizzo Operativo n°" + id + " non trovato");
 		}
 	}
+
 	/**
 	 * Inserisce un Indirizzo Operativo
 	 * @param dto
@@ -83,9 +84,11 @@ public class IndirizzoOperativoService {
 			throw new ElementAlreadyPresentException("Indirizzo Operativo gia presente");
 		}
 	}
+
 	/**
 	 * Modifica un Indirizzo Operativo
 	 * @param dto
+	 * @Throw NotFoundException
 	 */
 	public void modificaIndirizzoOperativo(IndirizzoModificaDTO dto) {
 		if (indiOpRepo.existsById(dto.getIdIndirizzo())) {

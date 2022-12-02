@@ -1,5 +1,6 @@
 package it.progetto.energy.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,15 @@ import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/provincia")
-//@Data
-//@AllArgsConstructor
+@Tag(name = "Provincia Controller", description = "Gestione delle Province")
 public class ProvinciaController {
-	
-	@Autowired
-	ProvinciaRepository provRepo;
+
 	@Autowired
 	ProvinciaService provServ;
 
-	@Operation(summary = "Ritorna tutte le Province presenti nel sistema", description = "")
+	@Deprecated
+	@Operation(summary = "Recupero Province",
+			description = "Restituisce tutte le Province presenti nel sistema")
 	@ApiResponse(responseCode = "200", description = "Province trovate")
 	@ApiResponse(responseCode = "404", description = "Nessuna Provincia trovata")
 	@GetMapping
@@ -34,7 +34,8 @@ public class ProvinciaController {
 		return ResponseEntity.ok(provServ.getAllProvince());
 	}
 	
-	@Operation(summary = "Ritorna tutte le Province presenti nel sistema, paginate", description = "")
+	@Operation(summary = "Recupero Province",
+			description = "Restituisce tutte le Province presenti nel sistema per pagina")
 	@ApiResponse(responseCode = "200", description = "Province trovate")
 	@ApiResponse(responseCode = "404", description = "Nessuna Provincia trovata")
 	@GetMapping("/gettAllProvincePaginate")

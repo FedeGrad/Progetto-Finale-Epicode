@@ -23,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Tag(name = "Controller User", description = "Gestione User e accessi")
 public class UserRuoliService {
 
 	@Autowired
@@ -36,16 +35,15 @@ public class UserRuoliService {
 	/**
 	 * Recupera tutti gli User
 	 * @deprecated
-	 * @param page
 	 * @return
 	 */
+	@Deprecated
 	public List<User> getAllUser() {
 		return userRepo.findAll();
 	}
 
 	/**
-	 * Recupera tutti gli User
-	 * 
+	 * Recupera tutti gli User per pagina
 	 * @param page
 	 * @return
 	 */
@@ -55,7 +53,6 @@ public class UserRuoliService {
 
 	/**
 	 * Metodo per inserire un User nel sistema
-	 * 
 	 * @param dto
 	 * @throws ElementAlreadyPresentException
 	 */
@@ -65,13 +62,13 @@ public class UserRuoliService {
 			BeanUtils.copyProperties(dto, user);
 			user.setPassword(passEnc.encode(dto.getPassword()));
 			user.setAccountAttivo(true);
-			String elencoruoli = dto.getRoles();
-			if (elencoruoli.isBlank()) {
-				elencoruoli = "ROLE_USER";
+			String elencoRuoli = dto.getRoles();
+			if (elencoRuoli.isBlank()) {
+				elencoRuoli = "ROLE_USER";
 			}
-			String[] listaRuoli = elencoruoli.split(",");
+			String[] listaRuoli = elencoRuoli.split(",");
 			Set<RoleAccess> ruoli = new HashSet<RoleAccess>();
-			log.info("Ruoli: " + elencoruoli);
+			log.info("Ruoli: " + elencoRuoli);
 			for (int i = 0; i < listaRuoli.length; i++) {
 				RoleAccess r = roleRepo.findByRoleName(listaRuoli[i]);
 				if (r != null) {
@@ -90,7 +87,6 @@ public class UserRuoliService {
 
 	/**
 	 * Metodo per modificare un User nel sistema
-	 * 
 	 * @param dto
 	 * @throws NotFoundException
 	 */
@@ -125,7 +121,6 @@ public class UserRuoliService {
 
 	/**
 	 * Metodo per eliminare un User
-	 * 
 	 * @param id
 	 */
 	public void eliminaUser(Long id) {
