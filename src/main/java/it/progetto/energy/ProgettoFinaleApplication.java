@@ -1,5 +1,6 @@
 package it.progetto.energy;
 
+import it.progetto.energy.model.Operazione;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

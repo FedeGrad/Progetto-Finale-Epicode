@@ -16,17 +16,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class IndirizzoDTO {
 	
-	@NotBlank
-	@Schema(example = " ", type = "string")
+	@NotBlank @Schema(example = " ", type = "string")
 	private String via;
-	@NotBlank
-	@Schema(example = " ", type = "string")
+	@NotBlank @Schema(example = " ", type = "string")
 	private String civico;
-	@NotBlank
-	@Schema(example = " ", type = "string")
+	@NotBlank @Schema(example = " ", type = "string")
 	private String localita;
-	@NotBlank
-	@Schema(example = " ", type = "string")
+	@NotBlank @Schema(example = " ", type = "string")
 	private String cap;
 	
 }

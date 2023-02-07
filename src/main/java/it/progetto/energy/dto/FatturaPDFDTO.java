@@ -19,8 +19,7 @@ public class FatturaPDFDTO {
 	@Schema(example = "1", type = "int", description = "inserisci l'id Fattura", name = "Id fattura")
 	private Long idFattura;
 	//	private Long idCliente;
-	@NotNull
-	@Schema(description = "carica il file", name = "Fattura                           ")
+	@NotNull @Schema(description = "carica il file", name = "Fattura")
 	private MultipartFile fileFattura;
 
 }

@@ -10,8 +10,7 @@ import javax.persistence.*;
 @Data
 public abstract class Operazione {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private boolean attivo;
 

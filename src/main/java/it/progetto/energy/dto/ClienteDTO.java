@@ -3,9 +3,6 @@ package it.progetto.energy.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -27,21 +24,16 @@ public class ClienteDTO {
 	static final String DATE_PATTERN = "dd/MM/yyyy";
 	static final String DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm:ss";
 	
-	@NotBlank
-	@Schema(example = "nome azienda", type = "string")
+	@NotBlank @Schema(example = "nome azienda", type = "string")
 	private String ragioneSociale;
-//	@Schema(hidden = false)
-	@NotBlank
-	@Schema(example = " ", type = "string")
+	@NotBlank @Schema(example = " ", type = "string")
 	private String partitaIva;
 	@Schema(example = "example@example.it", type = "string")
 	private String email;
-//	@JsonFormat(pattern = DATE_TIME_PATTERN)
-	@Schema(hidden = true)
+	@Schema(hidden = true) @JsonFormat(pattern = DATE_TIME_PATTERN)
 	private LocalDate dataInserimento = LocalDate.now();
 //	@Schema(example = "20/01/2000", type = "string")
-//	@JsonFormat(pattern = DATE_PATTERN)
-	@Schema(hidden = true)
+	@Schema(hidden = true) @JsonFormat(pattern = DATE_PATTERN)
 	private LocalDate dataUltimoContatto = LocalDate.now();
 	private BigDecimal fatturatoAnnuale;
 	@Schema(example = "PA / SAS / SPA / SRL", type = "string")
@@ -52,18 +44,16 @@ public class ClienteDTO {
 	private String telefono;
 	@Schema(example = "example@example.it", type = "string")
 	private String emailContatto;
-	@NotBlank
-	@Schema(example = " ", type = "string")
+	@NotBlank @Schema(example = " ", type = "string")
 	private String nomeContatto;
-	@NotBlank
-	@Schema(example = " ", type = "string")
+	@NotBlank @Schema(example = " ", type = "string")
 	private String cognomeContatto;
 	@Schema(example = "20/01/2000", type = "string")
 	@JsonFormat(pattern = DATE_PATTERN)
 	private LocalDate dataDiNascita;
 	@Schema(example = "0000000000", type = "string")
 	private String telefonoContatto;
-	private Long iDindirizzoOperativo;
-	private Long iDindirizzoLegale;
+	private Long idIndirizzoOperativo;
+	private Long idIndirizzoLegale;
 	
 }

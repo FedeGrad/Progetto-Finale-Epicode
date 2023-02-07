@@ -19,24 +19,19 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserDTO {
 	
-	@NotBlank
-	@Size(max = 20)
+	@NotBlank @Size(max = 20)
 	private String username;
 
-	@NotBlank
-	@Size(min = 2, max = 120)
+	@NotBlank @Size(min = 2, max = 120)
 	private String password;
 	
-	@NotBlank
-	@Size(max = 120)
+	@NotBlank @Size(max = 120)
 	private String nome;
 	
-	@NotBlank
-	@Size(max = 120)
+	@NotBlank @Size(max = 120)
 	private String cognome;
 	
-	@NotBlank
-	@Email
+	@NotBlank @Email
 	private String email;
 	
 	private String roles;

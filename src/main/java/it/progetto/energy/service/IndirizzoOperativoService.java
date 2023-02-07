@@ -9,16 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.IndirizzoDTO;
 import it.progetto.energy.dto.IndirizzoModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.model.Comune;
 import it.progetto.energy.model.IndirizzoOperativo;
 import it.progetto.energy.repository.IndirizzoOperativoRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -96,7 +92,7 @@ public class IndirizzoOperativoService {
 			BeanUtils.copyProperties(dto, indirizzo);
 			String localita = dto.getLocalita();
 			localita.toUpperCase();
-			Comune comuneTrovato = comuneServ.associaComune(dto.getLocalita());
+			Comune comuneTrovato = comuneServ.associaComune(localita);
 			indirizzo.setComune(comuneTrovato);
 			comuneTrovato.getIndirizziOperativi().add(indirizzo);
 			indiOpRepo.save(indirizzo);

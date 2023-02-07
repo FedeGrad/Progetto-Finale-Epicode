@@ -11,30 +11,24 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.*;
 import org.apache.commons.lang3.builder.ToStringExclude;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class IndirizzoOperativo {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Setter(value = AccessLevel.NONE)
 	private Long id;
 	private String via;
 	private String civico;
 	private String localita;
 	private String cap;
-	@JsonIgnore
-	@ToStringExclude
+	@JsonIgnore @ToStringExclude
 //	@ManyToOne(cascade = { CascadeType.MERGE })
 	@ManyToOne
 	@JoinColumn(name = "id_comune", referencedColumnName = "id")

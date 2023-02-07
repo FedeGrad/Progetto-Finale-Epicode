@@ -9,15 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.IndirizzoDTO;
 import it.progetto.energy.dto.IndirizzoModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.model.Comune;
 import it.progetto.energy.model.IndirizzoLegale;
 import it.progetto.energy.repository.IndirizzoLegaleRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -93,7 +90,9 @@ public class IndirizzoLegaleService {
 		if (indiLegRepo.existsById(dto.getIdIndirizzo())) {
 			IndirizzoLegale indirizzo = indiLegRepo.findById(dto.getIdIndirizzo()).get();
 			BeanUtils.copyProperties(dto, indirizzo);
-			Comune comuneTrovato = comuneServ.associaComune(dto.getLocalita());
+			String localita = dto.getLocalita();
+			localita.toUpperCase();
+			Comune comuneTrovato = comuneServ.associaComune(localita);
 			indirizzo.setComune(comuneTrovato);
 			comuneTrovato.getIndirizziLegali().add(indirizzo);
 			indiLegRepo.save(indirizzo);

@@ -22,11 +22,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.progetto.energy.dto.IndirizzoDTO;
 import it.progetto.energy.dto.IndirizzoModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.repository.IndirizzoOperativoRepository;
 import it.progetto.energy.service.IndirizzoOperativoService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/indirizzo_operativo")
@@ -89,7 +85,7 @@ public class IndirizzoOperativoController {
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
-	public ResponseEntity eliminaInidirizzoOp(@PathVariable Long id) {
+	public ResponseEntity eliminaIndirizzoOp(@PathVariable Long id) {
 		indirizzoOpServ.eliminaIndirizzoOperativo(id);
 		return ResponseEntity.ok("Indirizzo Operativo eliminato");
 	}

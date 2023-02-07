@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Deprecated
 public class ComuneCSV {
 
 	@JsonProperty("Codice Provincia")

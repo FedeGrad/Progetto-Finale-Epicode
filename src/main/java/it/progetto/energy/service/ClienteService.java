@@ -22,12 +22,7 @@ import it.progetto.energy.model.IndirizzoLegale;
 import it.progetto.energy.model.IndirizzoOperativo;
 import it.progetto.energy.model.Tipologia;
 import it.progetto.energy.repository.ClienteRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.persistence.EntityManager;
 
 @Service
 @Slf4j
@@ -160,36 +155,41 @@ public class ClienteService {
 	 * @throws WrongInsertException
 	 */
 	public ResponseEntity<?> inserisciCliente(ClienteDTO clienteDTO) throws WrongInsertException {
-		Cliente cliente = new Cliente();
-		cliente.setDataDiNascita(clienteDTO.getDataDiNascita());
-		cliente.setDataInserimento(LocalDate.now());
-		cliente.setDataUltimoContatto(LocalDate.now());
-		cliente.setAnni(Period.between(cliente.getDataDiNascita(), LocalDate.now()).getYears());
-		switch (clienteDTO.getTipologia().toUpperCase()) {
-			case "PA": cliente.setTipologia(Tipologia.PA); break;
-			case "SAS": cliente.setTipologia(Tipologia.SAS); break;
-			case "SPA": cliente.setTipologia(Tipologia.SPA); break;
-			case "SRL": cliente.setTipologia(Tipologia.SRL); break;
-		}
-		if (controlloDatiCliente(clienteDTO.getEmail(), clienteDTO.getEmailContatto(), clienteDTO.getPec(), clienteDTO.getPartitaIva(),
-				clienteDTO.getTelefono(), clienteDTO.getTelefonoContatto())) {
+		Cliente cliente;
+		if (controlloDatiCliente(clienteDTO.getEmail(), clienteDTO.getEmailContatto(), clienteDTO.getPec(),
+				clienteDTO.getPartitaIva(), clienteDTO.getTelefono(), clienteDTO.getTelefonoContatto())) {
+
+			cliente = Cliente.builder()
+//					.dataDiNascita(clienteDTO.getDataDiNascita())
+					.dataInserimento(LocalDate.now())
+					.dataUltimoContatto(LocalDate.now())
+					.anni(Period.between(clienteDTO.getDataDiNascita(), LocalDate.now()).getYears())
+					.build();
+
+			switch (clienteDTO.getTipologia().toUpperCase()) {
+				case "PA": cliente.setTipologia(Tipologia.PA); break;
+				case "SAS": cliente.setTipologia(Tipologia.SAS); break;
+				case "SPA": cliente.setTipologia(Tipologia.SPA); break;
+				case "SRL": cliente.setTipologia(Tipologia.SRL); break;
+			}
 			BeanUtils.copyProperties(clienteDTO, cliente);
+			IndirizzoLegale indirizzoLegTrovato = indirizzoLegServ.associaIndirizzoLegale(clienteDTO.getIdIndirizzoLegale());
+			cliente.setIndirizzoLegale(indirizzoLegTrovato);
+			indirizzoLegTrovato.setCliente(cliente);
+			log.info("Indirizzo Legale associato");
+			IndirizzoOperativo indirizzoOpTrovato = indirizzoOpServ
+					.associaIndirizzoOperativo(clienteDTO.getIdIndirizzoOperativo());
+			cliente.setIndirizzoOperativo(indirizzoOpTrovato);
+			indirizzoOpTrovato.setCliente(cliente);
+			log.info("Indirizzo Operativo associato");
+			clienteRepo.save(cliente);
+			log.info("Cliente: {}, salvato  in data: {}",
+					cliente.getNomeContatto() + " " + cliente.getCognomeContatto(), cliente.getDataInserimento());
+			return ResponseEntity.ok("Cliente creato id=" + cliente.getId());
 		} else {
 			throw new WrongInsertException("Errore inserimento dati");
 		}
-		log.info("Il Cliente inserito in data: " + cliente.getDataInserimento() + " è stato salvato");
-		IndirizzoLegale indirizzoLegtrovato = indirizzoLegServ.associaIndirizzoLegale(clienteDTO.getIDindirizzoLegale());
-		cliente.setIndirizzoLegale(indirizzoLegtrovato);
-		indirizzoLegtrovato.setCliente(cliente);
-		log.info("Indirizzo Legale associato");
-		IndirizzoOperativo indirizzoOptrovato = indirizzoOpServ
-				.associaIndirizzoOperativo(clienteDTO.getIDindirizzoOperativo());
-		cliente.setIndirizzoOperativo(indirizzoOptrovato);
-		indirizzoOptrovato.setCliente(cliente);
-		log.info("Indirizzo Operativo associato");
-		clienteRepo.save(cliente);
-		log.info(cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " salvato");
-		return ResponseEntity.ok("Cliente creato id=" + cliente.getId());
+
 	}
 
 	/**
@@ -216,18 +216,18 @@ public class ClienteService {
 			}
 			log.info("Il Cliente in data: " + cliente.getDataUltimoContatto() + " è stato modificato");
 			IndirizzoLegale indirizzoLegtrovato = indirizzoLegServ.associaIndirizzoLegale(dto.getIDindirizzoLegale());
-				cliente.setIndirizzoLegale(indirizzoLegtrovato);
-				indirizzoLegtrovato.setCliente(cliente);
-				log.info("Indirizzo Legale associato");
+			cliente.setIndirizzoLegale(indirizzoLegtrovato);
+			indirizzoLegtrovato.setCliente(cliente);
+			log.info("Indirizzo Legale associato");
 			IndirizzoOperativo indirizzoOptrovato = indirizzoOpServ
 					.associaIndirizzoOperativo(dto.getIDindirizzoOperativo());
 			cliente.setIndirizzoOperativo(indirizzoOptrovato);
 			indirizzoOptrovato.setCliente(cliente);
 			log.info("Indirizzo Operativo associato");
 			clienteRepo.save(cliente);
-			log.info(cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " modificiato");
+			log.info(cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " modificato");
 		} else {
-			throw new NotFoundException("Il Nolegio id " + dto.getIdCliente() + " non esiste");
+			throw new NotFoundException("Il Noleggio id " + dto.getIdCliente() + " non esiste");
 		}
 	}
 
@@ -245,5 +245,5 @@ public class ClienteService {
 			throw new NotFoundException("Il Cliente id" + id + " non esiste");
 		}
 	}
-	
+
 }

@@ -36,13 +36,13 @@ public class Runner implements ApplicationRunner {
 	PasswordEncoder passEncod;
 	@Autowired
 	RoleAccessRepository roleRepo;
-	@Autowired
-	@Qualifier("clienteDefault")
-	Cliente cliente;
-
-	@Autowired
-	@Qualifier("fatturaDefault")
-	Fattura fattura;
+//	@Autowired
+//	@Qualifier("clienteDefault")
+//	Cliente cliente;
+//
+//	@Autowired
+//	@Qualifier("fatturaDefault")
+//	Fattura fattura;
 
 	AggiornaAnniThread thread = new AggiornaAnniThread();
 

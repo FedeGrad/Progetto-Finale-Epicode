@@ -17,13 +17,11 @@ import lombok.Setter;
 public class IndirizzoModificaDTO {
 	
 	private Long idIndirizzo;
-	@NotBlank
-	@Schema(example = " ", type = "string")
+	@NotBlank @Schema(example = " ", type = "string")
 	private String via;
 	private String civico;
-	@NotBlank
-	@Schema(example = " ", type = "string")
+	@NotBlank @Schema(example = " ", type = "string")
 	private String localita;
 	private String cap;
-	
+
 }

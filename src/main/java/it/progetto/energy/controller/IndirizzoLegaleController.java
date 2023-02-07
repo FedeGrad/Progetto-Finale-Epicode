@@ -3,6 +3,7 @@ package it.progetto.energy.controller;
 import javax.validation.Valid;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.progetto.energy.dto.IndirizzoDTO;
 import it.progetto.energy.dto.IndirizzoModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.repository.IndirizzoLegaleRepository;
 import it.progetto.energy.service.IndirizzoLegaleService;
 
 @RestController
 @RequestMapping("/indirizzo_legale")
 @Tag(name = "Indirizzo Legale Controller", description = "Gestione degli indirizzi legali")
+@Slf4j
 public class IndirizzoLegaleController {
 
 	@Autowired
@@ -61,7 +62,7 @@ public class IndirizzoLegaleController {
 	@PostMapping
 	public ResponseEntity<?> inserisciIndirizzoLeg(@Valid @RequestBody IndirizzoDTO dto)
 			throws ElementAlreadyPresentException {
-		System.out.println(dto.getVia() + dto.getCap() + dto.getCivico() + dto.getLocalita());
+		log.info(dto.getVia() + dto.getCap() + dto.getCivico() + dto.getLocalita());
 		indirizzoLegServ.inserisciIndirizzoLegale(dto);
 		return ResponseEntity.ok("Indirizzo Legale inserito");
 	}
@@ -87,7 +88,7 @@ public class IndirizzoLegaleController {
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
-	public ResponseEntity eliminaInidirizzoLeg(@PathVariable Long id) {
+	public ResponseEntity eliminaIndirizzoLeg(@PathVariable Long id) {
 		indirizzoLegServ.eliminaIndirizzoLegale(id);
 		return ResponseEntity.ok("Indirizzo Legale eliminato");
 	}
