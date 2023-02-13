@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.progetto.energy.dto.UserDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.impl.repository.UserAccessRepository;
 import it.progetto.energy.service.UserRuoliService;
 
 @RestController

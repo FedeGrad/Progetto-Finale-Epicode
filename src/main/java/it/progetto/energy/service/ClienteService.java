@@ -189,7 +189,6 @@ public class ClienteService {
 		} else {
 			throw new WrongInsertException("Errore inserimento dati");
 		}
-
 	}
 
 	/**

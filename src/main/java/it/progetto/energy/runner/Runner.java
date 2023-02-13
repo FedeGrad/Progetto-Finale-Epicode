@@ -1,9 +1,7 @@
 package it.progetto.energy.runner;
 
-import it.progetto.energy.model.*;
 import it.progetto.energy.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.dto.UserDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.impl.model.RoleAccess;
