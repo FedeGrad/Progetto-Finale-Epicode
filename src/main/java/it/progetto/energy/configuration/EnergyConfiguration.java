@@ -2,8 +2,6 @@ package it.progetto.energy.configuration;
 
 import it.progetto.energy.model.*;
 import it.progetto.energy.repository.ClienteRepository;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,20 +11,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import it.progetto.energy.repository.ComuneRepository;
 import it.progetto.energy.repository.IndirizzoLegaleRepository;
 import it.progetto.energy.repository.IndirizzoOperativoRepository;
-import it.progetto.energy.service.ComuneService;
-import it.progetto.energy.service.IndirizzoLegaleService;
-import it.progetto.energy.service.IndirizzoOperativoService;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import java.io.File;
 import java.math.BigDecimal;
-import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.Optional;
 
 /**
  * Classe che gestisce la configurazione dei BEAN principalmente di Classi create da terzi,
@@ -52,26 +41,26 @@ public class EnergyConfiguration {
 	
 	@Bean(name = "clienteDefault")
 	@Lazy
-	public Cliente clienteDefault() {
-		Cliente cliente = new Cliente();
-		cliente.setNomeContatto("Mario");
-		cliente.setCognomeContatto("Rossi");
-		cliente.setAnni(33);
-		cliente.setTipologia(Tipologia.PA);
-		cliente.setEmail("azienda@email.com");
-		cliente.setRagioneSociale("Label");
-		cliente.setPartitaIva("12345678901");
-		cliente.setDataDiNascita(LocalDate.of(1989, 04, 9));
-		cliente.setDataInserimento(LocalDate.now());
-		cliente.setDataUltimoContatto(LocalDate.now());
-		cliente.setFatturatoAnnuale(BigDecimal.valueOf(1000));
-		cliente.setPec("utente@pec.com");
-		cliente.setTelefono("32711223344");
-		cliente.setTelefonoContatto("32711223344");
-		cliente.setEmailContatto("utente@email.com");
-		cliente.setIndirizzoLegale(indiLegaleRepo.findById(3l).get());
-		cliente.setIndirizzoOperativo(indiOperativoRepo.findById(2l).get());
-		return cliente;
+	public ClientDomain clienteDefault() {
+		ClientDomain clientDomain = new ClientDomain();
+		clientDomain.setNomeContatto("Mario");
+		clientDomain.setCognomeContatto("Rossi");
+		clientDomain.setAnni(33);
+		clientDomain.setTipologia(Tipologia.PA);
+		clientDomain.setEmail("azienda@email.com");
+		clientDomain.setRagioneSociale("Label");
+		clientDomain.setPartitaIva("12345678901");
+		clientDomain.setDataDiNascita(LocalDate.of(1989, 04, 9));
+		clientDomain.setDataInserimento(LocalDate.now());
+		clientDomain.setDataUltimoContatto(LocalDate.now());
+		clientDomain.setFatturatoAnnuale(BigDecimal.valueOf(1000));
+		clientDomain.setPec("utente@pec.com");
+		clientDomain.setTelefono("32711223344");
+		clientDomain.setTelefonoContatto("32711223344");
+		clientDomain.setEmailContatto("utente@email.com");
+		clientDomain.setIndirizzoLegale(indiLegaleRepo.findById(3l).get());
+		clientDomain.setIndirizzoOperativo(indiOperativoRepo.findById(2l).get());
+		return clientDomain;
 	}
 
 	@Bean
@@ -88,7 +77,7 @@ public class EnergyConfiguration {
 		fattura.setImportoSconto(fattura.getImporto()*fattura.getPercentualeSconto()/100);
 		fattura.setStato(StatoFattura.PAGATA);
 //		fattura.setCliente(clienteDefault());
-		fattura.setCliente(clienteRepository.findById(5l).get());
+		fattura.setClientDomain(clienteRepository.findById(5l).get());
 
 		return fattura;
 	}

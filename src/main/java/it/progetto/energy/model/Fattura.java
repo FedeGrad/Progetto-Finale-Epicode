@@ -13,8 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jdk.jfr.Percentage;
 import lombok.*;
 
@@ -44,6 +42,6 @@ public class Fattura {
 	private StatoFattura stato;
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH  })
 	@JoinColumn(name = "id_cliente")
-	private Cliente cliente;
+	private ClientDomain clientDomain;
 
 }

@@ -1,18 +1,15 @@
 package it.progetto.energy.thread;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import it.progetto.energy.model.ClientDomain;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import it.progetto.energy.model.Cliente;
 import it.progetto.energy.repository.ClienteRepository;
-import it.progetto.energy.service.ClienteService;
+
 @Slf4j
 public class AggiornaAnniThread {
 
@@ -27,7 +24,7 @@ public class AggiornaAnniThread {
 			long giorno = ora*24;
 			long anno = giorno*365;
 			try {
-				List<Cliente> clienti = (List<Cliente>) clienteRepo.findAll();
+				List<ClientDomain> clienti = (List<ClientDomain>) clienteRepo.findAll();
 				if(clienti == null) {
 					throw new NullPointerException("lista vuota");
 				} else {
