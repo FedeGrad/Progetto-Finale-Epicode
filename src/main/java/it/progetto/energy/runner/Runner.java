@@ -1,7 +1,12 @@
 package it.progetto.energy.runner;
 
+import it.progetto.energy.model.Cliente;
+import it.progetto.energy.model.Fattura;
 import it.progetto.energy.repository.*;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,36 +16,25 @@ import it.progetto.energy.impl.repository.RoleAccessRepository;
 import it.progetto.energy.impl.repository.UserAccessRepository;
 import it.progetto.energy.thread.AggiornaAnniThread;
 
-//@Data
-//@AllArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class Runner implements ApplicationRunner {
 
-	@Autowired
-	ClienteRepository clienteRepository;
-	@Autowired
-	FatturaRepository fatturaRepository;
-	@Autowired
-	ComuneRepository comuneRepo;
-	@Autowired
-	ProvinciaRepository provinciaRepo;
-	@Autowired
-	IndirizzoLegaleRepository indiLegRepo;
-	@Autowired
-	IndirizzoOperativoRepository indiOpRepo;
-	@Autowired
-	UserAccessRepository userRepo;
-	@Autowired
-	PasswordEncoder passEncod;
-	@Autowired
-	RoleAccessRepository roleRepo;
-//	@Autowired
+	private final ClienteRepository clienteRepository;
+	private final FatturaRepository fatturaRepository;
+	private final ComuneRepository comuneRepo;
+	private final ProvinciaRepository provinciaRepo;
+	private final IndirizzoLegaleRepository indiLegRepo;
+	private final IndirizzoOperativoRepository indiOpRepo;
+	private final UserAccessRepository userRepo;
+	private final PasswordEncoder passEncod;
+	private final RoleAccessRepository roleRepo;
+
 //	@Qualifier("clienteDefault")
-//	Cliente cliente;
+//	private final Cliente cliente;
 //
-//	@Autowired
 //	@Qualifier("fatturaDefault")
-//	Fattura fattura;
+//	private final Fattura fattura;
 
 	AggiornaAnniThread thread = new AggiornaAnniThread();
 

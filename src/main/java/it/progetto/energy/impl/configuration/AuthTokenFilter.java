@@ -39,7 +39,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				log.debug("[doFilterInternal] token valido");
 				userDetails.getAuthorities()
-				.stream()
 				.forEach(g->log.debug("[doFilterInternal] "+g.getAuthority()) );
 				
 				log.debug("[doFilterInternal] autorities found   " + userDetails.getAuthorities().size()+"");

@@ -2,9 +2,7 @@ package it.progetto.energy.configuration;
 
 import it.progetto.energy.model.*;
 import it.progetto.energy.repository.ClienteRepository;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -13,20 +11,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import it.progetto.energy.repository.ComuneRepository;
 import it.progetto.energy.repository.IndirizzoLegaleRepository;
 import it.progetto.energy.repository.IndirizzoOperativoRepository;
-import it.progetto.energy.service.ComuneService;
-import it.progetto.energy.service.IndirizzoLegaleService;
-import it.progetto.energy.service.IndirizzoOperativoService;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import java.io.File;
 import java.math.BigDecimal;
-import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.Optional;
 
 /**
  * Classe che gestisce la configurazione dei BEAN principalmente di Classi create da terzi,
@@ -41,17 +30,15 @@ import java.util.Optional;
 		type = SecuritySchemeType.HTTP,
 		bearerFormat = "JWT",
 		scheme = "bearer")
+@RequiredArgsConstructor
 public class EnergyConfiguration {
 
-	@Autowired
-	IndirizzoLegaleRepository indiLegaleRepo;
-	@Autowired
-	IndirizzoOperativoRepository indiOperativoRepo;
-	@Autowired
-	ClienteRepository clienteRepository;
-	
-	@Bean(name = "clienteDefault")
+	private final IndirizzoLegaleRepository indirizzoLegaleRepository;
+	private final IndirizzoOperativoRepository indirizzoOperativoRepository;
+	private final ClienteRepository clienteRepository;
+
 	@Lazy
+	@Bean(name = "clienteDefault")
 	public Cliente clienteDefault() {
 		Cliente cliente = new Cliente();
 		cliente.setNomeContatto("Mario");
@@ -69,13 +56,14 @@ public class EnergyConfiguration {
 		cliente.setTelefono("32711223344");
 		cliente.setTelefonoContatto("32711223344");
 		cliente.setEmailContatto("utente@email.com");
-		cliente.setIndirizzoLegale(indiLegaleRepo.findById(3l).get());
-		cliente.setIndirizzoOperativo(indiOperativoRepo.findById(2l).get());
+		cliente.setIndirizzoLegale(indirizzoLegaleRepository.findById(3L).orElse(null));
+		cliente.setIndirizzoOperativo(indirizzoOperativoRepository.findById(2L).orElse(null));
+
 		return cliente;
 	}
 
-	@Bean
 	@Lazy
+	@Bean(name = "fatturaDefault")
 	public Fattura fatturaDefault(){
 		Fattura fattura = new Fattura();
 		fattura.setAnno(LocalDate.now().getYear());
@@ -87,8 +75,7 @@ public class EnergyConfiguration {
 		fattura.setPercentualeSconto(0d);
 		fattura.setImportoSconto(fattura.getImporto()*fattura.getPercentualeSconto()/100);
 		fattura.setStato(StatoFattura.PAGATA);
-//		fattura.setCliente(clienteDefault());
-		fattura.setCliente(clienteRepository.findById(5l).get());
+		fattura.setCliente(clienteRepository.findById(5L).orElse(null));
 
 		return fattura;
 	}
