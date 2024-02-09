@@ -16,7 +16,7 @@ deve permettere di gestire un elenco dei clienti, che sono caratterizzati dai se
 - cognomeContatto
 - telefonoContatto
 
-Ogni cliente può avere fino a due indirizzi, uno per la sede legale ed uno per la sede operativa.
+Ogni clientDomain può avere fino a due indirizzi, uno per la sede legale ed uno per la sede operativa.
 
 Un indirizzo è composto da 
 -via
@@ -35,7 +35,7 @@ SAS
 SPA
 SRL
 
-Associato ad ogni cliente c'è un insieme di fatture. Le fatture sono caratterizzate dai seguenti dati:
+Associato ad ogni clientDomain c'è un insieme di fatture. Le fatture sono caratterizzate dai seguenti dati:
 anno : Integer
 data : Date
 importo : BigDecimal

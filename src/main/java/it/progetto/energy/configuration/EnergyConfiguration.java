@@ -38,28 +38,27 @@ public class EnergyConfiguration {
 	private final ClienteRepository clienteRepository;
 
 	@Lazy
-	@Bean(name = "clienteDefault")
-	public Cliente clienteDefault() {
-		Cliente cliente = new Cliente();
-		cliente.setNomeContatto("Mario");
-		cliente.setCognomeContatto("Rossi");
-		cliente.setAnni(33);
-		cliente.setTipologia(Tipologia.PA);
-		cliente.setEmail("azienda@email.com");
-		cliente.setRagioneSociale("Label");
-		cliente.setPartitaIva("12345678901");
-		cliente.setDataDiNascita(LocalDate.of(1989, 04, 9));
-		cliente.setDataInserimento(LocalDate.now());
-		cliente.setDataUltimoContatto(LocalDate.now());
-		cliente.setFatturatoAnnuale(BigDecimal.valueOf(1000));
-		cliente.setPec("utente@pec.com");
-		cliente.setTelefono("32711223344");
-		cliente.setTelefonoContatto("32711223344");
-		cliente.setEmailContatto("utente@email.com");
-		cliente.setIndirizzoLegale(indirizzoLegaleRepository.findById(3L).orElse(null));
-		cliente.setIndirizzoOperativo(indirizzoOperativoRepository.findById(2L).orElse(null));
-
-		return cliente;
+    @Bean(name = "clienteDefault")
+	public ClientDomain clienteDefault() {
+		ClientDomain clientDomain = new ClientDomain();
+		clientDomain.setNomeContatto("Mario");
+		clientDomain.setCognomeContatto("Rossi");
+		clientDomain.setAnni(33);
+		clientDomain.setTipologia(Tipologia.PA);
+		clientDomain.setEmail("azienda@email.com");
+		clientDomain.setRagioneSociale("Label");
+		clientDomain.setPartitaIva("12345678901");
+		clientDomain.setDataDiNascita(LocalDate.of(1989, 04, 9));
+		clientDomain.setDataInserimento(LocalDate.now());
+		clientDomain.setDataUltimoContatto(LocalDate.now());
+		clientDomain.setFatturatoAnnuale(BigDecimal.valueOf(1000));
+		clientDomain.setPec("utente@pec.com");
+		clientDomain.setTelefono("32711223344");
+		clientDomain.setTelefonoContatto("32711223344");
+		clientDomain.setEmailContatto("utente@email.com");
+		clientDomain.setIndirizzoLegale(indiLegaleRepo.findById(3l).get());
+		clientDomain.setIndirizzoOperativo(indiOperativoRepo.findById(2l).get());
+		return clientDomain;
 	}
 
 	@Lazy
