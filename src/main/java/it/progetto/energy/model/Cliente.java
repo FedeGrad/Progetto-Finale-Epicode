@@ -22,7 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @AllArgsConstructor
 @Builder
 @Jacksonized
-public class ClientDomain {
+public class Cliente {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Setter(value = AccessLevel.NONE)
@@ -49,14 +49,14 @@ public class ClientDomain {
 	private String telefonoContatto;
 	// @JsonIgnore
 	// @ToStringExclude
-	@OneToOne(mappedBy = "clientDomain", cascade = { CascadeType.MERGE, CascadeType.DETACH })
+	@OneToOne(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	private IndirizzoOperativo indirizzoOperativo;
 	// @JsonIgnore
 	// @ToStringExclude
-	@OneToOne(mappedBy = "clientDomain", cascade = { CascadeType.MERGE, CascadeType.DETACH })
+	@OneToOne(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	private IndirizzoLegale indirizzoLegale;
 	@JsonIgnore @ToStringExclude
-	@OneToMany(mappedBy = "clientDomain", cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE },
+	@OneToMany(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE },
 	fetch = FetchType.LAZY)
 	private List<Fattura> fatture = new ArrayList<Fattura>();
 

@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import it.progetto.energy.dto.*;
-import it.progetto.energy.model.ClientDomain;
+import it.progetto.energy.model.Cliente;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -115,9 +115,9 @@ public class FatturaService extends FileService{
 		}
 		BeanUtils.copyProperties(dto, fattura);
 		Path root = Paths.get("upload");
-		ClientDomain clientDomain = clienteServ.associaCliente(dto.getIdCliente());
-		clientDomain.getFatture().add(fattura);
-		fattura.setClientDomain(clientDomain);
+		Cliente cliente = clienteServ.associaCliente(dto.getIdCliente());
+		cliente.getFatture().add(fattura);
+		fattura.setCliente(cliente);
 		log.info("Cliente associato");
 		fatturaRepo.save(fattura);
 		log.info("La Fattura è stata salvata");
@@ -154,9 +154,9 @@ public class FatturaService extends FileService{
 				case "RIMBORSATA": fattura.setStato(StatoFattura.RIMBORSATA); break;
 			}
 			BeanUtils.copyProperties(dto, fattura);
-			ClientDomain clientDomain = clienteServ.associaCliente(dto.getIdCliente());
-			clientDomain.getFatture().add(fattura);
-			fattura.setClientDomain(clientDomain);
+			Cliente cliente = clienteServ.associaCliente(dto.getIdCliente());
+			cliente.getFatture().add(fattura);
+			fattura.setCliente(cliente);
 			log.info("Cliente associato");
 			fatturaRepo.save(fattura);
 			log.info("La Fattura è stata modificata");

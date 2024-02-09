@@ -1,7 +1,6 @@
 package it.progetto.energy.runner;
 
-import it.progetto.energy.model.Cliente;
-import it.progetto.energy.model.Fattura;
+
 import it.progetto.energy.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;

@@ -42,6 +42,6 @@ public class Fattura {
 	private StatoFattura stato;
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH  })
 	@JoinColumn(name = "id_cliente")
-	private ClientDomain clientDomain;
+	private Cliente cliente;
 
 }

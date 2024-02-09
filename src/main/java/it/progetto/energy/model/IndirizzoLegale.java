@@ -36,6 +36,6 @@ public class IndirizzoLegale {
 	private Comune comune;
 	@JsonIgnore
 	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
-	private ClientDomain clientDomain;
+	private Cliente cliente;
 
 }

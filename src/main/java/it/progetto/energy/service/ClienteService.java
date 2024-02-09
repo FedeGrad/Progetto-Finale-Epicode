@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
-import it.progetto.energy.model.ClientDomain;
+import it.progetto.energy.model.Cliente;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,8 +41,8 @@ public class ClienteService {
 	 * @return
 	 */
 	@Deprecated
-	public List<ClientDomain> getAllClienti() {
-		return (List<ClientDomain>) clienteRepo.findAll();
+	public List<Cliente> getAllClienti() {
+		return (List<Cliente>) clienteRepo.findAll();
 	}
 
 	/**
@@ -50,8 +50,8 @@ public class ClienteService {
 	 * @param page
 	 * @return
 	 */
-	public Page<ClientDomain> getAllClienti(Pageable page) {
-		return (Page<ClientDomain>) clienteRepo.findAll(page);
+	public Page<Cliente> getAllClienti(Pageable page) {
+		return (Page<Cliente>) clienteRepo.findAll(page);
 	}
 
 	/**
@@ -60,8 +60,8 @@ public class ClienteService {
 	 * @param page
 	 * @return
 	 */
-	public Page<ClientDomain> getClientiByNome(String nome, Pageable page) {
-		return (Page<ClientDomain>) clienteRepo.findByNomeContattoAllIgnoreCase(nome, page);
+	public Page<Cliente> getClientiByNome(String nome, Pageable page) {
+		return (Page<Cliente>) clienteRepo.findByNomeContattoAllIgnoreCase(nome, page);
 	}
 
 	/**
@@ -69,8 +69,8 @@ public class ClienteService {
 	 * @param nomeContiene
 	 * @return
 	 */
-	public Page<ClientDomain> getClientiByNomeContain(String nomeContiene, Pageable page) {
-		return (Page<ClientDomain>) clienteRepo.findByNomeContattoContainingAllIgnoreCase(nomeContiene, page);
+	public Page<Cliente> getClientiByNomeContain(String nomeContiene, Pageable page) {
+		return (Page<Cliente>) clienteRepo.findByNomeContattoContainingAllIgnoreCase(nomeContiene, page);
 	}
 
 	/**
@@ -79,8 +79,8 @@ public class ClienteService {
 	 * @param page
 	 * @return
 	 */
-	public Page<ClientDomain> getClientiByFatturato(Double fatturato, Pageable page) {
-		return (Page<ClientDomain>) clienteRepo.findByFatturatoAnnuale(fatturato, page);
+	public Page<Cliente> getClientiByFatturato(Double fatturato, Pageable page) {
+		return (Page<Cliente>) clienteRepo.findByFatturatoAnnuale(fatturato, page);
 	}
 
 	/**
@@ -89,8 +89,8 @@ public class ClienteService {
 	 * @param page
 	 * @return
 	 */
-	public Page<ClientDomain> getClientiByDataInserimento(DataDTO dataInserimento, Pageable page) {
-		return (Page<ClientDomain>) clienteRepo.findByDataInserimento(dataInserimento.getData(), page);
+	public Page<Cliente> getClientiByDataInserimento(DataDTO dataInserimento, Pageable page) {
+		return (Page<Cliente>) clienteRepo.findByDataInserimento(dataInserimento.getData(), page);
 	}
 
 	/**
@@ -99,8 +99,8 @@ public class ClienteService {
 	 * @param page
 	 * @return
 	 */
-	public Page<ClientDomain> getClientiByDataUltimoContatto(DataDTO dataUltContatto, Pageable page) {
-		return (Page<ClientDomain>) clienteRepo.findByDataUltimoContatto(dataUltContatto.getData(), page);
+	public Page<Cliente> getClientiByDataUltimoContatto(DataDTO dataUltContatto, Pageable page) {
+		return (Page<Cliente>) clienteRepo.findByDataUltimoContatto(dataUltContatto.getData(), page);
 	}
 
 	/**
@@ -108,8 +108,8 @@ public class ClienteService {
 	 * @param ricercaProvinciaDTO
 	 * @return
 	 */
-	public List<ClientDomain> getClientiByProvincia(RicercaProvinciaDTO ricercaProvinciaDTO) {
-		return (List<ClientDomain>) clienteRepo.findByProvinciaAllIgnoreCase(ricercaProvinciaDTO.getProvincia());
+	public List<Cliente> getClientiByProvincia(RicercaProvinciaDTO ricercaProvinciaDTO) {
+		return (List<Cliente>) clienteRepo.findByProvinciaAllIgnoreCase(ricercaProvinciaDTO.getProvincia());
 	}
 
 	/**
@@ -117,10 +117,10 @@ public class ClienteService {
 	 * @param id
 	 * @return
 	 */
-	public ClientDomain associaCliente(Long id) {
+	public Cliente associaCliente(Long id) {
 		if (clienteRepo.existsById(id)) {
-			ClientDomain clientDomainTrovato = clienteRepo.findById(id).get();
-			return clientDomainTrovato;
+			Cliente clienteTrovato = clienteRepo.findById(id).get();
+			return clienteTrovato;
 		} else {
 			throw new NotFoundException("Cliente id " + id + " non trovato");
 		}
@@ -155,11 +155,11 @@ public class ClienteService {
 	 * @throws WrongInsertException
 	 */
 	public ResponseEntity<?> inserisciCliente(ClienteDTO clienteDTO) throws WrongInsertException {
-		ClientDomain clientDomain;
+		Cliente cliente;
 		if (controlloDatiCliente(clienteDTO.getEmail(), clienteDTO.getEmailContatto(), clienteDTO.getPec(),
 				clienteDTO.getPartitaIva(), clienteDTO.getTelefono(), clienteDTO.getTelefonoContatto())) {
 
-			clientDomain = ClientDomain.builder()
+			cliente = Cliente.builder()
 //					.dataDiNascita(clienteDTO.getDataDiNascita())
 					.dataInserimento(LocalDate.now())
 					.dataUltimoContatto(LocalDate.now())
@@ -167,25 +167,25 @@ public class ClienteService {
 					.build();
 
 			switch (clienteDTO.getTipologia().toUpperCase()) {
-				case "PA": clientDomain.setTipologia(Tipologia.PA); break;
-				case "SAS": clientDomain.setTipologia(Tipologia.SAS); break;
-				case "SPA": clientDomain.setTipologia(Tipologia.SPA); break;
-				case "SRL": clientDomain.setTipologia(Tipologia.SRL); break;
+				case "PA": cliente.setTipologia(Tipologia.PA); break;
+				case "SAS": cliente.setTipologia(Tipologia.SAS); break;
+				case "SPA": cliente.setTipologia(Tipologia.SPA); break;
+				case "SRL": cliente.setTipologia(Tipologia.SRL); break;
 			}
-			BeanUtils.copyProperties(clienteDTO, clientDomain);
+			BeanUtils.copyProperties(clienteDTO, cliente);
 			IndirizzoLegale indirizzoLegTrovato = indirizzoLegServ.associaIndirizzoLegale(clienteDTO.getIdIndirizzoLegale());
-			clientDomain.setIndirizzoLegale(indirizzoLegTrovato);
-			indirizzoLegTrovato.setClientDomain(clientDomain);
+			cliente.setIndirizzoLegale(indirizzoLegTrovato);
+			indirizzoLegTrovato.setCliente(cliente);
 			log.info("Indirizzo Legale associato");
 			IndirizzoOperativo indirizzoOpTrovato = indirizzoOpServ
 					.associaIndirizzoOperativo(clienteDTO.getIdIndirizzoOperativo());
-			clientDomain.setIndirizzoOperativo(indirizzoOpTrovato);
-			indirizzoOpTrovato.setClientDomain(clientDomain);
+			cliente.setIndirizzoOperativo(indirizzoOpTrovato);
+			indirizzoOpTrovato.setCliente(cliente);
 			log.info("Indirizzo Operativo associato");
-			clienteRepo.save(clientDomain);
+			clienteRepo.save(cliente);
 			log.info("Cliente: {}, salvato  in data: {}",
-					clientDomain.getNomeContatto() + " " + clientDomain.getCognomeContatto(), clientDomain.getDataInserimento());
-			return ResponseEntity.ok("Cliente creato id=" + clientDomain.getId());
+					cliente.getNomeContatto() + " " + cliente.getCognomeContatto(), cliente.getDataInserimento());
+			return ResponseEntity.ok("Cliente creato id=" + cliente.getId());
 		} else {
 			throw new WrongInsertException("Errore inserimento dati");
 		}
@@ -199,32 +199,32 @@ public class ClienteService {
 	 */
 	public void modificaCliente(ClienteModificaDTO dto) throws NotFoundException, WrongInsertException {
 		if (clienteRepo.existsById(dto.getIdCliente())) {
-			ClientDomain clientDomain = clienteRepo.findById(dto.getIdCliente()).get();
-			clientDomain.setDataUltimoContatto(LocalDate.now());
+			Cliente cliente = clienteRepo.findById(dto.getIdCliente()).get();
+			cliente.setDataUltimoContatto(LocalDate.now());
 			switch (dto.getTipologia()) {
-				case "PA": clientDomain.setTipologia(Tipologia.PA); break;
-				case "SAS": clientDomain.setTipologia(Tipologia.SAS); break;
-				case "SPA": clientDomain.setTipologia(Tipologia.SPA); break;
-				case "SRL": clientDomain.setTipologia(Tipologia.SRL); break;
+				case "PA": cliente.setTipologia(Tipologia.PA); break;
+				case "SAS": cliente.setTipologia(Tipologia.SAS); break;
+				case "SPA": cliente.setTipologia(Tipologia.SPA); break;
+				case "SRL": cliente.setTipologia(Tipologia.SRL); break;
 			}
 			if (controlloDatiCliente(dto.getEmail(), dto.getEmailContatto(), dto.getPec(), dto.getPartitaIva(),
 					dto.getTelefono(), dto.getTelefonoContatto())) {
-				BeanUtils.copyProperties(dto, clientDomain);
+				BeanUtils.copyProperties(dto, cliente);
 			} else {
 				throw new WrongInsertException("Errore inserimento dati");
 			}
-			log.info("Il Cliente in data: " + clientDomain.getDataUltimoContatto() + " è stato modificato");
+			log.info("Il Cliente in data: " + cliente.getDataUltimoContatto() + " è stato modificato");
 			IndirizzoLegale indirizzoLegtrovato = indirizzoLegServ.associaIndirizzoLegale(dto.getIDindirizzoLegale());
-			clientDomain.setIndirizzoLegale(indirizzoLegtrovato);
-			indirizzoLegtrovato.setClientDomain(clientDomain);
+			cliente.setIndirizzoLegale(indirizzoLegtrovato);
+			indirizzoLegtrovato.setCliente(cliente);
 			log.info("Indirizzo Legale associato");
 			IndirizzoOperativo indirizzoOptrovato = indirizzoOpServ
 					.associaIndirizzoOperativo(dto.getIDindirizzoOperativo());
-			clientDomain.setIndirizzoOperativo(indirizzoOptrovato);
-			indirizzoOptrovato.setClientDomain(clientDomain);
+			cliente.setIndirizzoOperativo(indirizzoOptrovato);
+			indirizzoOptrovato.setCliente(cliente);
 			log.info("Indirizzo Operativo associato");
-			clienteRepo.save(clientDomain);
-			log.info(clientDomain.getNomeContatto() + " " + clientDomain.getCognomeContatto() + " modificato");
+			clienteRepo.save(cliente);
+			log.info(cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " modificato");
 		} else {
 			throw new NotFoundException("Il Noleggio id " + dto.getIdCliente() + " non esiste");
 		}
@@ -236,8 +236,8 @@ public class ClienteService {
 	 */
 	public void eliminaCliente(Long id) {
 		if (clienteRepo.existsById(id)) {
-			ClientDomain clientDomain = clienteRepo.findById(id).get();
-			log.info("Il Cliente " + clientDomain.getNomeContatto() + " " + clientDomain.getCognomeContatto() + " in data "
+			Cliente cliente = clienteRepo.findById(id).get();
+			log.info("Il Cliente " + cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " in data "
 					+ LocalDate.now() + " è stato eliminato");
 			clienteRepo.deleteById(id);
 		} else {

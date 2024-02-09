@@ -39,26 +39,26 @@ public class EnergyConfiguration {
 
 	@Lazy
     @Bean(name = "clienteDefault")
-	public ClientDomain clienteDefault() {
-		ClientDomain clientDomain = new ClientDomain();
-		clientDomain.setNomeContatto("Mario");
-		clientDomain.setCognomeContatto("Rossi");
-		clientDomain.setAnni(33);
-		clientDomain.setTipologia(Tipologia.PA);
-		clientDomain.setEmail("azienda@email.com");
-		clientDomain.setRagioneSociale("Label");
-		clientDomain.setPartitaIva("12345678901");
-		clientDomain.setDataDiNascita(LocalDate.of(1989, 04, 9));
-		clientDomain.setDataInserimento(LocalDate.now());
-		clientDomain.setDataUltimoContatto(LocalDate.now());
-		clientDomain.setFatturatoAnnuale(BigDecimal.valueOf(1000));
-		clientDomain.setPec("utente@pec.com");
-		clientDomain.setTelefono("32711223344");
-		clientDomain.setTelefonoContatto("32711223344");
-		clientDomain.setEmailContatto("utente@email.com");
-		clientDomain.setIndirizzoLegale(indiLegaleRepo.findById(3l).get());
-		clientDomain.setIndirizzoOperativo(indiOperativoRepo.findById(2l).get());
-		return clientDomain;
+	public Cliente clienteDefault() {
+		Cliente customerDomain = new Cliente();
+		customerDomain.setNomeContatto("Mario");
+		customerDomain.setCognomeContatto("Rossi");
+		customerDomain.setAnni(33);
+		customerDomain.setTipologia(Tipologia.PA);
+		customerDomain.setEmail("azienda@email.com");
+		customerDomain.setRagioneSociale("Label");
+		customerDomain.setPartitaIva("12345678901");
+		customerDomain.setDataDiNascita(LocalDate.of(1989, 04, 9));
+		customerDomain.setDataInserimento(LocalDate.now());
+		customerDomain.setDataUltimoContatto(LocalDate.now());
+		customerDomain.setFatturatoAnnuale(BigDecimal.valueOf(1000));
+		customerDomain.setPec("utente@pec.com");
+		customerDomain.setTelefono("32711223344");
+		customerDomain.setTelefonoContatto("32711223344");
+		customerDomain.setEmailContatto("utente@email.com");
+		customerDomain.setIndirizzoLegale(indirizzoLegaleRepository.findById(3L).orElse(null));
+		customerDomain.setIndirizzoOperativo(indirizzoOperativoRepository.findById(2L).orElse(null));
+		return customerDomain;
 	}
 
 	@Lazy
