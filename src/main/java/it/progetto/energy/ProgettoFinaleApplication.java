@@ -1,12 +1,7 @@
 package it.progetto.energy;
 
-import it.progetto.energy.model.Operazione;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-
-import java.util.Arrays;
 
 /*
  * L'annotazione @SpringBootApplication è comprensiva di:
@@ -18,7 +13,6 @@ public class ProgettoFinaleApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProgettoFinaleApplication.class, args);
-
 	}
 
 }

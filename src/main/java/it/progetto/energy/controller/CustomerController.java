@@ -1,10 +1,19 @@
 package it.progetto.energy.controller;
 
-import javax.validation.Valid;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.CustomerApi;
-import it.progetto.energy.model.Cliente;
+import it.progetto.energy.dto.ClienteDTO;
+import it.progetto.energy.dto.ClienteModificaDTO;
+import it.progetto.energy.dto.DataDTO;
+import it.progetto.energy.dto.RicercaProvinciaDTO;
+import it.progetto.energy.exception.WrongInsertException;
+import it.progetto.energy.persistence.entity.Cliente;
+import it.progetto.energy.service.ClienteService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,22 +30,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import it.progetto.energy.dto.ClienteDTO;
-import it.progetto.energy.dto.ClienteModificaDTO;
-import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.RicercaProvinciaDTO;
-import it.progetto.energy.exception.WrongInsertException;
-import it.progetto.energy.service.ClienteService;
-
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
 @Tag(name = "Cliente Controller", description = "Gestione dei clienti")
+@Slf4j
 @RequiredArgsConstructor
 public class CustomerController implements CustomerApi {
 
@@ -134,6 +134,7 @@ public class CustomerController implements CustomerApi {
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<?> createCustomer(@Valid @RequestBody ClienteDTO dto) throws WrongInsertException {
 		return clienteService.inserisciCliente(dto);
 	}
@@ -146,10 +147,11 @@ public class CustomerController implements CustomerApi {
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
-	public ResponseEntity<?> modificaCliente(@Valid @RequestBody ClienteModificaDTO modificaDTO)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void modificaCliente(@Valid @RequestBody ClienteModificaDTO modificaDTO)
 			throws NotFoundException, WrongInsertException {
 		clienteService.modificaCliente(modificaDTO);
-		return ResponseEntity.ok("Cliente modificato");
+		log.info("Customer updated");
 	}
 
 	@Operation(summary = "Eliminazione Cliente",
@@ -160,9 +162,10 @@ public class CustomerController implements CustomerApi {
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
-	public ResponseEntity eliminaCliente(@PathVariable Long id) {
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteCustomer(@PathVariable("id") Long id) {
 		clienteService.eliminaCliente(id);
-		return ResponseEntity.ok("Cliente eliminato");
+		log.info("Customer deleted");
 	}
 
 }

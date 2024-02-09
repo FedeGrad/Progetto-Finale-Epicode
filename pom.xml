@@ -7,14 +7,18 @@
 		<version>2.7.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>it.progetto</groupId>
 	<artifactId>Progetto_Finale</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Progetto_Finale</name>
 	<description>Epic Energy Service</description>
+
 	<properties>
 		<java.version>11</java.version>
+		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -49,8 +53,14 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
+			<version>42.5.1</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

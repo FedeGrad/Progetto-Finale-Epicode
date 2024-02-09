@@ -1,26 +1,19 @@
 package it.progetto.energy.service;
 
-import java.util.List;
-
+import it.progetto.energy.dto.ProvinciaDTO;
+import it.progetto.energy.dto.ProvinciaModificaDTO;
+import it.progetto.energy.exception.ElementAlreadyPresentException;
+import it.progetto.energy.persistence.entity.Provincia;
+import it.progetto.energy.persistence.repository.ProvinciaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-import it.progetto.energy.dto.ProvinciaDTO;
-import it.progetto.energy.dto.ProvinciaModificaDTO;
-import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.model.Fattura;
-import it.progetto.energy.model.Provincia;
-import it.progetto.energy.repository.ProvinciaRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 
 @Service
 @Slf4j

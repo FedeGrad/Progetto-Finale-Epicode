@@ -1,19 +1,19 @@
 package it.progetto.energy.runner;
 
-
-import it.progetto.energy.repository.*;
-import lombok.AllArgsConstructor;
+import it.progetto.energy.impl.repository.RoleAccessRepository;
+import it.progetto.energy.impl.repository.UserAccessRepository;
+import it.progetto.energy.persistence.repository.ClienteRepository;
+import it.progetto.energy.persistence.repository.ComuneRepository;
+import it.progetto.energy.persistence.repository.FatturaRepository;
+import it.progetto.energy.persistence.repository.IndirizzoLegaleRepository;
+import it.progetto.energy.persistence.repository.IndirizzoOperativoRepository;
+import it.progetto.energy.persistence.repository.ProvinciaRepository;
+import it.progetto.energy.thread.AggiornaAnniThread;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import it.progetto.energy.impl.repository.RoleAccessRepository;
-import it.progetto.energy.impl.repository.UserAccessRepository;
-import it.progetto.energy.thread.AggiornaAnniThread;
 
 @Component
 @RequiredArgsConstructor
@@ -21,13 +21,13 @@ public class Runner implements ApplicationRunner {
 
 	private final ClienteRepository clienteRepository;
 	private final FatturaRepository fatturaRepository;
-	private final ComuneRepository comuneRepo;
-	private final ProvinciaRepository provinciaRepo;
-	private final IndirizzoLegaleRepository indiLegRepo;
-	private final IndirizzoOperativoRepository indiOpRepo;
-	private final UserAccessRepository userRepo;
-	private final PasswordEncoder passEncod;
-	private final RoleAccessRepository roleRepo;
+	private final ComuneRepository comuneRepository;
+	private final ProvinciaRepository provinciaRepository;
+	private final IndirizzoLegaleRepository indirizzoLegaleRepository;
+	private final IndirizzoOperativoRepository indirizzoOperativoRepository;
+	private final UserAccessRepository userAccessRepository;
+	private final RoleAccessRepository roleAccessRepository;
+	private final PasswordEncoder passwordEncoder;
 
 //	@Qualifier("clienteDefault")
 //	private final Cliente cliente;
@@ -35,7 +35,7 @@ public class Runner implements ApplicationRunner {
 //	@Qualifier("fatturaDefault")
 //	private final Fattura fattura;
 
-	AggiornaAnniThread thread = new AggiornaAnniThread();
+	AggiornaAnniThread aggiornaAnniThread = new AggiornaAnniThread();
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -44,7 +44,7 @@ public class Runner implements ApplicationRunner {
 //		fatturaRepository.save(fattura);
 
 
-//		thread.run();
+//		aggiornaAnniThread.run();
 
 		/*
 		 * IMPORTAZIONE PROVINCE

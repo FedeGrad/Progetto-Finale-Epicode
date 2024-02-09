@@ -1,14 +1,13 @@
 package it.progetto.energy.thread;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import it.progetto.energy.model.Cliente;
+import it.progetto.energy.persistence.entity.Cliente;
+import it.progetto.energy.persistence.repository.ClienteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import it.progetto.energy.repository.ClienteRepository;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Slf4j
 public class AggiornaAnniThread {

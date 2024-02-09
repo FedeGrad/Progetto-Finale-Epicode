@@ -1,18 +1,20 @@
 package it.progetto.energy.configuration;
 
-import it.progetto.energy.model.*;
-import it.progetto.energy.repository.ClienteRepository;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import it.progetto.energy.persistence.entity.Cliente;
+import it.progetto.energy.persistence.entity.Fattura;
+import it.progetto.energy.persistence.entity.StatoFattura;
+import it.progetto.energy.persistence.entity.Tipologia;
+import it.progetto.energy.persistence.repository.ClienteRepository;
+import it.progetto.energy.persistence.repository.IndirizzoLegaleRepository;
+import it.progetto.energy.persistence.repository.IndirizzoOperativoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.EnableAsync;
-
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import it.progetto.energy.repository.IndirizzoLegaleRepository;
-import it.progetto.energy.repository.IndirizzoOperativoRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,8 +1,6 @@
 package it.progetto.energy.csv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import it.progetto.energy.model.Provincia;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

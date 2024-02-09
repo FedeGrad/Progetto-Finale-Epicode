@@ -1,25 +1,15 @@
 package it.progetto.energy.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.progetto.energy.model.IndirizzoLegale;
-import it.progetto.energy.model.IndirizzoOperativo;
-import it.progetto.energy.model.Tipologia;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Setter

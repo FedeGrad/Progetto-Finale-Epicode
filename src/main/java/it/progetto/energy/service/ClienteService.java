@@ -1,45 +1,41 @@
 package it.progetto.energy.service;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.List;
-
-import it.progetto.energy.model.Cliente;
+import it.progetto.energy.dto.ClienteDTO;
+import it.progetto.energy.dto.ClienteModificaDTO;
+import it.progetto.energy.dto.DataDTO;
+import it.progetto.energy.dto.RicercaProvinciaDTO;
+import it.progetto.energy.exception.WrongInsertException;
+import it.progetto.energy.persistence.entity.Cliente;
+import it.progetto.energy.persistence.entity.IndirizzoLegale;
+import it.progetto.energy.persistence.entity.IndirizzoOperativo;
+import it.progetto.energy.persistence.entity.Tipologia;
+import it.progetto.energy.persistence.repository.ClienteRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import it.progetto.energy.dto.ClienteDTO;
-import it.progetto.energy.dto.ClienteModificaDTO;
-import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.RicercaProvinciaDTO;
-import it.progetto.energy.exception.WrongInsertException;
-import it.progetto.energy.model.IndirizzoLegale;
-import it.progetto.energy.model.IndirizzoOperativo;
-import it.progetto.energy.model.Tipologia;
-import it.progetto.energy.repository.ClienteRepository;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ClienteService {
 
-	@Autowired
-	ClienteRepository clienteRepo;
-	@Autowired
-	IndirizzoLegaleService indirizzoLegServ;
-	@Autowired
-	IndirizzoOperativoService indirizzoOpServ;
+	private final ClienteRepository clienteRepo;
+	private final IndirizzoLegaleService indirizzoLegServ;
+	private final IndirizzoOperativoService indirizzoOpServ;
 
 	/**
 	 * Recupera tutti i Clienti
 	 * @deprecated
-	 * @return
-	 */
+     */
 	@Deprecated
 	public List<Cliente> getAllClienti() {
 		return (List<Cliente>) clienteRepo.findAll();
@@ -48,8 +44,7 @@ public class ClienteService {
 	/**
 	 * Recupera tutti i Clienti, per pagina
 	 * @param page
-	 * @return
-	 */
+     */
 	public Page<Cliente> getAllClienti(Pageable page) {
 		return (Page<Cliente>) clienteRepo.findAll(page);
 	}
@@ -58,8 +53,7 @@ public class ClienteService {
 	 * Recupera i Clienti per nome
 	 * @param nome
 	 * @param page
-	 * @return
-	 */
+     */
 	public Page<Cliente> getClientiByNome(String nome, Pageable page) {
 		return (Page<Cliente>) clienteRepo.findByNomeContattoAllIgnoreCase(nome, page);
 	}
@@ -67,8 +61,7 @@ public class ClienteService {
 	/**
 	 * Recupera i Clienti che nel nome è presente il valore passato nel parametro, nel nome
 	 * @param nomeContiene
-	 * @return
-	 */
+     */
 	public Page<Cliente> getClientiByNomeContain(String nomeContiene, Pageable page) {
 		return (Page<Cliente>) clienteRepo.findByNomeContattoContainingAllIgnoreCase(nomeContiene, page);
 	}
@@ -77,8 +70,7 @@ public class ClienteService {
 	 * Recupera i Clienti con uno specifico fatturato
 	 * @param fatturato
 	 * @param page
-	 * @return
-	 */
+     */
 	public Page<Cliente> getClientiByFatturato(Double fatturato, Pageable page) {
 		return (Page<Cliente>) clienteRepo.findByFatturatoAnnuale(fatturato, page);
 	}
@@ -87,8 +79,7 @@ public class ClienteService {
 	 * Recupera i Clienti registrati in una determinata data
 	 * @param dataInserimento
 	 * @param page
-	 * @return
-	 */
+     */
 	public Page<Cliente> getClientiByDataInserimento(DataDTO dataInserimento, Pageable page) {
 		return (Page<Cliente>) clienteRepo.findByDataInserimento(dataInserimento.getData(), page);
 	}
@@ -97,8 +88,7 @@ public class ClienteService {
 	 * Recupera i Clienti contattati in una determinata data
 	 * @param dataUltContatto
 	 * @param page
-	 * @return
-	 */
+     */
 	public Page<Cliente> getClientiByDataUltimoContatto(DataDTO dataUltContatto, Pageable page) {
 		return (Page<Cliente>) clienteRepo.findByDataUltimoContatto(dataUltContatto.getData(), page);
 	}
@@ -106,8 +96,7 @@ public class ClienteService {
 	/**
 	 * Recupera i Clienti di una specifica provincia
 	 * @param ricercaProvinciaDTO
-	 * @return
-	 */
+     */
 	public List<Cliente> getClientiByProvincia(RicercaProvinciaDTO ricercaProvinciaDTO) {
 		return (List<Cliente>) clienteRepo.findByProvinciaAllIgnoreCase(ricercaProvinciaDTO.getProvincia());
 	}
@@ -115,8 +104,7 @@ public class ClienteService {
 	/**
 	 * Associa un cliente by id
 	 * @param id
-	 * @return
-	 */
+     */
 	public Cliente associaCliente(Long id) {
 		if (clienteRepo.existsById(id)) {
 			Cliente clienteTrovato = clienteRepo.findById(id).get();
@@ -129,8 +117,7 @@ public class ClienteService {
 	/**
 	 * RegEx per: [0]eMail, [1]numero, [2]partita Iva di un Utente
 	 * @param valori
-	 * @return
-	 */
+     */
 	private boolean controlloDatiCliente(String... valori) {
 		while (!valori[0].matches("[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}")
 				|| !valori[1].matches("[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}")

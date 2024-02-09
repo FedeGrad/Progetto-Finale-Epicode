@@ -1,8 +1,12 @@
-package it.progetto.energy.model;
+package it.progetto.energy.persistence.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 @Entity
 //Non persiste l'entità sul DB ma mappa solamente

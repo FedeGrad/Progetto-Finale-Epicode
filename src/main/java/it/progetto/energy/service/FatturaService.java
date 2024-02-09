@@ -1,13 +1,15 @@
 package it.progetto.energy.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-
-import it.progetto.energy.dto.*;
-import it.progetto.energy.model.Cliente;
+import it.progetto.energy.dto.DataDTO;
+import it.progetto.energy.dto.FatturaDTO;
+import it.progetto.energy.dto.FatturaModificaDTO;
+import it.progetto.energy.dto.FatturaPDFDTO;
+import it.progetto.energy.dto.RangeDTO;
+import it.progetto.energy.persistence.entity.Cliente;
+import it.progetto.energy.persistence.entity.Fattura;
+import it.progetto.energy.persistence.entity.StatoFattura;
+import it.progetto.energy.persistence.repository.FatturaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,10 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import it.progetto.energy.model.Fattura;
-import it.progetto.energy.model.StatoFattura;
-import it.progetto.energy.repository.FatturaRepository;
-import lombok.extern.slf4j.Slf4j;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 @Slf4j

@@ -1,20 +1,32 @@
-package it.progetto.energy.model;
+package it.progetto.energy.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
+import org.apache.commons.lang3.builder.ToStringExclude;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.Email;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.*;
-import lombok.extern.jackson.Jacksonized;
-import org.apache.commons.lang3.builder.ToStringExclude;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Data
