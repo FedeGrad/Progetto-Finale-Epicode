@@ -6,9 +6,9 @@ import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.Comune;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
 import it.progetto.energy.persistence.repository.IndirizzoLegaleRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,11 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class IndirizzoLegaleService {
 
-	@Autowired
-	IndirizzoLegaleRepository indiLegRepo;
-	@Autowired
-	ComuneService comuneServ;
+	private final IndirizzoLegaleRepository indirizzoLegaleRepository;
+	private final ComuneService comuneServ;
 
 	/**
 	 * Recupera tutti gli Indirizzi Legali
@@ -32,7 +31,7 @@ public class IndirizzoLegaleService {
 	 */
 	@Deprecated
 	public List<IndirizzoLegale> getAllIndirizziLegali() {
-		return (List<IndirizzoLegale>) indiLegRepo.findAll();
+		return (List<IndirizzoLegale>) indirizzoLegaleRepository.findAll();
 	}
 
 	/**
@@ -41,7 +40,7 @@ public class IndirizzoLegaleService {
 	 * @return
 	 */
 	public Page<IndirizzoLegale> getAllIndirizziLegali(Pageable page) {
-		return (Page<IndirizzoLegale>) indiLegRepo.findAll(page);
+		return (Page<IndirizzoLegale>) indirizzoLegaleRepository.findAll(page);
 	}
 
 	/**
@@ -50,12 +49,8 @@ public class IndirizzoLegaleService {
 	 * @return IndirizzoLegale
 	 */
 	public IndirizzoLegale associaIndirizzoLegale(Long id) {
-		if (indiLegRepo.existsById(id)) {
-			IndirizzoLegale indirizzoTrovato = indiLegRepo.findById(id).get();
-			return indirizzoTrovato;
-		} else {
-			throw new NotFoundException("Indirizzo Legale n°" + id + " non trovato");
-		}
+		return indirizzoLegaleRepository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Main Address not Found"));
 	}
 
 	/**
@@ -64,16 +59,17 @@ public class IndirizzoLegaleService {
 	 * @throws ElementAlreadyPresentException
 	 */
 	public void inserisciIndirizzoLegale(IndirizzoDTO dto) throws ElementAlreadyPresentException {
-		if (!indiLegRepo.existsByViaAllIgnoreCase(dto.getVia()) || !indiLegRepo.existsByCivico(dto.getCivico())
-				|| !indiLegRepo.existsByCap(dto.getCap())) {
+		if (!indirizzoLegaleRepository.existsByViaAllIgnoreCase(dto.getVia())
+				|| !indirizzoLegaleRepository.existsByCivico(dto.getCivico())
+				|| !indirizzoLegaleRepository.existsByCap(dto.getCap())) {
 			IndirizzoLegale indirizzo = new IndirizzoLegale();
 			BeanUtils.copyProperties(dto, indirizzo);
 			String localita = dto.getLocalita();
-			localita.toUpperCase();
-			Comune comuneTrovato = comuneServ.associaComune(localita);
+			Comune comuneTrovato = comuneServ.associaComune(localita.toUpperCase());
 			indirizzo.setComune(comuneTrovato);
 			comuneTrovato.getIndirizziLegali().add(indirizzo);
-			indiLegRepo.save(indirizzo);
+
+			indirizzoLegaleRepository.save(indirizzo);
 			log.info("L'indirizzo Legale è stato salvato");
 		} else {
 			throw new ElementAlreadyPresentException("Indirizzo Legale gia presente");
@@ -85,16 +81,16 @@ public class IndirizzoLegaleService {
 	 * @param dto
 	 * @throws NotFoundException
 	 */
-	public void modificaIndirizzoLegale(IndirizzoModificaDTO dto) {
-		if (indiLegRepo.existsById(dto.getIdIndirizzo())) {
-			IndirizzoLegale indirizzo = indiLegRepo.findById(dto.getIdIndirizzo()).get();
+	public void updateMainAddress(IndirizzoModificaDTO dto) {
+		if (indirizzoLegaleRepository.existsById(dto.getIdIndirizzo())) {
+			IndirizzoLegale indirizzo = indirizzoLegaleRepository.findById(dto.getIdIndirizzo())
+					.orElseThrow(() -> new NotFoundException("Main Address not Found"));
 			BeanUtils.copyProperties(dto, indirizzo);
 			String localita = dto.getLocalita();
-			localita.toUpperCase();
-			Comune comuneTrovato = comuneServ.associaComune(localita);
+			Comune comuneTrovato = comuneServ.associaComune(localita.toUpperCase());
 			indirizzo.setComune(comuneTrovato);
 			comuneTrovato.getIndirizziLegali().add(indirizzo);
-			indiLegRepo.save(indirizzo);
+			indirizzoLegaleRepository.save(indirizzo);
 			log.info("l'indirizzo Legale è stato modificato");
 		} else {
 			throw new NotFoundException("L'Indirizzo Legale n°" + dto.getIdIndirizzo() + " non è presente nel sistema");
@@ -106,12 +102,12 @@ public class IndirizzoLegaleService {
 	 * @param id
 	 * @throws NotFoundException
 	 */
-	public void eliminaIndirizzoLegale(Long id) {
-		if (indiLegRepo.existsById(id)) {
-			indiLegRepo.deleteById(id);
-			log.info("L'indirizzo Legale n°" + id + " è stato eliminato");
+	public void deleteMainAddress(Long id) {
+		if (indirizzoLegaleRepository.existsById(id)) {
+			indirizzoLegaleRepository.deleteById(id);
+			log.info("L'indirizzo Legale id: {} è stato eliminato", id);
 		} else {
-			throw new NotFoundException("L'indirizzo Legale n°" + id + " non presente nel sistema");
+			throw new NotFoundException("L'indirizzo Legale id: " + id + " non presente nel sistema");
 		}
 	}
 

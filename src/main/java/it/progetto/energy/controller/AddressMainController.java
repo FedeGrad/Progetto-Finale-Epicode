@@ -80,7 +80,7 @@ public class AddressMainController implements AddressMainApi {
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void updateMainAddress(@RequestBody IndirizzoModificaDTO modificaDTO) {
-		indirizzoLegServ.modificaIndirizzoLegale(modificaDTO);
+		indirizzoLegServ.updateMainAddress(modificaDTO);
 		log.info("Main address updated");
 	}
 
@@ -93,7 +93,7 @@ public class AddressMainController implements AddressMainApi {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteMainAddress(@PathVariable Long id) {
-		indirizzoLegServ.eliminaIndirizzoLegale(id);
+		indirizzoLegServ.deleteMainAddress(id);
 		log.info("Main address deleted");
 	}
 

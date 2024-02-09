@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -135,8 +134,8 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> createCustomer(@Valid @RequestBody ClienteDTO dto) throws WrongInsertException {
-		return clienteService.inserisciCliente(dto);
+	public Cliente createCustomer(@Valid @RequestBody ClienteDTO dto) throws WrongInsertException {
+		return clienteService.createCustomer(dto);
 	}
 
 	@Operation(summary = "Modifica Cliente",
@@ -150,7 +149,7 @@ public class CustomerController implements CustomerApi {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void modificaCliente(@Valid @RequestBody ClienteModificaDTO modificaDTO)
 			throws NotFoundException, WrongInsertException {
-		clienteService.modificaCliente(modificaDTO);
+		clienteService.updateCustomer(modificaDTO);
 		log.info("Customer updated");
 	}
 
