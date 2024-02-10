@@ -1,6 +1,7 @@
 package it.progetto.energy.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import it.progetto.energy.model.Tipologia;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

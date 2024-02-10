@@ -1,25 +1,21 @@
-package it.progetto.energy.dto.fattura;
+package it.progetto.energy.dto.invoice;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
 @Data
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FatturaPDFDTO {
+public class InvoiceAddPDFDTO {
 
-	@Schema(example = "1", type = "int", description = "inserisci l'id Fattura", name = "Id fattura")
+	@Schema(example = "1", type = "long", description = "inserisci l'id Fattura", name = "Id fattura")
 	private Long idFattura;
-	//	private Long idCliente;
+
 	@NotNull @Schema(description = "carica il file", name = "Fattura")
 	private MultipartFile fileFattura;
 

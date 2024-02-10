@@ -2,12 +2,12 @@ package it.progetto.energy.service;
 
 import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.RangeDTO;
-import it.progetto.energy.dto.fattura.FatturaDTO;
-import it.progetto.energy.dto.fattura.FatturaModificaDTO;
-import it.progetto.energy.dto.fattura.FatturaPDFDTO;
+import it.progetto.energy.dto.invoice.InvoiceAddPDFDTO;
+import it.progetto.energy.dto.invoice.InvoiceDTO;
+import it.progetto.energy.dto.invoice.InvoiceUpdateDTO;
+import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.Fattura;
-import it.progetto.energy.persistence.entity.StatoFattura;
 import it.progetto.energy.persistence.repository.FatturaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -105,17 +105,9 @@ public class FatturaService extends FileService{
 	 * Inserisce una Fattura nel sistema
 	 * @param dto
 	 */
-	public void inserisciFattura(FatturaDTO dto) throws IOException {
+	public void inserisciFattura(InvoiceDTO dto) {
 		Fattura fattura = new Fattura();
-		String stato = dto.getStato();
-		switch (stato.toUpperCase().replaceAll(" ", "").trim()) {
-			case "PAGATA": fattura.setStato(StatoFattura.PAGATA); break;
-			case "NONPAGATA": fattura.setStato(StatoFattura.NON_PAGATA);break;
-			case "ANNULLATA": fattura.setStato(StatoFattura.ANNULLATA); break;
-			case "SCADUTA": fattura.setStato(StatoFattura.SCADUTA); break;
-			case "DARIMBORSARE": fattura.setStato(StatoFattura.DA_RIMBORSARE); break;
-			case "RIMBORSATA": fattura.setStato(StatoFattura.RIMBORSATA); break;
-		}
+		fattura.setStato(dto.getStato());
 		BeanUtils.copyProperties(dto, fattura);
 		Path root = Paths.get("upload");
 		Cliente cliente = clienteServ.associaCliente(dto.getIdCliente());
@@ -127,13 +119,13 @@ public class FatturaService extends FileService{
 	}
 
 	//TODO IMPLEMENTARE
-	public ResponseEntity<?> inserisciFatturaPDF(FatturaPDFDTO fatturaPDFDTO) throws IOException {
+	public ResponseEntity<?> inserisciFatturaPDF(InvoiceAddPDFDTO invoiceAddPDFDTO) throws IOException {
 		Path root = Paths.get("upload");
 		File file = new File(root.toUri());
-		fatturaPDFDTO.getFileFattura().transferTo(file);
-		Fattura fattura = fatturaRepo.findById(fatturaPDFDTO.getIdFattura()).get();
+		invoiceAddPDFDTO.getFileFattura().transferTo(file);
+		Fattura fattura = fatturaRepo.findById(invoiceAddPDFDTO.getIdFattura()).get();
 		fattura.setFile(file);
-		save(fatturaPDFDTO.getFileFattura());
+		save(invoiceAddPDFDTO.getFileFattura());
 		log.info("CV SALVATO");
 
 		return ResponseEntity.ok().build();
@@ -144,18 +136,12 @@ public class FatturaService extends FileService{
 	 * @param dto
 	 * @throws NotFoundException
 	 */
-	public void modificaFattura(FatturaModificaDTO dto) throws NotFoundException {
+	public void modificaFattura(InvoiceUpdateDTO dto) throws NotFoundException {
 		if (fatturaRepo.existsById(dto.getIdFattura())) {
-			Fattura fattura = fatturaRepo.findById(dto.getIdFattura()).get();
-			String stato = dto.getStato();
-			switch (stato.toUpperCase().replaceAll(" ", "").trim()) {
-				case "PAGATA": fattura.setStato(StatoFattura.PAGATA); break;
-				case "NONPAGATA": fattura.setStato(StatoFattura.NON_PAGATA);break;
-				case "ANNULLATA": fattura.setStato(StatoFattura.ANNULLATA); break;
-				case "SCADUTA": fattura.setStato(StatoFattura.SCADUTA); break;
-				case "DARIMBORSARE": fattura.setStato(StatoFattura.DA_RIMBORSARE); break;
-				case "RIMBORSATA": fattura.setStato(StatoFattura.RIMBORSATA); break;
-			}
+			Fattura fattura = fatturaRepo.findById(dto.getIdFattura())
+					.get();
+
+			fattura.setStato(dto.getStato());
 			BeanUtils.copyProperties(dto, fattura);
 			Cliente cliente = clienteServ.associaCliente(dto.getIdCliente());
 			cliente.getFatture().add(fattura);
@@ -175,7 +161,7 @@ public class FatturaService extends FileService{
 	public void eliminaFattura(Long id) {
 		if (fatturaRepo.existsById(id)) {
 			fatturaRepo.deleteById(id);
-			log.info("La Fattura id " + id + " è stata eliminata");
+			log.info("La Fattura id {} è stata eliminata", id);
 		} else {
 			throw new NotFoundException("La Fattura id" + id + " non esiste");
 		}

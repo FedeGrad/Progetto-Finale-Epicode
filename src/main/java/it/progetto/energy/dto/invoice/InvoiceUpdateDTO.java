@@ -1,40 +1,39 @@
-package it.progetto.energy.dto.fattura;
+package it.progetto.energy.dto.invoice;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jdk.jfr.Percentage;
+import it.progetto.energy.model.StatoFattura;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDate;
 
 @Data
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FatturaDTO {
-
+public class InvoiceUpdateDTO {
+	
 	static final String DATE_PATTERN = "dd/MM/yyyy";
+	
+	private Long idFattura;
 
-	@Schema(hidden = true)
 	private Integer anno;
-	@Schema(example = "20/01/2022", type = "string")
+
+	@Schema(example = "20/01/2000", type = "string")
 	@JsonFormat(pattern = DATE_PATTERN)
 	private LocalDate data;
+
 	private Double importo;
+
 	private Integer numero;
+
 	@Schema(example = "PAGATA / NON PAGATA / ANNULLATA / SCADUTA / DA RIMBORSARE / RIMBORSATA", type = "string")
-	private String stato;
+	@Enumerated(EnumType.STRING)
+	private StatoFattura stato;
+
 	private Long idCliente;
-	private Double importoIVA;
-	@Percentage
-	private Double percentualeIVA;
-	private Double importoSconto;
-	@Percentage
-	private Double percentualeSconto;
 
 }

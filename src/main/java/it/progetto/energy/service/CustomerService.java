@@ -8,7 +8,6 @@ import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
 import it.progetto.energy.persistence.entity.IndirizzoOperativo;
-import it.progetto.energy.persistence.entity.Tipologia;
 import it.progetto.energy.persistence.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -182,13 +181,9 @@ public class CustomerService {
 		if (clienteRepo.existsById(dto.getIdCliente())) {
 			Cliente cliente = clienteRepo.findById(dto.getIdCliente())
 					.orElseThrow(() -> new NotFoundException("Customer not found"));
+
 			cliente.setDataUltimoContatto(LocalDate.now());
-			switch (dto.getTipologia().name()) {
-				case "PA": cliente.setTipologia(Tipologia.PA); break;
-				case "SAS": cliente.setTipologia(Tipologia.SAS); break;
-				case "SPA": cliente.setTipologia(Tipologia.SPA); break;
-				case "SRL": cliente.setTipologia(Tipologia.SRL); break;
-			}
+			cliente.setTipologia(dto.getTipologia());
 
 			if (controlloDatiCliente(dto.getEmail(), dto.getEmailContatto(), dto.getPec(), dto.getPartitaIva(),
 					dto.getTelefono(), dto.getTelefonoContatto())) {
@@ -201,15 +196,17 @@ public class CustomerService {
 			cliente.setIndirizzoLegale(indirizzoLegale);
 			indirizzoLegale.setCliente(cliente);
 			log.info("Indirizzo Legale associato");
-			IndirizzoOperativo indirizzoOptrovato = indirizzoOpServ
+
+			IndirizzoOperativo indirizzoOperativo = indirizzoOpServ
 					.associaIndirizzoOperativo(dto.getIdIndirizzoOperativo());
-			cliente.setIndirizzoOperativo(indirizzoOptrovato);
-			indirizzoOptrovato.setCliente(cliente);
+			cliente.setIndirizzoOperativo(indirizzoOperativo);
+			indirizzoOperativo.setCliente(cliente);
 			log.info("Indirizzo Operativo associato");
+
 			clienteRepo.save(cliente);
-			log.info(cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " modificato");
+			log.info("Customer {} updated", cliente.getNomeContatto() + " " + cliente.getCognomeContatto());
 		} else {
-			throw new NotFoundException("Il Noleggio id " + dto.getIdCliente() + " non esiste");
+			throw new NotFoundException("Customer id " + dto.getIdCliente() + " don't found");
 		}
 	}
 
@@ -219,7 +216,8 @@ public class CustomerService {
 	 */
 	public void eliminaCliente(Long id) {
 		if (clienteRepo.existsById(id)) {
-			Cliente cliente = clienteRepo.findById(id).get();
+			Cliente cliente = clienteRepo.findById(id)
+					.get();
 			log.info("Il Cliente " + cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " in data "
 					+ LocalDate.now() + " è stato eliminato");
 			clienteRepo.deleteById(id);

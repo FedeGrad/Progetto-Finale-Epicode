@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.RangeDTO;
 import it.progetto.energy.dto.StatoDTO;
-import it.progetto.energy.dto.fattura.FatturaDTO;
-import it.progetto.energy.dto.fattura.FatturaModificaDTO;
-import it.progetto.energy.dto.fattura.FatturaPDFDTO;
+import it.progetto.energy.dto.invoice.InvoiceAddPDFDTO;
+import it.progetto.energy.dto.invoice.InvoiceDTO;
+import it.progetto.energy.dto.invoice.InvoiceUpdateDTO;
 import it.progetto.energy.persistence.entity.Fattura;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,20 +63,20 @@ public interface InvoiceApi {
             description = "Inserisci i dati della fattura che verrà creata e aggiunta al DB")
     @ApiResponse(responseCode = "204", description = "Fattura creata/inserita correttamente")
     @ApiResponse(responseCode = "500", description = "ERRORE creazione/inserimento")
-    void createInvoice(FatturaDTO fatturaDTO) throws IOException;
+    void createInvoice(InvoiceDTO invoiceDTO) throws IOException;
 
     @Operation(summary = "Aggiunge Fattura File",
             description = "Inserisci l'id della fattura pre-creata e il File")
     @ApiResponse(responseCode = "200", description = "Fattura creata/inserita correttamente")
     @ApiResponse(responseCode = "500", description = "ERRORE creazione/inserimento")
-    void uploadInvoice(String token, FatturaPDFDTO fatturaPDFDTO) throws IOException;
+    void uploadInvoice(String token, InvoiceAddPDFDTO invoiceAddPDFDTO) throws IOException;
 
     @Operation(summary = "Modifica Fattura",
             description = "Modifica una Fattura presente nel sistema")
     @ApiResponse(responseCode = "204", description = "Fattura modificata")
     @ApiResponse(responseCode = "404", description = "Fattura non trovata")
     @ApiResponse(responseCode = "500", description = "Errore modifica")
-    void updateInvoice(FatturaModificaDTO fatturaModificaDTO);
+    void updateInvoice(InvoiceUpdateDTO invoiceUpdateDTO);
 
     @Operation(summary = "Elimina Fattura",
             description = "Elimina una Fattura presente nel sistema")

@@ -1,5 +1,6 @@
 package it.progetto.energy.persistence.entity;
 
+import it.progetto.energy.model.StatoFattura;
 import jdk.jfr.Percentage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

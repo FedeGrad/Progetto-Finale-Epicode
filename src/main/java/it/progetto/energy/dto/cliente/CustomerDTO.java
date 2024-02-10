@@ -2,7 +2,7 @@ package it.progetto.energy.dto.cliente;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.progetto.energy.persistence.entity.Tipologia;
+import it.progetto.energy.model.Tipologia;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

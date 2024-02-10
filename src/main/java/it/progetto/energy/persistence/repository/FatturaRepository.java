@@ -1,7 +1,7 @@
 package it.progetto.energy.persistence.repository;
 
+import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.persistence.entity.Fattura;
-import it.progetto.energy.persistence.entity.StatoFattura;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

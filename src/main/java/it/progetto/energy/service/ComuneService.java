@@ -1,7 +1,7 @@
 package it.progetto.energy.service;
 
 import it.progetto.energy.dto.comune.ComuneDTO;
-import it.progetto.energy.dto.comune.ComuneModificaDTO;
+import it.progetto.energy.dto.comune.ComuneUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.Comune;
 import it.progetto.energy.persistence.entity.Provincia;
@@ -84,7 +84,7 @@ public class ComuneService {
 	 * @param dto
 	 * @throws ElementAlreadyPresentException
 	 */
-	public void modificaComune(ComuneModificaDTO dto) throws ElementAlreadyPresentException {
+	public void modificaComune(ComuneUpdateDTO dto) throws ElementAlreadyPresentException {
 		if (comuneRepo.existsById(dto.getIdComune())) {
 			Comune comune = comuneRepo.findById(dto.getIdComune()).get();
 			BeanUtils.copyProperties(dto, comune);

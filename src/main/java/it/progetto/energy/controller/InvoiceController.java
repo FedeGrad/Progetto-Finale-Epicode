@@ -6,11 +6,11 @@ import it.progetto.energy.controller.api.InvoiceApi;
 import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.RangeDTO;
 import it.progetto.energy.dto.StatoDTO;
-import it.progetto.energy.dto.fattura.FatturaDTO;
-import it.progetto.energy.dto.fattura.FatturaModificaDTO;
-import it.progetto.energy.dto.fattura.FatturaPDFDTO;
+import it.progetto.energy.dto.invoice.InvoiceAddPDFDTO;
+import it.progetto.energy.dto.invoice.InvoiceDTO;
+import it.progetto.energy.dto.invoice.InvoiceUpdateDTO;
+import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.persistence.entity.Fattura;
-import it.progetto.energy.persistence.entity.StatoFattura;
 import it.progetto.energy.service.FatturaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -115,8 +115,8 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(consumes = {MediaType.MULTIPART_MIXED_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void createInvoice(@Valid @ModelAttribute FatturaDTO fatturaDTO) throws IOException {
-		fatturaService.inserisciFattura(fatturaDTO);
+	public void createInvoice(@Valid @ModelAttribute InvoiceDTO invoiceDTO) throws IOException {
+		fatturaService.inserisciFattura(invoiceDTO);
 		log.info("Invoice created");
 	}
 
@@ -127,8 +127,8 @@ public class InvoiceController implements InvoiceApi {
 	@PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void uploadInvoice(@RequestHeader String token,
-							  @ModelAttribute FatturaPDFDTO fatturaPDFDTO) throws IOException {
-		log.info("{}, {}, {}", token, fatturaPDFDTO.getIdFattura(), fatturaPDFDTO.getFileFattura().getOriginalFilename());
+							  @ModelAttribute InvoiceAddPDFDTO invoiceAddPDFDTO) throws IOException {
+		log.info("{}, {}, {}", token, invoiceAddPDFDTO.getIdFattura(), invoiceAddPDFDTO.getFileFattura().getOriginalFilename());
 //				fatturaServ.inserisciFattuaPDF(fatturaPDFDTO);
 	}
 
@@ -137,8 +137,8 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateInvoice(@Valid @RequestBody FatturaModificaDTO fatturaModificaDTO) {
-		fatturaService.modificaFattura(fatturaModificaDTO);
+	public void updateInvoice(@Valid @RequestBody InvoiceUpdateDTO invoiceUpdateDTO) {
+		fatturaService.modificaFattura(invoiceUpdateDTO);
 		log.info("Invoice updated");
 	}
 
