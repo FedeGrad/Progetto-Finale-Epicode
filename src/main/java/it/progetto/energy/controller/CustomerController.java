@@ -4,12 +4,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.CustomerApi;
 import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.cliente.ClienteDTO;
-import it.progetto.energy.dto.cliente.ClienteModificaDTO;
+import it.progetto.energy.dto.cliente.CustomerDTO;
+import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
 import it.progetto.energy.dto.provincia.RicercaProvinciaDTO;
 import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
-import it.progetto.energy.service.ClienteService;
+import it.progetto.energy.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,7 +37,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController implements CustomerApi {
 
-	private final ClienteService clienteService;
+	private final CustomerService customerService;
 
 	@Deprecated
 	@SecurityRequirement(name = "bearerAuth")
@@ -45,7 +45,7 @@ public class CustomerController implements CustomerApi {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<Cliente> findAllCustomer() {
-		return clienteService.getAllClienti();
+		return customerService.getAllClienti();
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class CustomerController implements CustomerApi {
 	@ResponseStatus(HttpStatus.OK)
 	public Page<Cliente> findAllCustomer(Pageable page) {
 		//TODO ADDED MAPPPER
-		return clienteService.getAllClienti(page);
+		return customerService.getAllClienti(page);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class CustomerController implements CustomerApi {
 	@ResponseStatus(HttpStatus.OK)
 	public Page<Cliente> findCustomerByName(@PathVariable("name") String name, Pageable page) {
 		//TODO ADDED MAPPPER
-		return clienteService.getClientiByNome(name, page);
+		return customerService.getClientiByNome(name, page);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class CustomerController implements CustomerApi {
 	@ResponseStatus(HttpStatus.OK)
 	public Page<Cliente> findCustomerByNameContains(@PathVariable("name") String name, Pageable page) {
 		//TODO ADDED MAPPPER
-		return clienteService.getClientiByNomeContain(name, page);
+		return customerService.getClientiByNomeContain(name, page);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class CustomerController implements CustomerApi {
 	@PostMapping("/data/insert")
 	@ResponseStatus(HttpStatus.OK)
 	public Page<Cliente> findCustomerByDataInserimento(@RequestBody DataDTO data, Pageable page) {
-		return clienteService.getClientiByDataInserimento(data, page);
+		return customerService.getClientiByDataInserimento(data, page);
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class CustomerController implements CustomerApi {
 	@PostMapping("/data/last/update")
 	@ResponseStatus(HttpStatus.OK)
 	public Page<Cliente> findCustomerByDataLastUpdate(@RequestBody DataDTO data, Pageable page) {
-		return clienteService.getClientiByDataUltimoContatto(data, page);
+		return customerService.getClientiByDataUltimoContatto(data, page);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class CustomerController implements CustomerApi {
 	@PostMapping("/provincia")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Cliente> findCustomerByProvincia(@RequestBody RicercaProvinciaDTO dto) {
-		return clienteService.getClientiByProvincia(dto);
+		return customerService.getClientiByProvincia(dto);
 	}
 
 	@Override
@@ -110,8 +110,8 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente createCustomer(@Valid @RequestBody ClienteDTO clienteDTO) throws WrongInsertException {
-		return clienteService.createCustomer(clienteDTO);
+	public Cliente createCustomer(@Valid @RequestBody CustomerDTO customerDTO) throws WrongInsertException {
+		return customerService.createCustomer(customerDTO);
 	}
 
 	@Override
@@ -119,9 +119,9 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateCustomer(@Valid @RequestBody ClienteModificaDTO modificaDTO)
+	public void updateCustomer(@Valid @RequestBody CustomerUpdateDTO modificaDTO)
 			throws NotFoundException, WrongInsertException {
-		clienteService.updateCustomer(modificaDTO);
+		customerService.updateCustomer(modificaDTO);
 		log.info("Customer updated");
 	}
 
@@ -131,7 +131,7 @@ public class CustomerController implements CustomerApi {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteCustomer(@PathVariable("id") Long customerId) {
-		clienteService.eliminaCliente(customerId);
+		customerService.eliminaCliente(customerId);
 		log.info("Customer deleted");
 	}
 

@@ -31,7 +31,7 @@ public class FatturaService extends FileService{
 	@Autowired
 	FatturaRepository fatturaRepo;
 	@Autowired
-	ClienteService clienteServ;
+	CustomerService clienteServ;
 
 	/**
 	 * Recupera tutte le fatture

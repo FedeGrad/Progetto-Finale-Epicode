@@ -12,23 +12,40 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteOutputDTO {
+public class CustomerOutputDTO {
 
     private Long id;
+
     private String ragioneSociale;
+
     private String partitaIva;
+
     private String email;
+
     private LocalDate dataInserimento;
+
     private LocalDate dataUltimoContatto;
+
     private BigDecimal fatturatoAnnuale;
+
     private String tipologia;
+
     private String pec;
+
     private String telefono;
+
     private String emailContatto;
+
     private String nomeContatto;
+
     private String cognomeContatto;
+
     private LocalDate dataDiNascita;
+
     private String telefonoContatto;
+
     private Long idIndirizzoOperativo;
+
     private Long idIndirizzoLegale;
+
 }

@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.cliente.ClienteDTO;
-import it.progetto.energy.dto.cliente.ClienteModificaDTO;
+import it.progetto.energy.dto.cliente.CustomerDTO;
+import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
 import it.progetto.energy.dto.provincia.RicercaProvinciaDTO;
 import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
@@ -59,13 +59,13 @@ public interface CustomerApi {
             description = "Inserisce un Cliente nel sistema")
     @ApiResponse(responseCode = "200", description = "Cliente inserito correttamente")
     @ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
-    Cliente createCustomer(ClienteDTO clienteDTO) throws WrongInsertException;
+    Cliente createCustomer(CustomerDTO customerDTO) throws WrongInsertException;
 
     @Operation(summary = "Modifica Cliente",
             description = "Modifica un Cliente presente nel sistema")
     @ApiResponse(responseCode = "200", description = "Cliente modificato")
     @ApiResponse(responseCode = "404", description = "Cliente non trovato")
-    void updateCustomer(ClienteModificaDTO clienteModificaDTO)
+    void updateCustomer(CustomerUpdateDTO customerUpdateDTO)
             throws NotFoundException, WrongInsertException;
 
     @Operation(summary = "Eliminazione Cliente",
