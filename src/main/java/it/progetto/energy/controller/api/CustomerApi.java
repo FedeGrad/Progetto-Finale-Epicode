@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.cliente.CustomerDTO;
 import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
-import it.progetto.energy.dto.provincia.RicercaProvinciaDTO;
+import it.progetto.energy.dto.provincia.FindProvinciaDTO;
 import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
 import org.springframework.data.domain.Page;
@@ -53,7 +53,7 @@ public interface CustomerApi {
             description = "Restituisce i Clienti per provincia")
     @ApiResponse(responseCode = "200", description = "Clienti trovati")
     @ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
-    List<Cliente> findCustomerByProvincia(RicercaProvinciaDTO ricercaProvinciaDTO);
+    List<Cliente> findCustomerByProvincia(FindProvinciaDTO findProvinciaDTO);
 
     @Operation(summary = "Inserimento Cliente",
             description = "Inserisce un Cliente nel sistema")

@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.AddressMainApi;
 import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
-import it.progetto.energy.dto.indirizzo.IndirizzoModificaDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
 import it.progetto.energy.service.IndirizzoLegaleService;
@@ -66,8 +66,8 @@ public class AddressMainController implements AddressMainApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateMainAddress(@RequestBody IndirizzoModificaDTO indirizzoModificaDTO) {
-		indirizzoLegServ.updateMainAddress(indirizzoModificaDTO);
+	public void updateMainAddress(@RequestBody IndirizzoUpdateDTO indirizzoUpdateDTO) {
+		indirizzoLegServ.updateMainAddress(indirizzoUpdateDTO);
 		log.info("Main address updated");
 	}
 

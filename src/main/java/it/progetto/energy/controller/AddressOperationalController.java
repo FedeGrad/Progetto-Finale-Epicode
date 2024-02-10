@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.AddressOperationalApi;
 import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
-import it.progetto.energy.dto.indirizzo.IndirizzoModificaDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.IndirizzoOperativo;
 import it.progetto.energy.service.IndirizzoOperativoService;
@@ -67,8 +67,8 @@ public class AddressOperationalController implements AddressOperationalApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void updateOperationalAddress(@RequestBody IndirizzoModificaDTO indirizzoModificaDTO) {
-		indirizzoOpServ.modificaIndirizzoOperativo(indirizzoModificaDTO);
+	public void updateOperationalAddress(@RequestBody IndirizzoUpdateDTO indirizzoUpdateDTO) {
+		indirizzoOpServ.modificaIndirizzoOperativo(indirizzoUpdateDTO);
 		log.info("Address Operational updated");
 	}
 

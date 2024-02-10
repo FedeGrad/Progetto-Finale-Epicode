@@ -6,7 +6,7 @@ import it.progetto.energy.controller.api.CustomerApi;
 import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.cliente.CustomerDTO;
 import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
-import it.progetto.energy.dto.provincia.RicercaProvinciaDTO;
+import it.progetto.energy.dto.provincia.FindProvinciaDTO;
 import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.service.CustomerService;
@@ -101,7 +101,7 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/provincia")
 	@ResponseStatus(HttpStatus.OK)
-	public List<Cliente> findCustomerByProvincia(@RequestBody RicercaProvinciaDTO dto) {
+	public List<Cliente> findCustomerByProvincia(@RequestBody FindProvinciaDTO dto) {
 		return customerService.getClientiByProvincia(dto);
 	}
 

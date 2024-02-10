@@ -3,7 +3,7 @@ package it.progetto.energy.controller.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
-import it.progetto.energy.dto.indirizzo.IndirizzoModificaDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
 import org.springframework.data.domain.Page;
@@ -34,7 +34,7 @@ public interface AddressMainApi {
             description = "Modifica un Indirizzo Legale presente nel sistema")
     @ApiResponse(responseCode = "200", description = "Indirizzo Leg. modificato")
     @ApiResponse(responseCode = "404", description = "Indirizzo Leg. non trovato")
-    void updateMainAddress(IndirizzoModificaDTO modificaDTO);
+    void updateMainAddress(IndirizzoUpdateDTO modificaDTO);
 
     @Operation(summary = "Eliminazione Indirizzo Legale",
             description = "Elimina un Indirizzo Legale presente nel sistema tramite ID")

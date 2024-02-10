@@ -1,7 +1,7 @@
 package it.progetto.energy.service;
 
 import it.progetto.energy.dto.provincia.ProvinciaDTO;
-import it.progetto.energy.dto.provincia.ProvinciaModificaDTO;
+import it.progetto.energy.dto.provincia.ProvinciaUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.Provincia;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
@@ -72,17 +72,17 @@ public class ProvinciaService {
 
 	/**
 	 * Modifica una Provincia
-	 * @param provinciaModificaDTO
+	 * @param provinciaUpdateDTO
 	 */
-	public void modificaProvincia(ProvinciaModificaDTO provinciaModificaDTO) {
-		if (provinciaRepo.existsBySiglaAllIgnoreCase(provinciaModificaDTO.getSigla())) {
-			Provincia provincia = provinciaRepo.findBySiglaAllIgnoreCase(provinciaModificaDTO.getSigla());
-			BeanUtils.copyProperties(provinciaModificaDTO, provincia);
+	public void modificaProvincia(ProvinciaUpdateDTO provinciaUpdateDTO) {
+		if (provinciaRepo.existsBySiglaAllIgnoreCase(provinciaUpdateDTO.getSigla())) {
+			Provincia provincia = provinciaRepo.findBySiglaAllIgnoreCase(provinciaUpdateDTO.getSigla());
+			BeanUtils.copyProperties(provinciaUpdateDTO, provincia);
 			provinciaRepo.save(provincia);
 			log.info("La Provincia è stata modificata");
 		} else {
 			throw new NotFoundException(
-					"La Provincia sigla " + provinciaModificaDTO.getSigla() + " non è presente nel sistema");
+					"La Provincia sigla " + provinciaUpdateDTO.getSigla() + " non è presente nel sistema");
 		}
 	}
 

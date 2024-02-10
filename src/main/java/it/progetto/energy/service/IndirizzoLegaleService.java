@@ -1,7 +1,7 @@
 package it.progetto.energy.service;
 
 import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
-import it.progetto.energy.dto.indirizzo.IndirizzoModificaDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.Comune;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
@@ -81,7 +81,7 @@ public class IndirizzoLegaleService {
 	 * @param dto
 	 * @throws NotFoundException
 	 */
-	public void updateMainAddress(IndirizzoModificaDTO dto) {
+	public void updateMainAddress(IndirizzoUpdateDTO dto) {
 		if (indirizzoLegaleRepository.existsById(dto.getIdIndirizzo())) {
 			IndirizzoLegale indirizzo = indirizzoLegaleRepository.findById(dto.getIdIndirizzo())
 					.orElseThrow(() -> new NotFoundException("Main Address not Found"));

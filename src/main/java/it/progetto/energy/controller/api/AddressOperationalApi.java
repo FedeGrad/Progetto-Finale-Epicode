@@ -3,7 +3,7 @@ package it.progetto.energy.controller.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
-import it.progetto.energy.dto.indirizzo.IndirizzoModificaDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.IndirizzoOperativo;
 import org.springframework.data.domain.Page;
@@ -37,7 +37,7 @@ public interface AddressOperationalApi {
             description = "Modifica Indirizzo Operativo presente nel sistema")
     @ApiResponse(responseCode = "200", description = "Indirizzo Op. modificato")
     @ApiResponse(responseCode = "404", description = "Indirizzo Op. non trovato")
-    void updateOperationalAddress(@RequestBody IndirizzoModificaDTO indirizzoModificaDTO);
+    void updateOperationalAddress(@RequestBody IndirizzoUpdateDTO indirizzoUpdateDTO);
 
     @Operation(summary = "Eliminazione Indirizzo Operativo",
             description = "Elimina un Indirizzo Operativo presente nel sistema")

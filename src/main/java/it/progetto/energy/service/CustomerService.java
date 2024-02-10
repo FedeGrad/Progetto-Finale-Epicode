@@ -3,7 +3,7 @@ package it.progetto.energy.service;
 import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.cliente.CustomerDTO;
 import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
-import it.progetto.energy.dto.provincia.RicercaProvinciaDTO;
+import it.progetto.energy.dto.provincia.FindProvinciaDTO;
 import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
@@ -93,10 +93,10 @@ public class CustomerService {
 
 	/**
 	 * Recupera i Clienti di una specifica provincia
-	 * @param ricercaProvinciaDTO
+	 * @param findProvinciaDTO
      */
-	public List<Cliente> getClientiByProvincia(RicercaProvinciaDTO ricercaProvinciaDTO) {
-		return clienteRepo.findByProvinciaAllIgnoreCase(ricercaProvinciaDTO.getProvincia());
+	public List<Cliente> getClientiByProvincia(FindProvinciaDTO findProvinciaDTO) {
+		return clienteRepo.findByProvinciaAllIgnoreCase(findProvinciaDTO.getProvincia());
 	}
 
 	/**

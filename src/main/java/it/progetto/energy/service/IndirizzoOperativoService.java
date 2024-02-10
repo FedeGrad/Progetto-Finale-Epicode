@@ -1,7 +1,7 @@
 package it.progetto.energy.service;
 
 import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
-import it.progetto.energy.dto.indirizzo.IndirizzoModificaDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.Comune;
 import it.progetto.energy.persistence.entity.IndirizzoOperativo;
@@ -85,7 +85,7 @@ public class IndirizzoOperativoService {
 	 * @param dto
 	 * @Throw NotFoundException
 	 */
-	public void modificaIndirizzoOperativo(IndirizzoModificaDTO dto) {
+	public void modificaIndirizzoOperativo(IndirizzoUpdateDTO dto) {
 		if (indiOpRepo.existsById(dto.getIdIndirizzo())) {
 			IndirizzoOperativo indirizzo = indiOpRepo.findById(dto.getIdIndirizzo()).get();
 			BeanUtils.copyProperties(dto, indirizzo);
