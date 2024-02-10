@@ -1,7 +1,5 @@
 package it.progetto.energy.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.CustomerApi;
@@ -42,10 +40,6 @@ public class CustomerController implements CustomerApi {
 	private final ClienteService clienteService;
 
 	@Deprecated
-	@Operation(summary = "Recupero Clienti",
-			description = "Restituisce tutti i Clienti presenti nel sistema")
-	@ApiResponse(responseCode = "200", description = "Clienti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessuna Cliente trovato")
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping
@@ -64,10 +58,7 @@ public class CustomerController implements CustomerApi {
 		return clienteService.getAllClienti(page);
 	}
 
-	@Operation(summary = "Recupero Clienti per nome",
-			description = "Restituisce i Clienti presenti nel sistema con un determinato nome")
-	@ApiResponse(responseCode = "200", description = "Clienti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/name/{name}/page")
@@ -77,10 +68,7 @@ public class CustomerController implements CustomerApi {
 		return clienteService.getClientiByNome(name, page);
 	}
 
-	@Operation(summary = "Recupero Cliente per parte di nome",
-			description = "Restituisce i Clienti presenti nel sistema che contengono il valore passato nel nome")
-	@ApiResponse(responseCode = "200", description = "Clienti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/name/contains/{name}")
@@ -90,10 +78,7 @@ public class CustomerController implements CustomerApi {
 		return clienteService.getClientiByNomeContain(name, page);
 	}
 
-	@Operation(summary = "Recupero Clienti per data",
-			description = "Restituisce i Clienti per data di inserimento")
-	@ApiResponse(responseCode = "200", description = "Clienti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/insert/data")
@@ -102,10 +87,7 @@ public class CustomerController implements CustomerApi {
 		return clienteService.getClientiByDataInserimento(data, page);
 	}
 
-	@Operation(summary = "Recupero Clienti per data ultimo contatto",
-			description = "Restituisce i Clienti per data dell'ultimo contatto")
-	@ApiResponse(responseCode = "200", description = "Clienti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/last/update/data")
@@ -114,10 +96,7 @@ public class CustomerController implements CustomerApi {
 		return clienteService.getClientiByDataUltimoContatto(data, page);
 	}
 
-	@Operation(summary = "Recupero Clienti per provincia",
-			description = "Restituisce i Clienti per provincia")
-	@ApiResponse(responseCode = "200", description = "Clienti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/provincia")
@@ -126,44 +105,33 @@ public class CustomerController implements CustomerApi {
 		return clienteService.getClientiByProvincia(dto);
 	}
 
-	@Operation(summary = "Inserimento Cliente",
-			description = "Inserisce un Cliente nel sistema")
-	@ApiResponse(responseCode = "200", description = "Cliente inserito correttamente")
-	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente createCustomer(@Valid @RequestBody ClienteDTO dto) throws WrongInsertException {
-		return clienteService.createCustomer(dto);
+	public Cliente createCustomer(@Valid @RequestBody ClienteDTO clienteDTO) throws WrongInsertException {
+		return clienteService.createCustomer(clienteDTO);
 	}
 
-	@Operation(summary = "Modifica Cliente",
-			description = "Modifica un Cliente presente nel sistema")
-	@ApiResponse(responseCode = "200", description = "Cliente modificato")
-	@ApiResponse(responseCode = "404", description = "Cliente non trovato")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void modificaCliente(@Valid @RequestBody ClienteModificaDTO modificaDTO)
+	public void updateCustomer(@Valid @RequestBody ClienteModificaDTO modificaDTO)
 			throws NotFoundException, WrongInsertException {
 		clienteService.updateCustomer(modificaDTO);
 		log.info("Customer updated");
 	}
 
-	@Operation(summary = "Eliminazione Cliente",
-			description = "Elimina un cliente tramite l'ID")
-	@ApiResponse(responseCode = "200", description = "Cliente eliminato")
-	@ApiResponse(responseCode = "404", description = "Cliente non trovato")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteCustomer(@PathVariable("id") Long id) {
-		clienteService.eliminaCliente(id);
+	public void deleteCustomer(@PathVariable("id") Long customerId) {
+		clienteService.eliminaCliente(customerId);
 		log.info("Customer deleted");
 	}
 
