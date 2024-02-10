@@ -1,7 +1,5 @@
 package it.progetto.energy.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.ComuneApi;
 import it.progetto.energy.persistence.entity.Comune;
@@ -26,24 +24,18 @@ import java.util.List;
 public class ComuneController implements ComuneApi {
 
 	private final ComuneService comuneServ;
-	
-	@Operation(summary = "Recupero Comuni",
-			description = "Restituisce tutti i Comuni presenti nel sistema")
-	@ApiResponse(responseCode = "200", description = "Comuni trovati")
-	@ApiResponse(responseCode = "404", description = "Nessuna Comune trovato")
+
+	@Override
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<Comune> getAllComuni() {
+	public List<Comune> findAllComuni() {
 		return comuneServ.getAllComuni();
 	}
-	
-	@Operation(summary = "Recupero Comuni per pagina",
-			   description = "Ritorna tutti i Comuni presenti nel sistema per pagina")
-	@ApiResponse(responseCode = "200", description = "Comuni trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Comune trovato")
+
+	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Comune> getAllComuni(Pageable page) {
+	public Page<Comune> findAllComuni(Pageable page) {
 		return comuneServ.getAllComuni(page);
 	}
 

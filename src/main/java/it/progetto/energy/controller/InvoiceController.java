@@ -1,7 +1,5 @@
 package it.progetto.energy.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.InvoiceApi;
@@ -47,10 +45,7 @@ public class InvoiceController implements InvoiceApi {
 	private final FatturaService fatturaService;
 
 	@Deprecated
-	@Operation(summary = "Recupera Fatture",
-			description = "Restituisce tutte le Fatture presenti nel sistema")
-	@ApiResponse(responseCode = "200", description = "Fatture trovate")
-	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping
@@ -59,10 +54,7 @@ public class InvoiceController implements InvoiceApi {
 		return fatturaService.getAllFatture();
 	}
 
-	@Operation(summary = "Recupera Fatture per pagina",
-			description = "Restituisce tutte le Fatture presenti nel sistema per pagina")
-	@ApiResponse(responseCode = "200", description = "Fatture trovate")
-	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/page")
@@ -71,59 +63,44 @@ public class InvoiceController implements InvoiceApi {
 		return fatturaService.getAllFatture(page);
 	}
 
-	@Operation(summary = "Recupera fatture per ID",
-			description = "Restituisce tutte le Fatture di un Cliente tramite l'ID Cliente")
-	@ApiResponse(responseCode = "200", description = "Fatture trovate")
-	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/customer/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<Fattura> findInvoiceByCustomer(@PathVariable("id") Long id) {
-		return fatturaService.getFatturaByCliente(id);
+	public List<Fattura> findInvoiceByCustomer(@PathVariable("id") Long invoiceId) {
+		return fatturaService.getFatturaByCliente(invoiceId);
 	}
 
-	@Operation(summary = "Recupera Fatture per stato",
-			description = "Restituisce tutte le Fatture in un determinato stato")
-	@ApiResponse(responseCode = "200", description = "Fatture trovate")
-	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/state")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Fattura> findInvoiceByState(@RequestBody StatoDTO dto, Pageable page) {
-		StatoFattura statoFattura = dto.getStato();
+	public Page<Fattura> findInvoiceByState(@RequestBody StatoDTO statoDTO, Pageable page) {
+		StatoFattura statoFattura = statoDTO.getStato();
 		return fatturaService.getFatturaByStato(statoFattura, page);
 	}
 
-	@Operation(summary = "Recupera Fatture per data",
-			description = "Restituisce tutte le Fatture per data")
-	@ApiResponse(responseCode = "200", description = "Fatture trovate")
-	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/date")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Fattura> findInvoiceByDate(@RequestBody DataDTO data, Pageable page) {
-		return fatturaService.getFatturaByData(data, page);
+	public Page<Fattura> findInvoiceByDate(@RequestBody DataDTO dataDTO, Pageable page) {
+		return fatturaService.getFatturaByData(dataDTO, page);
 	}
 
-	@Operation(summary = "Recupera Fatture per anno",
-			description = "Restituisce tutte le Fatture di un determinato anno")
-	@ApiResponse(responseCode = "200", description = "Fatture trovate")
-	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/year/{year}")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Fattura> findInvoiceByYear(@PathVariable("year") Integer anno, Pageable page) {
-		return fatturaService.getFatturaByAnno(anno, page);
+	public Page<Fattura> findInvoiceByYear(@PathVariable("year") Integer year, Pageable page) {
+		return fatturaService.getFatturaByAnno(year, page);
 	}
 
-	@Operation(summary = "Recupera Fatture by range",
-			description = "Restituisce tutte le Fatture in un range")
-	@ApiResponse(responseCode = "200", description = "Fatture trovate")
-	@ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/range")
@@ -133,10 +110,7 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	//TODO DA IMPLEMENTARE
-	@Operation(summary = "Crea Fattura in PDF",
-			description = "Inserisci i dati della fattura che verrà creata e aggiunta al DB")
-	@ApiResponse(responseCode = "204", description = "Fattura creata/inserita correttamente")
-	@ApiResponse(responseCode = "500", description = "ERRORE creazione/inserimento")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(consumes = {MediaType.MULTIPART_MIXED_VALUE})
@@ -147,45 +121,34 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	//TODO IMPLEMENTARE
-	@Operation(summary = "Aggiunge Fattura File",
-			description = "Inserisci l'id della fattura pre-creata e il File")
-	@ApiResponse(responseCode = "200", description = "Fattura creata/inserita correttamente")
-	@ApiResponse(responseCode = "500", description = "ERRORE creazione/inserimento")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void uploadInvoice(@RequestHeader String token,
-											  @ModelAttribute FatturaPDFDTO fatturaPDFDTO) throws IOException {
-		log.info("{}, {}, {}", token + fatturaPDFDTO.getIdFattura() + fatturaPDFDTO.getFileFattura().getOriginalFilename());
+							  @ModelAttribute FatturaPDFDTO fatturaPDFDTO) throws IOException {
+		log.info("{}, {}, {}", token, fatturaPDFDTO.getIdFattura(), fatturaPDFDTO.getFileFattura().getOriginalFilename());
 //				fatturaServ.inserisciFattuaPDF(fatturaPDFDTO);
 	}
 
-	@Operation(summary = "Modifica Fattura",
-			description = "Modifica una Fattura presente nel sistema")
-	@ApiResponse(responseCode = "204", description = "Fattura modificata")
-	@ApiResponse(responseCode = "404", description = "Fattura non trovata")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateInvoice(@Valid @RequestBody FatturaModificaDTO modificaDTO) {
-		fatturaService.modificaFattura(modificaDTO);
+	public void updateInvoice(@Valid @RequestBody FatturaModificaDTO fatturaModificaDTO) {
+		fatturaService.modificaFattura(fatturaModificaDTO);
 		log.info("Invoice updated");
 	}
 
-	@Operation(summary = "Elimina Fattura",
-			description = "Elimina una Fattura presente nel sistema")
-	@ApiResponse(responseCode = "204", description = "Fattura eliminata")
-	@ApiResponse(responseCode = "404", description = "Fattura non trovata")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteInvoice(@PathVariable("id") Long id) {
-		fatturaService.eliminaFattura(id);
+	public void deleteInvoice(@PathVariable("id") Long invoiceId) {
+		fatturaService.eliminaFattura(invoiceId);
 		log.info("Invoice deleted");
 	}
 

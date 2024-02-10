@@ -1,7 +1,5 @@
 package it.progetto.energy.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.AddressOperationalApi;
@@ -39,65 +37,48 @@ public class AddressOperationalController implements AddressOperationalApi {
 	private final IndirizzoOperativoService indirizzoOpServ;
 
 	@Deprecated
-	@Operation(summary = "Ritorno Indirizzi Operativi",
-			description = "Restituisce tutti gli Indirizzi Operativi presenti nel sistema")
-	@ApiResponse(responseCode = "200", description = "Indirizzi Op. trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Indirizzo Op. trovato")
+	@Override
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<IndirizzoOperativo> findAllAddressOperational() {
 		return indirizzoOpServ.getAllIndirizziOperativi();
 	}
 
-	@Operation(summary = "Recupero Indirizzi Operativi per pagina",
-			description = "Restituisce tutti gli Indirizzi Operativi presenti nel sistema per pagina")
-	@ApiResponse(responseCode = "200", description = "Indirizzi Op. trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Indirizzo Op. trovato")
+	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public Page<IndirizzoOperativo> findAllAddressOperational(Pageable page) {
 		return indirizzoOpServ.getAllIndirizziOperativi(page);
 	}
 
-	@Operation(summary = "Inserimento Indirizzo Operativo",
-			description = "Inserisce un Indirizzo Operativo nel sistema")
-	@ApiResponse(responseCode = "200", description = "Indirizzo Op. inserito correttamente nel sistema")
-	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void createOperationalAddress(@Valid @RequestBody IndirizzoDTO dto)
+	public void createOperationalAddress(@Valid @RequestBody IndirizzoDTO indirizzoDTO)
 			throws ElementAlreadyPresentException {
-		indirizzoOpServ.inserisciIndirizzoOperativo(dto);
+		indirizzoOpServ.inserisciIndirizzoOperativo(indirizzoDTO);
 		log.info("Address Operational added");
 	}
 
-	@Operation(summary = "Modifica Indirizzo Operativo",
-			description = "Modifica Indirizzo Operativo presente nel sistema")
-	@ApiResponse(responseCode = "200", description = "Indirizzo Op. modificato")
-	@ApiResponse(responseCode = "404", description = "Indirizzo Op. non trovato")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void updateOperationalAddress(@RequestBody IndirizzoModificaDTO modificaDTO) {
-		indirizzoOpServ.modificaIndirizzoOperativo(modificaDTO);
+	public void updateOperationalAddress(@RequestBody IndirizzoModificaDTO indirizzoModificaDTO) {
+		indirizzoOpServ.modificaIndirizzoOperativo(indirizzoModificaDTO);
 		log.info("Address Operational updated");
 	}
 
-	@Operation(summary = "Eliminazione Indirizzo Operativo",
-			description = "Elimina un Indirizzo Operativo presente nel sistema")
-	@ApiResponse(responseCode = "204", description = "Indirizzo Op. eliminato")
-	@ApiResponse(responseCode = "404", description = "Indirizzo Op. non trovato")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteOperationalAddress(@PathVariable Long id) {
-		indirizzoOpServ.eliminaIndirizzoOperativo(id);
+	public void deleteOperationalAddress(@PathVariable("id") Long operationalAddressId) {
+		indirizzoOpServ.eliminaIndirizzoOperativo(operationalAddressId);
 		log.info("Indirizzo Operativo eliminato");
 	}
 

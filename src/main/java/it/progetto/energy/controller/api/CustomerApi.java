@@ -22,8 +22,7 @@ public interface CustomerApi {
             description = "Restituisce tutti i Clienti presenti nel sistema per pagina")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retrieved Customer"),
-            @ApiResponse(responseCode = "404", description = "Customer not found"),
-            @ApiResponse(responseCode = "404", description = "Slot not found") })
+            @ApiResponse(responseCode = "404", description = "Customer not found")})
     Page<Cliente> findAllCustomer(Pageable page);
 
     @Operation(summary = "Recupero Clienti per nome",
