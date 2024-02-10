@@ -3,8 +3,8 @@ package it.progetto.energy.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.AddressOperationalApi;
-import it.progetto.energy.dto.IndirizzoDTO;
-import it.progetto.energy.dto.IndirizzoModificaDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.IndirizzoOperativo;
 import it.progetto.energy.service.IndirizzoOperativoService;
@@ -28,7 +28,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/indirizzo_operativo")
+@RequestMapping("/operational/address")
 @Tag(name = "Indirizzo Operativo Controller", description = "Gestione degli indirizzi operativi")
 @Slf4j
 @RequiredArgsConstructor

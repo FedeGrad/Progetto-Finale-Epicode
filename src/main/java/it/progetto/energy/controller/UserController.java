@@ -1,11 +1,9 @@
 package it.progetto.energy.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.UserApi;
-import it.progetto.energy.dto.UserDTO;
+import it.progetto.energy.dto.user.UserDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.impl.model.User;
 import it.progetto.energy.service.UserRuoliService;
@@ -38,66 +36,48 @@ public class UserController implements UserApi {
 	private final UserRuoliService userRuoliService;
 
 	@Deprecated
-	@Operation(summary = "Recupero Utenti",
-			description = "Restituisce gli Utenti presenti nel sistema")
-	@ApiResponse(responseCode = "200", description = "Utenti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Utente trovato")
+	@Override
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<User> findAllUser() {
 		return userRuoliService.getAllUser();
 	}
 
-	@Operation(summary = "Recupero Utenti per pagina",
-			description = "Restituisce gli Utenti presenti nel sistema per pagina")
-	@ApiResponse(responseCode = "200", description = "Utenti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Utente trovato")
+	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public Page<User> findAllUser(Pageable page) {
 		return userRuoliService.getAllUser(page);
 	}
 
-	@Operation(summary = "Inserimento Utente",
-			description = "Inserisce un Utente nel sistema")
-	@ApiResponse(responseCode = "204", description = "Utente inserito correttamente nel sistema")
-	@ApiResponse(responseCode = "400", description = "Utente gia presente nel sistema")
-	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(HttpStatus.OK)
 	public void createUser(@Valid @RequestBody UserDTO userDTO) throws ElementAlreadyPresentException {
 		userRuoliService.inserisciUser(userDTO);
 		log.info("User created");
 	}
 
-	@Operation(summary = "Modifica Utente",
-			description = "Modifica un Utente presente nel sistema")
-	@ApiResponse(responseCode = "204", description = "Utente modificato")
-	@ApiResponse(responseCode = "404", description = "Utente non trovato")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateUser(@RequestBody UserDTO modificaDTO) {
-		userRuoliService.modificaUser(modificaDTO);
-		log.info("Utente modificato");
+	@ResponseStatus(HttpStatus.OK)
+	public void updateUser(@RequestBody UserDTO updateDTO) {
+		userRuoliService.modificaUser(updateDTO);
+		log.info("User updated");
 	}
 
-	@Operation(summary = "Eliminazione Utente", 
-			description = "Elimina un Utente presente nel sistema")
-	@ApiResponse(responseCode = "204", description = "Utente eliminato")
-	@ApiResponse(responseCode = "404", description = "Utente non trovato")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteUser(@PathVariable Long id) {
-		userRuoliService.eliminaUser(id);
-		log.info("Utente eliminato");
+	public void deleteUser(@PathVariable("id") Long userId) {
+		userRuoliService.eliminaUser(userId);
+		log.info("User deleted");
 	}
 
 }

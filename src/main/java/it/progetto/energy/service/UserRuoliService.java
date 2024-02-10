@@ -1,9 +1,12 @@
 package it.progetto.energy.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import it.progetto.energy.dto.user.UserDTO;
+import it.progetto.energy.exception.ElementAlreadyPresentException;
+import it.progetto.energy.impl.model.RoleAccess;
+import it.progetto.energy.impl.model.User;
+import it.progetto.energy.impl.repository.RoleAccessRepository;
+import it.progetto.energy.impl.repository.UserAccessRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,13 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import it.progetto.energy.dto.UserDTO;
-import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.impl.model.RoleAccess;
-import it.progetto.energy.impl.repository.RoleAccessRepository;
-import it.progetto.energy.impl.model.User;
-import it.progetto.energy.impl.repository.UserAccessRepository;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j

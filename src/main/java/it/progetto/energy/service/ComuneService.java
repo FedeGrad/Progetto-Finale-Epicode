@@ -1,7 +1,7 @@
 package it.progetto.energy.service;
 
-import it.progetto.energy.dto.ComuneDTO;
-import it.progetto.energy.dto.ComuneModificaDTO;
+import it.progetto.energy.dto.comune.ComuneDTO;
+import it.progetto.energy.dto.comune.ComuneModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.Comune;
 import it.progetto.energy.persistence.entity.Provincia;

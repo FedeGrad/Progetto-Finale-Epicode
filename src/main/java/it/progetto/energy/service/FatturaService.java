@@ -1,10 +1,10 @@
 package it.progetto.energy.service;
 
 import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.FatturaDTO;
-import it.progetto.energy.dto.FatturaModificaDTO;
-import it.progetto.energy.dto.FatturaPDFDTO;
 import it.progetto.energy.dto.RangeDTO;
+import it.progetto.energy.dto.fattura.FatturaDTO;
+import it.progetto.energy.dto.fattura.FatturaModificaDTO;
+import it.progetto.energy.dto.fattura.FatturaPDFDTO;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.Fattura;
 import it.progetto.energy.persistence.entity.StatoFattura;

@@ -3,10 +3,10 @@ package it.progetto.energy.controller.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import it.progetto.energy.dto.ClienteDTO;
-import it.progetto.energy.dto.ClienteModificaDTO;
 import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.RicercaProvinciaDTO;
+import it.progetto.energy.dto.cliente.ClienteDTO;
+import it.progetto.energy.dto.cliente.ClienteModificaDTO;
+import it.progetto.energy.dto.provincia.RicercaProvinciaDTO;
 import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
 import org.springframework.data.domain.Page;
@@ -73,4 +73,5 @@ public interface CustomerApi {
     @ApiResponse(responseCode = "200", description = "Cliente eliminato")
     @ApiResponse(responseCode = "404", description = "Cliente non trovato")
     void deleteCustomer(Long customerId);
+
 }

@@ -3,10 +3,10 @@ package it.progetto.energy.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.CustomerApi;
-import it.progetto.energy.dto.ClienteDTO;
-import it.progetto.energy.dto.ClienteModificaDTO;
 import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.RicercaProvinciaDTO;
+import it.progetto.energy.dto.cliente.ClienteDTO;
+import it.progetto.energy.dto.cliente.ClienteModificaDTO;
+import it.progetto.energy.dto.provincia.RicercaProvinciaDTO;
 import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.service.ClienteService;
@@ -81,7 +81,7 @@ public class CustomerController implements CustomerApi {
 	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/insert/data")
+	@PostMapping("/data/insert")
 	@ResponseStatus(HttpStatus.OK)
 	public Page<Cliente> findCustomerByDataInserimento(@RequestBody DataDTO data, Pageable page) {
 		return clienteService.getClientiByDataInserimento(data, page);
@@ -90,7 +90,7 @@ public class CustomerController implements CustomerApi {
 	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/last/update/data")
+	@PostMapping("/data/last/update")
 	@ResponseStatus(HttpStatus.OK)
 	public Page<Cliente> findCustomerByDataLastUpdate(@RequestBody DataDTO data, Pageable page) {
 		return clienteService.getClientiByDataUltimoContatto(data, page);

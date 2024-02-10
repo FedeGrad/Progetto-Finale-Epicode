@@ -1,9 +1,9 @@
 package it.progetto.energy.service;
 
-import it.progetto.energy.dto.ClienteDTO;
-import it.progetto.energy.dto.ClienteModificaDTO;
 import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.RicercaProvinciaDTO;
+import it.progetto.energy.dto.cliente.ClienteDTO;
+import it.progetto.energy.dto.cliente.ClienteModificaDTO;
+import it.progetto.energy.dto.provincia.RicercaProvinciaDTO;
 import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;

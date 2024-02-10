@@ -10,10 +10,13 @@ public class IndirizziCSV {
 
 	@JsonProperty("VIA")
 	private String via;
+
 	@JsonProperty("CIVICO")
 	private String civico;
+
 	@JsonProperty("CITTA")
 	private String localita;
+
 	@JsonProperty("CAP")
 	private String cap;
 	

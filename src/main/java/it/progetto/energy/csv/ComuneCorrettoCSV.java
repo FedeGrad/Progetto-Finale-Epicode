@@ -10,8 +10,11 @@ public class ComuneCorrettoCSV {
 
 	@JsonProperty("Comune")
 	private String nome;
+
 	@JsonProperty("Provincia")
 	private String siglaProvincia;
+
 	@JsonProperty("CAP")
 	private String cap;
+
 }

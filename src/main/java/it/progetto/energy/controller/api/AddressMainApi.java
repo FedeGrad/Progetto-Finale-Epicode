@@ -2,8 +2,8 @@ package it.progetto.energy.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import it.progetto.energy.dto.IndirizzoDTO;
-import it.progetto.energy.dto.IndirizzoModificaDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
 import org.springframework.data.domain.Page;

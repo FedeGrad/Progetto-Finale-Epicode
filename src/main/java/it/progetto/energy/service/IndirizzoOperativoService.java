@@ -1,7 +1,7 @@
 package it.progetto.energy.service;
 
-import it.progetto.energy.dto.IndirizzoDTO;
-import it.progetto.energy.dto.IndirizzoModificaDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
+import it.progetto.energy.dto.indirizzo.IndirizzoModificaDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.persistence.entity.Comune;
 import it.progetto.energy.persistence.entity.IndirizzoOperativo;

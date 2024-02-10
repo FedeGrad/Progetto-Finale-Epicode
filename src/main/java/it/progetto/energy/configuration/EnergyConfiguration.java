@@ -50,7 +50,7 @@ public class EnergyConfiguration {
 		customerDomain.setEmail("azienda@email.com");
 		customerDomain.setRagioneSociale("Label");
 		customerDomain.setPartitaIva("12345678901");
-		customerDomain.setDataDiNascita(LocalDate.of(1989, 04, 9));
+		customerDomain.setDataDiNascita(LocalDate.of(1989, 4, 9));
 		customerDomain.setDataInserimento(LocalDate.now());
 		customerDomain.setDataUltimoContatto(LocalDate.now());
 		customerDomain.setFatturatoAnnuale(BigDecimal.valueOf(1000));
