@@ -7,11 +7,9 @@ import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.cliente.CustomerDTO;
 import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
 import it.progetto.energy.dto.provincia.FindProvinciaDTO;
-import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -59,14 +57,13 @@ public interface CustomerApi {
             description = "Inserisce un Cliente nel sistema")
     @ApiResponse(responseCode = "200", description = "Cliente inserito correttamente")
     @ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
-    Cliente createCustomer(CustomerDTO customerDTO) throws WrongInsertException;
+    Cliente createCustomer(CustomerDTO customerDTO);
 
     @Operation(summary = "Modifica Cliente",
             description = "Modifica un Cliente presente nel sistema")
     @ApiResponse(responseCode = "200", description = "Cliente modificato")
     @ApiResponse(responseCode = "404", description = "Cliente non trovato")
-    void updateCustomer(CustomerUpdateDTO customerUpdateDTO)
-            throws NotFoundException, WrongInsertException;
+    void updateCustomer(CustomerUpdateDTO customerUpdateDTO);
 
     @Operation(summary = "Eliminazione Cliente",
             description = "Elimina un cliente tramite l'ID")

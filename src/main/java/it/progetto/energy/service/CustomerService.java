@@ -4,7 +4,9 @@ import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.cliente.CustomerDTO;
 import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
 import it.progetto.energy.dto.provincia.FindProvinciaDTO;
-import it.progetto.energy.exception.WrongInsertException;
+import it.progetto.energy.exception.NotCreatableException;
+import it.progetto.energy.exception.NotFoundException;
+import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
 import it.progetto.energy.persistence.entity.IndirizzoOperativo;
@@ -15,11 +17,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
 
 @Service
 @Slf4j
@@ -106,9 +109,9 @@ public class CustomerService {
 	public Cliente associaCliente(Long id) {
 		if (clienteRepo.existsById(id)) {
 			return clienteRepo.findById(id)
-					.orElseThrow(() -> new NotFoundException("Customer not found"));
+					.orElseThrow(() -> new NotFoundException(ERROR_ONE)); //TODO
 		} else {
-			throw new NotFoundException("Cliente id " + id + " non trovato");
+			throw new NotFoundException(ERROR_ONE);
 		}
 	}
 
@@ -137,9 +140,8 @@ public class CustomerService {
 	/**
 	 * Inserisce un Cliente nel sistema
 	 * @param customerDTO
-	 * @throws WrongInsertException
 	 */
-	public Cliente createCustomer(CustomerDTO customerDTO) throws WrongInsertException {
+	public Cliente createCustomer(CustomerDTO customerDTO) {
 		Cliente cliente;
 		if (controlloDatiCliente(customerDTO.getEmail(), customerDTO.getEmailContatto(), customerDTO.getPec(),
 				customerDTO.getPartitaIva(), customerDTO.getTelefono(), customerDTO.getTelefonoContatto())) {
@@ -167,20 +169,18 @@ public class CustomerService {
 			log.info("Customer create id {}", cliente.getId());
 			return clienteRepo.save(cliente);
 		} else {
-			throw new WrongInsertException("Errore inserimento dati");
+			throw new NotCreatableException(ERROR_ONE); //TODO
 		}
 	}
 
 	/**
 	 * Modifica un Cliente nel sistema
 	 * @param dto
-	 * @throws NotFoundException
-	 * @throws WrongInsertException
 	 */
-	public void updateCustomer(CustomerUpdateDTO dto) throws NotFoundException, WrongInsertException {
+	public void updateCustomer(CustomerUpdateDTO dto) {
 		if (clienteRepo.existsById(dto.getIdCliente())) {
 			Cliente cliente = clienteRepo.findById(dto.getIdCliente())
-					.orElseThrow(() -> new NotFoundException("Customer not found"));
+					.orElseThrow(() -> new NotFoundException(ERROR_ONE));
 
 			cliente.setDataUltimoContatto(LocalDate.now());
 			cliente.setTipologia(dto.getTipologia());
@@ -189,7 +189,7 @@ public class CustomerService {
 					dto.getTelefono(), dto.getTelefonoContatto())) {
 				BeanUtils.copyProperties(dto, cliente);
 			} else {
-				throw new WrongInsertException("Errore inserimento dati");
+				throw new NotUpdatableException(ERROR_ONE); //TODO
 			}
 			log.info("Il Cliente in data {} è stato modificato", cliente.getDataUltimoContatto());
 			IndirizzoLegale indirizzoLegale = indirizzoLegServ.associaIndirizzoLegale(dto.getIdIndirizzoLegale());
@@ -206,7 +206,7 @@ public class CustomerService {
 			clienteRepo.save(cliente);
 			log.info("Customer {} updated", cliente.getNomeContatto() + " " + cliente.getCognomeContatto());
 		} else {
-			throw new NotFoundException("Customer id " + dto.getIdCliente() + " don't found");
+			throw new NotFoundException(ERROR_ONE); //TODO
 		}
 	}
 
@@ -218,11 +218,10 @@ public class CustomerService {
 		if (clienteRepo.existsById(id)) {
 			Cliente cliente = clienteRepo.findById(id)
 					.get();
-			log.info("Il Cliente " + cliente.getNomeContatto() + " " + cliente.getCognomeContatto() + " in data "
-					+ LocalDate.now() + " è stato eliminato");
+			log.info("Customer id {} deleted in date {} ", id, LocalDate.now());
 			clienteRepo.deleteById(id);
 		} else {
-			throw new NotFoundException("Il Cliente id" + id + " non esiste");
+			throw new NotFoundException(ERROR_ONE);
 		}
 	}
 

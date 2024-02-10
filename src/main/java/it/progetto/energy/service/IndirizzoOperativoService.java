@@ -3,6 +3,7 @@ package it.progetto.energy.service;
 import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
 import it.progetto.energy.dto.indirizzo.IndirizzoUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
+import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.persistence.entity.Comune;
 import it.progetto.energy.persistence.entity.IndirizzoOperativo;
 import it.progetto.energy.persistence.repository.IndirizzoOperativoRepository;
@@ -12,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.util.List;
+
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 
 @Service
 @Slf4j
@@ -54,7 +57,7 @@ public class IndirizzoOperativoService {
 			IndirizzoOperativo indirizzoTrovato = indiOpRepo.findById(id).get();
 			return indirizzoTrovato;
 		} else {
-			throw new NotFoundException("Indirizzo Operativo n°" + id + " non trovato");
+			throw new NotFoundException(ERROR_TWO);
 		}
 	}
 
@@ -63,7 +66,7 @@ public class IndirizzoOperativoService {
 	 * @param dto
 	 * @throws ElementAlreadyPresentException
 	 */
-	public void inserisciIndirizzoOperativo(IndirizzoDTO dto) throws ElementAlreadyPresentException {
+	public void inserisciIndirizzoOperativo(IndirizzoDTO dto) {
 		if (!indiOpRepo.existsByViaAllIgnoreCase(dto.getVia()) || !indiOpRepo.existsByCivico(dto.getCivico())
 				|| !indiOpRepo.existsByCap(dto.getCap())) {
 			IndirizzoOperativo indirizzo = new IndirizzoOperativo();
@@ -76,7 +79,7 @@ public class IndirizzoOperativoService {
 			indiOpRepo.save(indirizzo);
 			log.info("L'indirizzo Operativo è stato salvato");
 		} else {
-			throw new ElementAlreadyPresentException("Indirizzo Operativo gia presente");
+			throw new ElementAlreadyPresentException(ERROR_ONE);
 		}
 	}
 
@@ -97,8 +100,7 @@ public class IndirizzoOperativoService {
 			indiOpRepo.save(indirizzo);
 			log.info("l'indirizzo Operativo è stato modificato");
 		} else {
-			throw new NotFoundException(
-					"L'Indirizzo Operativo n°" + dto.getIdIndirizzo() + " non è presente nel sistema");
+			throw new NotFoundException(ERROR_TWO); //TODO
 		}
 	}
 	/**
@@ -110,7 +112,7 @@ public class IndirizzoOperativoService {
 			indiOpRepo.deleteById(id);
 			log.info("L'indirizzo Operativo n°" + id + " è stato eliminato");
 		} else {
-			throw new NotFoundException("L'indirizzo Operativo n°" + id + " non presente nel sistema");
+			throw new NotFoundException(ERROR_TWO); //TODO
 		}
 	}
 

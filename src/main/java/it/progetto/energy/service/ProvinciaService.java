@@ -3,6 +3,7 @@ package it.progetto.energy.service;
 import it.progetto.energy.dto.provincia.ProvinciaDTO;
 import it.progetto.energy.dto.provincia.ProvinciaUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
+import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.persistence.entity.Provincia;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.util.List;
+
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 
 @Service
 @Slf4j
@@ -50,7 +53,7 @@ public class ProvinciaService {
 			Provincia provinciaTrovata = provinciaRepo.findBySiglaAllIgnoreCase(sigla);
 			return provinciaTrovata;
 		} else {
-			throw new NotFoundException("Provincia sigla " + sigla + " non trovata");
+			throw new NotFoundException(ERROR_ONE);
 		}
 	}
 
@@ -66,7 +69,7 @@ public class ProvinciaService {
 			provinciaRepo.save(provincia);
 			log.info("La provincia è stata salvata");
 		} else {
-			throw new ElementAlreadyPresentException("La Provincia gia presente");
+			throw new ElementAlreadyPresentException(ERROR_TWO);
 		}
 	}
 
@@ -81,8 +84,7 @@ public class ProvinciaService {
 			provinciaRepo.save(provincia);
 			log.info("La Provincia è stata modificata");
 		} else {
-			throw new NotFoundException(
-					"La Provincia sigla " + provinciaUpdateDTO.getSigla() + " non è presente nel sistema");
+			throw new NotFoundException(ERROR_ONE); //TODO
 		}
 	}
 
@@ -95,7 +97,7 @@ public class ProvinciaService {
 			provinciaRepo.deleteById(id);
 			log.info("La Provincia id " + id + " è stata eliminata");
 		} else {
-			throw new NotFoundException("La Provincia id " + id + " non presente nel sistema");
+			throw new NotFoundException(ERROR_ONE); //TODO
 		}
 	}
 

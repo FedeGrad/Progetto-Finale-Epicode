@@ -2,6 +2,7 @@ package it.progetto.energy.service;
 
 import it.progetto.energy.dto.user.UserDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
+import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.impl.model.RoleAccess;
 import it.progetto.energy.impl.model.User;
 import it.progetto.energy.impl.repository.RoleAccessRepository;
@@ -13,11 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
 
 @Service
 @Slf4j
@@ -67,19 +69,19 @@ public class UserRuoliService {
 			String[] listaRuoli = elencoRuoli.split(",");
 			Set<RoleAccess> ruoli = new HashSet<RoleAccess>();
 			log.info("Ruoli: " + elencoRuoli);
-			for (int i = 0; i < listaRuoli.length; i++) {
-				RoleAccess r = roleRepo.findByRoleName(listaRuoli[i]);
-				if (r != null) {
-					log.info(r.getRoleName().toString());
-					ruoli.add(r);
-				} else {
-					throw new NotFoundException("ruolo inesistente");
-				}
-			}
+            for (String s : listaRuoli) {
+                RoleAccess r = roleRepo.findByRoleName(s);
+                if (r != null) {
+                    log.info(r.getRoleName().toString());
+                    ruoli.add(r);
+                } else {
+                    throw new NotFoundException(ERROR_ONE); //TODO
+                }
+            }
 			user.setRoles(ruoli);
 			userRepo.save(user);
 		} else {
-			throw new ElementAlreadyPresentException("utente gia registrato");
+			throw new ElementAlreadyPresentException(ERROR_ONE);
 		}
 	}
 
@@ -89,8 +91,9 @@ public class UserRuoliService {
 	 * @throws NotFoundException
 	 */
 	public void modificaUser(UserDTO dto) throws NotFoundException {
-		if (userRepo.existsByUsername(dto.getUsername())) {
-			User user = userRepo.findByUsername(dto.getUsername()).get();
+		if (Boolean.TRUE.equals(userRepo.existsByUsername(dto.getUsername()))) {
+			User user = userRepo.findByUsername(dto.getUsername())
+					.get();
 			BeanUtils.copyProperties(dto, user);
 			user.setPassword(passEnc.encode(dto.getPassword()));
 			user.setAccountAttivo(true);
@@ -101,19 +104,19 @@ public class UserRuoliService {
 			String[] listaRuoli = elencoruoli.split(",");
 			Set<RoleAccess> ruoli = new HashSet<RoleAccess>();
 			log.info("Ruoli: " + elencoruoli);
-			for (int i = 0; i < listaRuoli.length; i++) {
-				RoleAccess r = roleRepo.findByRoleName(listaRuoli[i]);
-				if (r != null) {
-					log.info(r.getRoleName().toString());
-					ruoli.add(r);
-				} else {
-					throw new NotFoundException("ruolo inesistente");
-				}
-			}
+            for (String s : listaRuoli) {
+                RoleAccess r = roleRepo.findByRoleName(s);
+                if (r != null) {
+                    log.info(r.getRoleName().toString());
+                    ruoli.add(r);
+                } else {
+                    throw new NotFoundException(ERROR_ONE);
+                }
+            }
 			user.setRoles(ruoli);
 			userRepo.save(user);
 		} else {
-			throw new NotFoundException("User non presente");
+			throw new NotFoundException(ERROR_ONE);
 		}
 	}
 
@@ -123,11 +126,12 @@ public class UserRuoliService {
 	 */
 	public void eliminaUser(Long id) {
 		if (userRepo.existsById(id)) {
-			User user = userRepo.findById(id).get();
+			User user = userRepo.findById(id)
+					.get();
 			log.info(user + " Eliminato");
 			userRepo.deleteById(id);
 		} else {
-			throw new NotFoundException("ID inesistente");
+			throw new NotFoundException(ERROR_ONE);
 		}
 	}
 

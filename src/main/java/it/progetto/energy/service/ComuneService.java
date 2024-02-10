@@ -3,6 +3,7 @@ package it.progetto.energy.service;
 import it.progetto.energy.dto.comune.ComuneDTO;
 import it.progetto.energy.dto.comune.ComuneUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
+import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.persistence.entity.Comune;
 import it.progetto.energy.persistence.entity.Provincia;
 import it.progetto.energy.persistence.repository.ComuneRepository;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.util.List;
+
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
 
 @Service
 @Slf4j
@@ -31,7 +34,7 @@ public class ComuneService {
 	 * @return
 	 */
 	public Page<Comune> getAllComuni(Pageable page) {
-		return (Page<Comune>) comuneRepo.findAll(page);
+		return comuneRepo.findAll(page);
 	}
 
 	/**
@@ -72,10 +75,11 @@ public class ComuneService {
 			Comune comune = new Comune();
 			BeanUtils.copyProperties(dto, comune);
 			Provincia provinciaTrovata = provinciaServ.associaProvincia(dto.getSiglaProvincia());
+			comune.setProvincia(provinciaTrovata);
 			comuneRepo.save(comune);
-			log.info("Il Comune " + comune.getNome() + " è stato salvato");
+			log.info("Comune {} it was saved", comune.getNome());
 		} else {
-			throw new ElementAlreadyPresentException("Comune " + dto.getNome() + " già presente");
+			throw new NotCreatableException(ERROR_ONE); //TODO REFACT
 		}
 	}
 
@@ -86,11 +90,13 @@ public class ComuneService {
 	 */
 	public void modificaComune(ComuneUpdateDTO dto) throws ElementAlreadyPresentException {
 		if (comuneRepo.existsById(dto.getIdComune())) {
-			Comune comune = comuneRepo.findById(dto.getIdComune()).get();
+			Comune comune = comuneRepo.findById(dto.getIdComune())
+					.get();
 			BeanUtils.copyProperties(dto, comune);
 			Provincia provinciaTrovata = provinciaServ.associaProvincia(dto.getSiglaProvincia());
+			comune.setProvincia(provinciaTrovata);
 			comuneRepo.save(comune);
-			log.info("Il Comune con l'id " + dto.getIdComune() + " è stato modificato");
+			log.info("Comune id {} it was updated ", dto.getIdComune());
 		} else {
 			throw new NotFoundException("Il Comune con l'id " + dto.getIdComune() + " non è presente nel sistema");
 		}

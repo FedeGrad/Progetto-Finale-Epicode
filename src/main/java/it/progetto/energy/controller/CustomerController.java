@@ -7,7 +7,6 @@ import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.cliente.CustomerDTO;
 import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
 import it.progetto.energy.dto.provincia.FindProvinciaDTO;
-import it.progetto.energy.exception.WrongInsertException;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.webjars.NotFoundException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -110,7 +108,7 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente createCustomer(@Valid @RequestBody CustomerDTO customerDTO) throws WrongInsertException {
+	public Cliente createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
 		return customerService.createCustomer(customerDTO);
 	}
 
@@ -119,8 +117,7 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateCustomer(@Valid @RequestBody CustomerUpdateDTO modificaDTO)
-			throws NotFoundException, WrongInsertException {
+	public void updateCustomer(@Valid @RequestBody CustomerUpdateDTO modificaDTO) {
 		customerService.updateCustomer(modificaDTO);
 		log.info("Customer updated");
 	}
