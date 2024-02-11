@@ -1,12 +1,12 @@
 package it.progetto.energy.service;
 
 import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.cliente.CustomerDTO;
-import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
 import it.progetto.energy.dto.provincia.FindProvinciaDTO;
 import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.exception.NotUpdatableException;
+import it.progetto.energy.mapper.entitytodomain.CustomerEntityMapper;
+import it.progetto.energy.model.CustomerDomain;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
 import it.progetto.energy.persistence.entity.IndirizzoOperativo;
@@ -14,15 +14,16 @@ import it.progetto.energy.persistence.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.util.Arrays;
 import java.util.List;
 
 import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 
 @Service
 @Slf4j
@@ -32,197 +33,183 @@ public class CustomerService {
 	private final ClienteRepository clienteRepo;
 	private final IndirizzoLegaleService indirizzoLegServ;
 	private final IndirizzoOperativoService indirizzoOpServ;
+	private final CustomerEntityMapper customerEntityMapper;
 
 	/**
 	 * Recupera tutti i Clienti
 	 * @deprecated
-     */
+	 */
 	@Deprecated
-	public List<Cliente> getAllClienti() {
-		return (List<Cliente>) clienteRepo.findAll();
+	public List<CustomerDomain> getAllClienti() {
+		List<Cliente> clienteList = clienteRepo.findAll();
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(clienteList);
 	}
 
 	/**
 	 * Recupera tutti i Clienti, per pagina
-	 * @param page
-     */
-	public Page<Cliente> getAllClienti(Pageable page) {
-		return clienteRepo.findAll(page);
+	 */
+	public List<CustomerDomain> getAllClienti(Pageable page) {
+		List<Cliente> clientePage = clienteRepo.findAll(page).getContent();
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
 
 	/**
 	 * Recupera i Clienti per nome
-	 * @param nome
-	 * @param page
-     */
-	public Page<Cliente> getClientiByNome(String nome, Pageable page) {
-		return clienteRepo.findByNomeContattoAllIgnoreCase(nome, page);
+	 */
+	public List<CustomerDomain> getClientiByNome(String nome, Pageable page) {
+		List<Cliente> clientePage = clienteRepo.findByNomeContattoAllIgnoreCase(nome, page)
+				.getContent();
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
 
 	/**
 	 * Recupera i Clienti che nel nome è presente il valore passato nel parametro, nel nome
-	 * @param nomeContiene
-     */
-	public Page<Cliente> getClientiByNomeContain(String nomeContiene, Pageable page) {
-		return clienteRepo.findByNomeContattoContainingAllIgnoreCase(nomeContiene, page);
+	 */
+	public List<CustomerDomain> getClientiByNomeContain(String nomeContiene, Pageable page) {
+		List<Cliente> clientePage = clienteRepo.findByNomeContattoContainingAllIgnoreCase(nomeContiene, page)
+				.getContent();
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
 
 	/**
 	 * Recupera i Clienti con uno specifico fatturato
-	 * @param fatturato
-	 * @param page
-     */
-	public Page<Cliente> getClientiByFatturato(Double fatturato, Pageable page) {
-		return clienteRepo.findByFatturatoAnnuale(fatturato, page);
+	 */
+	public List<CustomerDomain> getClientiByFatturato(Double fatturato, Pageable page) {
+		List<Cliente> clientePage = clienteRepo.findByFatturatoAnnuale(fatturato, page)
+				.getContent();
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
 
 	/**
 	 * Recupera i Clienti registrati in una determinata data
-	 * @param dataInserimento
-	 * @param page
-     */
-	public Page<Cliente> getClientiByDataInserimento(DataDTO dataInserimento, Pageable page) {
-		return clienteRepo.findByDataInserimento(dataInserimento.getData(), page);
+	 */
+	public List<CustomerDomain> getClientiByDataInserimento(DataDTO dataDTO, Pageable page) {
+		List<Cliente> clientePage = clienteRepo.findByDataInserimento(dataDTO.getData(), page)
+				.getContent();
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
 
 	/**
 	 * Recupera i Clienti contattati in una determinata data
-	 * @param dataUltContatto
-	 * @param page
-     */
-	public Page<Cliente> getClientiByDataUltimoContatto(DataDTO dataUltContatto, Pageable page) {
-		return clienteRepo.findByDataUltimoContatto(dataUltContatto.getData(), page);
+	 */
+	public List<CustomerDomain> getClientiByDataUltimoContatto(DataDTO dataUltContatto, Pageable page) {
+		List<Cliente> clientePage = clienteRepo.findByDataUltimoContatto(dataUltContatto.getData(), page)
+				.getContent();
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
 
 	/**
 	 * Recupera i Clienti di una specifica provincia
-	 * @param findProvinciaDTO
-     */
-	public List<Cliente> getClientiByProvincia(FindProvinciaDTO findProvinciaDTO) {
-		return clienteRepo.findByProvinciaAllIgnoreCase(findProvinciaDTO.getProvincia());
-	}
-
-	/**
-	 * Associa un cliente by id
-	 * @param id
-     */
-	public Cliente associaCliente(Long id) {
-		if (clienteRepo.existsById(id)) {
-			return clienteRepo.findById(id)
-					.orElseThrow(() -> new NotFoundException(ERROR_ONE)); //TODO
-		} else {
-			throw new NotFoundException(ERROR_ONE);
-		}
-	}
-
-	/**
-	 * RegEx per: [0]eMail, [1]numero, [2]partita Iva di un Utente
-	 * @param valori
-     */
-	private boolean controlloDatiCliente(String... valori) {
-		while (!valori[0].matches("[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}")
-				|| !valori[1].matches("[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}")
-				|| !valori[2].matches("[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}")) {
-			log.info("Errore inserimeto E-mail");
-			return false;
-		}
-		while (!valori[3].matches("[0-9]{11}")) {
-			log.info("Errore inserimento partita IVA");
-			return false;
-		}
-		while (!valori[4].matches("[0-9]{10,12}") || !valori[5].matches("[0-9]{10,12}")) {
-			log.info("Errore inserimento telefono");
-			return false;
-		}
-		return true;
+	 */
+	public List<CustomerDomain> getClientiByProvincia(FindProvinciaDTO findProvinciaDTO) {
+		List<Cliente> clienteList = clienteRepo.findByProvinciaAllIgnoreCase(findProvinciaDTO.getProvincia());
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(clienteList);
 	}
 
 	/**
 	 * Inserisce un Cliente nel sistema
-	 * @param customerDTO
 	 */
-	public Cliente createCustomer(CustomerDTO customerDTO) {
-		Cliente cliente;
-		if (controlloDatiCliente(customerDTO.getEmail(), customerDTO.getEmailContatto(), customerDTO.getPec(),
-				customerDTO.getPartitaIva(), customerDTO.getTelefono(), customerDTO.getTelefonoContatto())) {
+	@Transactional
+	public CustomerDomain createCustomer(CustomerDomain customerDomain) {
+		boolean email = checkEmail(customerDomain.getEmail(), customerDomain.getCustomerEmail(), customerDomain.getPec());
+		boolean phoneNumber = checkPhoneNumber(customerDomain.getCompanyPhone(), customerDomain.getCustomerPhone());
+		boolean npi = checkNPI(customerDomain.getNPI());
 
-			cliente = Cliente.builder()
-//					.dataDiNascita(clienteDTO.getDataDiNascita())
-					.dataInserimento(LocalDate.now())
-					.dataUltimoContatto(LocalDate.now())
-					.anni(Period.between(customerDTO.getDataDiNascita(), LocalDate.now()).getYears())
-					.build();
+		if (email && phoneNumber && npi) {
+			Cliente cliente = customerEntityMapper.fromCustomerDomainToCustomer(customerDomain);
+			IndirizzoLegale indirizzoLegTrovato = indirizzoLegServ
+					.associaIndirizzoLegale(customerDomain.getAddressMain().getId());
 
-			cliente.setTipologia(customerDTO.getTipologia());
-			BeanUtils.copyProperties(customerDTO, cliente);
-			IndirizzoLegale indirizzoLegTrovato = indirizzoLegServ.associaIndirizzoLegale(customerDTO.getIdIndirizzoLegale());
 			cliente.setIndirizzoLegale(indirizzoLegTrovato);
 			indirizzoLegTrovato.setCliente(cliente);
 			log.info("Indirizzo Legale associato");
+
 			IndirizzoOperativo indirizzoOpTrovato = indirizzoOpServ
-					.associaIndirizzoOperativo(customerDTO.getIdIndirizzoOperativo());
+					.associaIndirizzoOperativo(customerDomain.getAddressOperational().getId());
 			cliente.setIndirizzoOperativo(indirizzoOpTrovato);
 			indirizzoOpTrovato.setCliente(cliente);
 			log.info("Indirizzo Operativo associato");
-			log.info("Cliente: {} {}, salvato in data: {}",
-					cliente.getNomeContatto(), cliente.getCognomeContatto(), cliente.getDataInserimento());
-			log.info("Customer create id {}", cliente.getId());
-			return clienteRepo.save(cliente);
+
+			Cliente saved = clienteRepo.save(cliente);
+			//TODO ADD FHIR
+			log.info("Customer create id {}", saved.getId());
+			return customerEntityMapper.fromCustomerToCustomerDomain(saved);
 		} else {
-			throw new NotCreatableException(ERROR_ONE); //TODO
+			throw new NotCreatableException(ERROR_ONE); //TODO errore dati errati
 		}
 	}
 
 	/**
 	 * Modifica un Cliente nel sistema
-	 * @param dto
 	 */
-	public void updateCustomer(CustomerUpdateDTO dto) {
-		if (clienteRepo.existsById(dto.getIdCliente())) {
-			Cliente cliente = clienteRepo.findById(dto.getIdCliente())
-					.orElseThrow(() -> new NotFoundException(ERROR_ONE));
+	@Transactional
+	public CustomerDomain updateCustomer(CustomerDomain customerDomain) {
+//		if (clienteRepo.existsById(customerDomain.getIdCliente())) {
+		Cliente cliente = clienteRepo.findById(customerDomain.getId())
+				.orElseThrow(() -> new NotFoundException(ERROR_ONE));
 
+		boolean email = checkEmail(customerDomain.getEmail(), customerDomain.getCustomerEmail(), customerDomain.getPec());
+		boolean phoneNumber = checkPhoneNumber(customerDomain.getCompanyPhone(), customerDomain.getCustomerPhone());
+		boolean npi = checkNPI(customerDomain.getNPI());
+
+		if (email && phoneNumber && npi) {
 			cliente.setDataUltimoContatto(LocalDate.now());
-			cliente.setTipologia(dto.getTipologia());
+			cliente.setTipologia(customerDomain.getType());
+			BeanUtils.copyProperties(customerDomain, cliente);
+			//TODO MANAGE UPDATE
 
-			if (controlloDatiCliente(dto.getEmail(), dto.getEmailContatto(), dto.getPec(), dto.getPartitaIva(),
-					dto.getTelefono(), dto.getTelefonoContatto())) {
-				BeanUtils.copyProperties(dto, cliente);
-			} else {
-				throw new NotUpdatableException(ERROR_ONE); //TODO
-			}
 			log.info("Il Cliente in data {} è stato modificato", cliente.getDataUltimoContatto());
-			IndirizzoLegale indirizzoLegale = indirizzoLegServ.associaIndirizzoLegale(dto.getIdIndirizzoLegale());
+			IndirizzoLegale indirizzoLegale = indirizzoLegServ
+					.associaIndirizzoLegale(customerDomain.getAddressMain().getId());
 			cliente.setIndirizzoLegale(indirizzoLegale);
 			indirizzoLegale.setCliente(cliente);
 			log.info("Indirizzo Legale associato");
 
 			IndirizzoOperativo indirizzoOperativo = indirizzoOpServ
-					.associaIndirizzoOperativo(dto.getIdIndirizzoOperativo());
+					.associaIndirizzoOperativo(customerDomain.getAddressOperational().getId());
 			cliente.setIndirizzoOperativo(indirizzoOperativo);
 			indirizzoOperativo.setCliente(cliente);
 			log.info("Indirizzo Operativo associato");
 
-			clienteRepo.save(cliente);
-			log.info("Customer {} updated", cliente.getNomeContatto() + " " + cliente.getCognomeContatto());
+			Cliente updated = clienteRepo.save(cliente);
+			log.info("Customer updated id {}", updated.getId());
+			return customerEntityMapper.fromCustomerToCustomerDomain(updated);
 		} else {
-			throw new NotFoundException(ERROR_ONE); //TODO
+			throw new NotUpdatableException(ERROR_ONE); //TODO errore dati errati
 		}
+//		} else {
+//			throw new NotFoundException(ERROR_ONE); //TODO
+//		}
 	}
 
 	/**
 	 * Elimina un cliente
-	 * @param id
 	 */
 	public void eliminaCliente(Long id) {
 		if (clienteRepo.existsById(id)) {
-			Cliente cliente = clienteRepo.findById(id)
-					.get();
-			log.info("Customer id {} deleted in date {} ", id, LocalDate.now());
 			clienteRepo.deleteById(id);
+			log.info("Customer id {} deleted", id);
 		} else {
-			throw new NotFoundException(ERROR_ONE);
+			throw new NotFoundException(ERROR_TWO);
 		}
+	}
+
+	/**
+	 * RegEx per: [0]eMail, [1]numero, [2]partita Iva di un Utente
+	 */
+
+	private boolean checkEmail(String... emails) {
+		return Boolean.TRUE.equals(Arrays.stream(emails)
+				.allMatch(email -> email.matches("[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}")));
+	}
+
+	private boolean checkPhoneNumber(String... phoneNumber) {
+		return Boolean.TRUE.equals(Arrays.stream(phoneNumber)
+				.allMatch(phone -> phone.matches("[\\d']{10,12}")));
+	}
+
+	private boolean checkNPI(String npi) {
+		return npi.matches("[0-9]{11}");
 	}
 
 }

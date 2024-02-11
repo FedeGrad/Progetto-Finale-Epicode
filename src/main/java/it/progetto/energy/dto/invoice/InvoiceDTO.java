@@ -21,31 +21,33 @@ public class InvoiceDTO {
 	static final String DATE_PATTERN = "dd/MM/yyyy";
 
 	@Schema(hidden = true)
-	private Integer anno;
+	private Integer year;
 
+	@NotNull
 	@Schema(example = "20/01/2022", type = "string")
 	@JsonFormat(pattern = DATE_PATTERN)
-	private LocalDate data;
+	private LocalDate date;
 
-	private Double importo;
+	@NotNull
+	private Double amount;
 
-	private Integer numero;
+	private Integer number;
+
+	private Double amountIVA;
+
+	@Percentage
+	private Double percentageIVA;
+
+	private Double amountDiscount;
+
+	@Percentage
+	private Double percentageDiscount;
 
 	@Schema(example = "PAGATA / NON PAGATA / ANNULLATA / SCADUTA / DA RIMBORSARE / RIMBORSATA", type = "string")
 	@Enumerated(EnumType.STRING)
-	private StatoFattura stato;
+	private StatoFattura state;
 
 	@NotNull
-	private Long idCliente;
-
-	private Double importoIVA;
-
-	@Percentage
-	private Double percentualeIVA;
-
-	private Double importoSconto;
-
-	@Percentage
-	private Double percentualeSconto;
+	private Long customerId;
 
 }

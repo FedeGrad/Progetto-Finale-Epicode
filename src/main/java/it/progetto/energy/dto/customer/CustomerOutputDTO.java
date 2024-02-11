@@ -1,17 +1,19 @@
-package it.progetto.energy.model;
+package it.progetto.energy.dto.customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @Builder
-public class CustomerDomain {
+@AllArgsConstructor
+@NoArgsConstructor
+public class CustomerOutputDTO {
 
     private Long id;
 
@@ -27,7 +29,7 @@ public class CustomerDomain {
 
     private BigDecimal annualTurnover;
 
-    private Tipologia type;
+    private String type;
 
     private String pec;
 
@@ -43,12 +45,10 @@ public class CustomerDomain {
 
     private String customerPhone;
 
-    private int anni;
+    private Long operationalAddressId;
 
-    private AddressOperationalDomain addressOperational;
+    private Long mainAddressId;
 
-    private AddressMainDomain addressMain;
-
-    private List<InvoiceDomain> invoiceList;
+    private List<Long> invoiceIdList;
 
 }

@@ -1,5 +1,6 @@
-package it.progetto.energy.dto.cliente;
+package it.progetto.energy.dto.customer;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.progetto.energy.model.Tipologia;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Setter
@@ -23,52 +25,50 @@ public class CustomerUpdateDTO {
 	static final String DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm:ss";
 
 	@NotNull
-	private Long idCliente;
+	private Long id;
 
 	@Schema(example = "Company name", type = "string")
-	private String ragioneSociale;
+	private String companyName;
 
-//	@Schema(hidden = false)
 	@Schema(example = "NPI", type = "string")
-	private String partitaIva;
+	private String NPI;
 
 	@Schema(example = "example@example.it", type = "string")
 	private String email;
 
-//	@JsonFormat(pattern = DATE_TIME_PATTERN)
-//	@Schema(hidden = true)
-//	private LocalDate dataInserimento;
-
-//	@Schema(example = "20/01/2000", type = "string")
-//	@JsonFormat(pattern = DATE_PATTERN)
 	@Schema(hidden = true)
-	private LocalDate dataUltimoContatto = LocalDate.now();
+	@JsonFormat(pattern = DATE_PATTERN)
+	private LocalDate dataLastUpdate = LocalDate.now();
 
-	private BigDecimal fatturatoAnnuale;
+	private BigDecimal annualTurnover;
 
 	@Schema(example = "PA / SAS / SPA / SRL", type = "string")
-	private Tipologia tipologia;
+	private Tipologia type;
 
 	@Schema(example = "example@pec.it", type = "string")
 	private String pec;
 
 	@Schema(example = "3279999999", type = "string")
-	private String telefono;
+	private String companyPhone;
 
 	@Schema(example = "example@example.it", type = "string")
-	private String emailContatto;
+	private String customerEmail;
 
 	@Schema(example = "name", type = "string")
-	private String nomeContatto;
+	private String name;
 
 	@Schema(example = "surname", type = "string")
-	private String cognomeContatto;
+	private String surname;
+
+	private LocalDate dateOfBirth;
 
 	@Schema(example = "3279999999", type = "string")
-	private String telefonoContatto;
+	private String customerPhone;
 
-	private Long idIndirizzoOperativo;
+	private Long addressOperationalId;
 
-	private Long idIndirizzoLegale;
+	private Long addressMainId;
+
+	private List<Long> invoiceIdList;
 
 }

@@ -15,7 +15,10 @@ public interface FatturaRepository extends PagingAndSortingRepository<Fattura, L
 	@Query(value = "SELECT * FROM fattura "
 			+ "JOIN cliente ON fattura.id_cliente = cliente.id "
 			+ "WHERE cliente.id = ?1", nativeQuery = true)
-	public List<Fattura> findByCliente(Long idCliente);
+	List<Fattura> findByCliente(Long idCliente);
+
+	@Override
+	List<Fattura> findAll();
 	
 //	@Query(value = "SELECT * FROM fattura WHERE importo BETWEEN ?1 AND ?2", nativeQuery = true)
 	public Page<Fattura> findByImportoBetween(Double importoMin, Double importoMax, Pageable page);

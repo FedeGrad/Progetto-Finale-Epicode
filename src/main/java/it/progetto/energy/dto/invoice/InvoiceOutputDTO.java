@@ -1,5 +1,6 @@
 package it.progetto.energy.dto.invoice;
 
+import it.progetto.energy.model.StatoFattura;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,19 +11,24 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InvoiceOutputDTO {
-	
-	private Long idFattura;
 
-	private Integer anno;
+	private Long id;
 
-	private LocalDate data;
+	private Integer year;
 
-	private Double importo;
+	private LocalDate date;
 
-	private Integer numero;
+	private Double amount;
 
-	private String stato;
+	private Integer number;
 
-	private Long idCliente;
+	private Double amountIVA;
+
+	private Double amountDiscount;
+
+	private StatoFattura state;
+
+	private Long customerId;
+
 
 }

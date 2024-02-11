@@ -4,14 +4,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.CustomerApi;
 import it.progetto.energy.dto.DataDTO;
-import it.progetto.energy.dto.cliente.CustomerDTO;
-import it.progetto.energy.dto.cliente.CustomerUpdateDTO;
+import it.progetto.energy.dto.customer.CustomerDTO;
+import it.progetto.energy.dto.customer.CustomerOutputDTO;
+import it.progetto.energy.dto.customer.CustomerUpdateDTO;
 import it.progetto.energy.dto.provincia.FindProvinciaDTO;
-import it.progetto.energy.persistence.entity.Cliente;
+import it.progetto.energy.mapper.dtotodomain.CustomerDTOMapper;
+import it.progetto.energy.model.CustomerDomain;
 import it.progetto.energy.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,14 +37,16 @@ import java.util.List;
 public class CustomerController implements CustomerApi {
 
 	private final CustomerService customerService;
+	private final CustomerDTOMapper customerDTOMapper;
 
 	@Deprecated
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<Cliente> findAllCustomer() {
-		return customerService.getAllClienti();
+	public List<CustomerOutputDTO> findAllCustomer() {
+		List<CustomerDomain> customerDomain = customerService.getAllClienti();
+		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerDomain);
 	}
 
 	@Override
@@ -51,9 +54,9 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Cliente> findAllCustomer(Pageable page) {
-		//TODO ADDED MAPPPER
-		return customerService.getAllClienti(page);
+	public List<CustomerOutputDTO> findAllCustomer(Pageable page) {
+		List<CustomerDomain> customerPage = customerService.getAllClienti(page);
+		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
 	@Override
@@ -61,9 +64,9 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/name/{name}/page")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Cliente> findCustomerByName(@PathVariable("name") String name, Pageable page) {
-		//TODO ADDED MAPPPER
-		return customerService.getClientiByNome(name, page);
+	public List<CustomerOutputDTO> findCustomerByName(@PathVariable("name") String name, Pageable page) {
+		List<CustomerDomain> customerPage = customerService.getClientiByNome(name, page);
+		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
 	@Override
@@ -71,9 +74,9 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/name/contains/{name}")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Cliente> findCustomerByNameContains(@PathVariable("name") String name, Pageable page) {
-		//TODO ADDED MAPPPER
-		return customerService.getClientiByNomeContain(name, page);
+	public List<CustomerOutputDTO> findCustomerByNameContains(@PathVariable("name") String name, Pageable page) {
+		List<CustomerDomain> customerPage = customerService.getClientiByNomeContain(name, page);
+		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
 	@Override
@@ -81,8 +84,9 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/data/insert")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Cliente> findCustomerByDataInserimento(@RequestBody DataDTO data, Pageable page) {
-		return customerService.getClientiByDataInserimento(data, page);
+	public List<CustomerOutputDTO> findCustomerByDataInserimento(@RequestBody DataDTO data, Pageable page) {
+		List<CustomerDomain> customerPage = customerService.getClientiByDataInserimento(data, page);
+		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
 	@Override
@@ -90,8 +94,9 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/data/last/update")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Cliente> findCustomerByDataLastUpdate(@RequestBody DataDTO data, Pageable page) {
-		return customerService.getClientiByDataUltimoContatto(data, page);
+	public List<CustomerOutputDTO> findCustomerByDataLastUpdate(@RequestBody DataDTO data, Pageable page) {
+		List<CustomerDomain> customerPage = customerService.getClientiByDataUltimoContatto(data, page);
+		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
 	@Override
@@ -99,8 +104,9 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/provincia")
 	@ResponseStatus(HttpStatus.OK)
-	public List<Cliente> findCustomerByProvincia(@RequestBody FindProvinciaDTO dto) {
-		return customerService.getClientiByProvincia(dto);
+	public List<CustomerOutputDTO> findCustomerByProvincia(@RequestBody FindProvinciaDTO dto) {
+		List<CustomerDomain> customerList = customerService.getClientiByProvincia(dto);
+		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerList);
 	}
 
 	@Override
@@ -108,8 +114,10 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
-		return customerService.createCustomer(customerDTO);
+	public CustomerOutputDTO createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
+		CustomerDomain customerDomain = customerDTOMapper.fromCustomerUpdateDTOToCustomerDomain(customerDTO);
+		CustomerDomain customerCreated = customerService.createCustomer(customerDomain);
+		return customerDTOMapper.fromCustomerDomainToCustomerOutputDTO(customerCreated);
 	}
 
 	@Override
@@ -117,9 +125,10 @@ public class CustomerController implements CustomerApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateCustomer(@Valid @RequestBody CustomerUpdateDTO modificaDTO) {
-		customerService.updateCustomer(modificaDTO);
-		log.info("Customer updated");
+	public CustomerOutputDTO updateCustomer(@Valid @RequestBody CustomerUpdateDTO customerUpdateDTO) {
+		CustomerDomain customerDomain = customerDTOMapper.fromCustomerUpdateDTOToCustomerDomain(customerUpdateDTO);
+		CustomerDomain customerUpdated = customerService.updateCustomer(customerDomain);
+		return customerDTOMapper.fromCustomerDomainToCustomerOutputDTO(customerUpdated);
 	}
 
 	@Override

@@ -8,13 +8,14 @@ import it.progetto.energy.dto.RangeDTO;
 import it.progetto.energy.dto.StatoDTO;
 import it.progetto.energy.dto.invoice.InvoiceAddPDFDTO;
 import it.progetto.energy.dto.invoice.InvoiceDTO;
+import it.progetto.energy.dto.invoice.InvoiceOutputDTO;
 import it.progetto.energy.dto.invoice.InvoiceUpdateDTO;
+import it.progetto.energy.mapper.dtotodomain.InvoiceDTOMapper;
+import it.progetto.energy.model.InvoiceDomain;
 import it.progetto.energy.model.StatoFattura;
-import it.progetto.energy.persistence.entity.Fattura;
-import it.progetto.energy.service.FatturaService;
+import it.progetto.energy.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,7 +43,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InvoiceController implements InvoiceApi {
 
-	private final FatturaService fatturaService;
+	private final InvoiceService invoiceService;
+	private final InvoiceDTOMapper invoiceDTOMapper;
 
 	@Deprecated
 	@Override
@@ -50,8 +52,9 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<Fattura> findAllInvoice() {
-		return fatturaService.getAllFatture();
+	public List<InvoiceOutputDTO> findAllInvoice() {
+		List<InvoiceDomain> invoiceList = invoiceService.getAllFatture();
+		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoiceList);
 	}
 
 	@Override
@@ -59,8 +62,9 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Fattura> findAllInvoice(Pageable page) {
-		return fatturaService.getAllFatture(page);
+	public List<InvoiceOutputDTO> findAllInvoice(Pageable page) {
+		List<InvoiceDomain> invoicePage = invoiceService.getAllFatture(page);
+		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
 	@Override
@@ -68,8 +72,9 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/customer/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<Fattura> findInvoiceByCustomer(@PathVariable("id") Long invoiceId) {
-		return fatturaService.getFatturaByCliente(invoiceId);
+	public List<InvoiceOutputDTO> findInvoiceByCustomer(@PathVariable("id") Long invoiceId) {
+		List<InvoiceDomain> invoiceList = invoiceService.getFatturaByCliente(invoiceId);
+		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoiceList);
 	}
 
 	@Override
@@ -77,9 +82,10 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/state")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Fattura> findInvoiceByState(@RequestBody StatoDTO statoDTO, Pageable page) {
+	public List<InvoiceOutputDTO> findInvoiceByState(@RequestBody StatoDTO statoDTO, Pageable page) {
 		StatoFattura statoFattura = statoDTO.getStato();
-		return fatturaService.getFatturaByStato(statoFattura, page);
+		List<InvoiceDomain> invoicePage = invoiceService.getFatturaByStato(statoFattura, page);
+		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
 	@Override
@@ -87,8 +93,9 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/date")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Fattura> findInvoiceByDate(@RequestBody DataDTO dataDTO, Pageable page) {
-		return fatturaService.getFatturaByData(dataDTO, page);
+	public List<InvoiceOutputDTO> findInvoiceByDate(@RequestBody DataDTO dataDTO, Pageable page) {
+		List<InvoiceDomain> invoicePage = invoiceService.getFatturaByData(dataDTO, page);
+		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
 	@Override
@@ -96,8 +103,9 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/year/{year}")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Fattura> findInvoiceByYear(@PathVariable("year") Integer year, Pageable page) {
-		return fatturaService.getFatturaByAnno(year, page);
+	public List<InvoiceOutputDTO> findInvoiceByYear(@PathVariable("year") Integer year, Pageable page) {
+		List<InvoiceDomain> invoicePage = invoiceService.getFatturaByAnno(year, page);
+		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
 	@Override
@@ -105,19 +113,31 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/range")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Fattura> findInvoiceByRange(@RequestBody RangeDTO rangeDTO, Pageable page) {
-		return fatturaService.getFatturaByImporto(rangeDTO, page);
+	public List<InvoiceOutputDTO> findInvoiceByRange(@RequestBody RangeDTO rangeDTO, Pageable page) {
+		List<InvoiceDomain> invoicePage = invoiceService.getFatturaByImporto(rangeDTO, page);
+		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
-	//TODO DA IMPLEMENTARE
 	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(consumes = {MediaType.MULTIPART_MIXED_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void createInvoice(@Valid @ModelAttribute InvoiceDTO invoiceDTO) throws IOException {
-		fatturaService.inserisciFattura(invoiceDTO);
-		log.info("Invoice created");
+	public InvoiceOutputDTO createInvoice(@Valid @ModelAttribute InvoiceDTO invoiceDTO) throws IOException {
+		InvoiceDomain invoiceDomain = invoiceDTOMapper.fromInvoiceDTOToInvoiceDomain(invoiceDTO);
+		InvoiceDomain invoiceCreated = invoiceService.createInvoice(invoiceDomain);
+		return invoiceDTOMapper.fromInvoiceDomainToInvoiceOutputDTO(invoiceCreated);
+	}
+
+	@Override
+	@SecurityRequirement(name = "bearerAuth")
+	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public InvoiceOutputDTO updateInvoice(@Valid @RequestBody InvoiceUpdateDTO invoiceUpdateDTO) {
+		InvoiceDomain invoiceDomain = invoiceDTOMapper.fromInvoiceUpdateDTOToInvoiceDomain(invoiceUpdateDTO);
+		InvoiceDomain invoiceUpdated = invoiceService.updateInvoice(invoiceDomain);
+		return invoiceDTOMapper.fromInvoiceDomainToInvoiceOutputDTO(invoiceUpdated);
 	}
 
 	//TODO IMPLEMENTARE
@@ -135,21 +155,10 @@ public class InvoiceController implements InvoiceApi {
 	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateInvoice(@Valid @RequestBody InvoiceUpdateDTO invoiceUpdateDTO) {
-		fatturaService.modificaFattura(invoiceUpdateDTO);
-		log.info("Invoice updated");
-	}
-
-	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteInvoice(@PathVariable("id") Long invoiceId) {
-		fatturaService.eliminaFattura(invoiceId);
-		log.info("Invoice deleted");
+		invoiceService.deleteInvoice(invoiceId);
 	}
 
 }
