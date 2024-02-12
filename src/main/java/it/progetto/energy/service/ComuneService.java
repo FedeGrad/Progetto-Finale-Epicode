@@ -36,7 +36,7 @@ public class ComuneService {
 	@Deprecated
 	public List<ComuneDomain> getAllComuni() {
 		List<Comune> comuneList = (List<Comune>) comuneRepository.findAll();
-		return comuneEntityMapper.fromComuneToComuneDomain(comuneList);
+		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneList);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class ComuneService {
 	public List<ComuneDomain> getAllComuni(Pageable page) {
 		List<Comune> comuneList = comuneRepository.findAll(page)
 				.getContent();
-		return comuneEntityMapper.fromComuneToComuneDomain(comuneList);
+		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneList);
 	}
 
 	/**

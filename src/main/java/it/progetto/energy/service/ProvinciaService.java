@@ -1,15 +1,14 @@
 package it.progetto.energy.service;
 
-import it.progetto.energy.dto.provincia.ProvinciaDTO;
-import it.progetto.energy.dto.provincia.ProvinciaUpdateDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.exception.NotFoundException;
+import it.progetto.energy.exception.NotDeletableException;
+import it.progetto.energy.exception.NotUpdatableException;
+import it.progetto.energy.mapper.entitytodomain.ProvinciaEntityMapper;
+import it.progetto.energy.model.ProvinciaDomain;
 import it.progetto.energy.persistence.entity.Provincia;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,54 +19,42 @@ import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ProvinciaService {
 
-	@Autowired
-	ProvinciaRepository provinciaRepo;
+	private final ProvinciaRepository provinciaRepository;
+	private final ProvinciaEntityMapper provinciaEntityMapper;
 
 	/**
 	 * Recupera tutte le Province
 	 * @deprecated
-	 * @return
+	 * @return List<ProvinciaDomain>
 	 */
-	public List<Provincia> getAllProvince() {
-		return (List<Provincia>) provinciaRepo.findAll();
+	public List<ProvinciaDomain> getAllProvince() {
+		List<Provincia> provinciaList = (List<Provincia>) provinciaRepository.findAll();
+		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaList);
 	}
 
 	/**
 	 * Recupera tutte le Province per pagina
-	 * @param page
-	 * @return
+	 * @return List<ProvinciaDomain>
 	 */
-	public Page<Provincia> getAllProvince(Pageable page) {
-		return provinciaRepo.findAll(page);
-	}
-
-	/**
-	 * Recupera una provincia tramite la sigla
-	 * @param sigla
-	 * @return Provincia
-	 */
-	public Provincia associaProvincia(String sigla) {
-		if (provinciaRepo.existsBySiglaAllIgnoreCase(sigla)) {
-			Provincia provinciaTrovata = provinciaRepo.findBySiglaAllIgnoreCase(sigla);
-			return provinciaTrovata;
-		} else {
-			throw new NotFoundException(ERROR_ONE);
-		}
+	public List<ProvinciaDomain> getAllProvince(Pageable page) {
+		List<Provincia> provinciaList = provinciaRepository.findAll(page)
+				.getContent();
+		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaList);
 	}
 
 	/**
 	 * Inserisce una Provincia
-	 * @param provinciaDTO
-	 * @throws ElementAlreadyPresentException
 	 */
-	public void inserisciProvincia(ProvinciaDTO provinciaDTO) throws ElementAlreadyPresentException {
-		if (!provinciaRepo.existsBySiglaAllIgnoreCase(provinciaDTO.getSigla())) {
-			Provincia provincia = new Provincia();
-			BeanUtils.copyProperties(provinciaDTO, provincia);
-			provinciaRepo.save(provincia);
-			log.info("La provincia è stata salvata");
+	public ProvinciaDomain createProvincia(ProvinciaDomain provinciaDomain) {
+		if (!provinciaRepository.existsBySiglaAllIgnoreCase(provinciaDomain.getSigla())) {
+			Provincia provincia = provinciaEntityMapper.fromProvinciaDomainToProvinciaEntity(provinciaDomain);
+			Provincia saved = provinciaRepository.save(provincia);
+			log.info("Provincia id {} saved", saved.getId());
+
+			return provinciaEntityMapper.fromProvinciaEntityToProvinciaDomain(saved);
 		} else {
 			throw new ElementAlreadyPresentException(ERROR_TWO);
 		}
@@ -75,29 +62,32 @@ public class ProvinciaService {
 
 	/**
 	 * Modifica una Provincia
-	 * @param provinciaUpdateDTO
 	 */
-	public void modificaProvincia(ProvinciaUpdateDTO provinciaUpdateDTO) {
-		if (provinciaRepo.existsBySiglaAllIgnoreCase(provinciaUpdateDTO.getSigla())) {
-			Provincia provincia = provinciaRepo.findBySiglaAllIgnoreCase(provinciaUpdateDTO.getSigla());
-			BeanUtils.copyProperties(provinciaUpdateDTO, provincia);
-			provinciaRepo.save(provincia);
-			log.info("La Provincia è stata modificata");
-		} else {
-			throw new NotFoundException(ERROR_ONE); //TODO
-		}
+	public ProvinciaDomain updateProvincia(ProvinciaDomain provinciaDomain) {
+//		if (provinciaRepository.existsById(provinciaDomain.getId())) {
+		Provincia provinciaToUpdate = provinciaRepository.findById(provinciaDomain.getId())
+				.orElseThrow(() -> new NotUpdatableException(ERROR_ONE));
+		Provincia provincia = provinciaEntityMapper.fromProvinciaDomainToProvinciaEntity(provinciaDomain);
+
+		//TODO MERGE TWO PROVINCIA
+		Provincia updated = provinciaRepository.save(provinciaToUpdate);
+		log.info("Provincia id {} updated", updated.getId());
+
+		return provinciaEntityMapper.fromProvinciaEntityToProvinciaDomain(updated);
+//		} else {
+//			throw new NotFoundException(ERROR_ONE); //TODO
+//		}
 	}
 
 	/**
 	 * Elimina una Provincia
-	 * @param id
 	 */
-	public void eliminaProvincia(Long id) {
-		if (provinciaRepo.existsById(id)) {
-			provinciaRepo.deleteById(id);
-			log.info("La Provincia id " + id + " è stata eliminata");
+	public void deleteProvincia(Long id) {
+		if (provinciaRepository.existsById(id)) {
+			provinciaRepository.deleteById(id);
+			log.info("Provincia id {} deleted", id);
 		} else {
-			throw new NotFoundException(ERROR_ONE); //TODO
+			throw new NotDeletableException(ERROR_ONE); //TODO
 		}
 	}
 

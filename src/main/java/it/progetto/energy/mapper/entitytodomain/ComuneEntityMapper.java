@@ -22,6 +22,6 @@ public interface ComuneEntityMapper {
     @Mapping(target = "name", source = "nome")
     ComuneDomain fromComuneToComuneDomain(Comune comune);
 
-    List<ComuneDomain> fromComuneToComuneDomain(List<Comune> comune);
+    List<ComuneDomain> fromComuneListToComuneDomainList(List<Comune> comuneList);
 
 }

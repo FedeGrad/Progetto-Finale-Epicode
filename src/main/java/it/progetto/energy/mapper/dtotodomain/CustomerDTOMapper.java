@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", uses = {InvoiceDTOMapper.class, Page.class})
 public interface CustomerDTOMapper {
 
-     @Mapping(target = "invoiceIdList", source = "invoiceList", qualifiedByName = "fromInvoiceToInvoiceId")
+     @Mapping(target = "invoiceIdList", source = "invoiceList", qualifiedByName = "fromInvoiceDomainListToInvoiceIdList")
      @Mapping(target = "mainAddressId", source = "addressMain.id")
      CustomerOutputDTO fromCustomerDomainToCustomerOutputDTO(CustomerDomain customerDomainDomain);
 
@@ -27,18 +27,18 @@ public interface CustomerDTOMapper {
      @Mapping(target = "id", ignore = true)
      @Mapping(target = "anni", ignore = true)
      @Mapping(target = "addressMain.id", source = "addressMainId")
-     @Mapping(target = "invoiceList", source = "invoiceIdList", qualifiedByName = "fromInvoiceIdToInvoice")
+     @Mapping(target = "invoiceList", source = "invoiceIdList", qualifiedByName = "fromInvoiceIdListToInvoiceDomainList")
      CustomerDomain fromCustomerUpdateDTOToCustomerDomain(CustomerDTO customerDTO);
 
      @Mapping(target = "dataCreate", ignore = true)
      @Mapping(target = "anni", ignore = true)
      @Mapping(target = "dataLastUpdate", ignore = true)
      @Mapping(target = "addressMain.id", source = "addressMainId")
-     @Mapping(target = "invoiceList", source = "invoiceIdList", qualifiedByName = "fromInvoiceIdToInvoice")
+     @Mapping(target = "invoiceList", source = "invoiceIdList", qualifiedByName = "fromInvoiceIdListToInvoiceDomainList")
      CustomerDomain fromCustomerUpdateDTOToCustomerDomain(CustomerUpdateDTO customerDTO);
 
-     @Named("fromInvoiceToInvoiceId")
-     default List<Long> fromInvoiceToInvoiceId(List<InvoiceDomain> invoiceDomainList){
+     @Named("fromInvoiceDomainListToInvoiceIdList")
+     default List<Long> fromInvoiceDomainListToInvoiceIdList(List<InvoiceDomain> invoiceDomainList){
           if(!invoiceDomainList.isEmpty()){
                return invoiceDomainList.stream()
                        .map(InvoiceDomain::getId)
@@ -47,8 +47,8 @@ public interface CustomerDTOMapper {
           return Collections.emptyList();
      }
 
-     @Named("fromInvoiceIdToInvoice")
-     default List<InvoiceDomain> fromInvoiceIdToInvoice(List<Long> invoiceIdList){
+     @Named("fromInvoiceIdListToInvoiceDomainList")
+     default List<InvoiceDomain> fromInvoiceIdListToInvoiceDomainList(List<Long> invoiceIdList){
           if (!invoiceIdList.isEmpty()){
                List<InvoiceDomain> invoiceDomainList = new ArrayList<>();
                invoiceIdList.forEach(invoiceId -> {

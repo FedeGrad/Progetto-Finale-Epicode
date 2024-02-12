@@ -17,7 +17,7 @@ public class ProvinciaDomain {
 
     private String name;
 
-    private String regione;
+    private String region;
 
     private List<ComuneDomain> comuneList;
 

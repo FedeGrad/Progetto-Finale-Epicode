@@ -203,7 +203,7 @@ public class CustomerService {
 	}
 
 	private boolean checkNPI(String npi) {
-		return npi.matches("[0-9]{11}");
+		return npi.matches("[\\d']{11}");
 	}
 
 }
