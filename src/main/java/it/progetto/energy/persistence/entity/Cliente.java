@@ -26,7 +26,6 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -62,15 +61,15 @@ public class Cliente {
 	private String telefonoContatto;
 	// @JsonIgnore
 	// @ToStringExclude
-	@OneToOne(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.DETACH })
+	@OneToOne(mappedBy = "cliente", cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	private IndirizzoOperativo indirizzoOperativo;
 	// @JsonIgnore
 	// @ToStringExclude
-	@OneToOne(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.DETACH })
+	@OneToOne(mappedBy = "cliente", cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	private IndirizzoLegale indirizzoLegale;
 	@JsonIgnore @ToStringExclude
-	@OneToMany(mappedBy = "cliente", cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE },
+	@OneToMany(mappedBy = "cliente", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE},
 	fetch = FetchType.LAZY)
-	private List<Fattura> fatture = new ArrayList<Fattura>();
+	private List<Fattura> fatture;
 
 }

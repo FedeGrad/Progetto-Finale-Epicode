@@ -7,12 +7,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class ComuneOutputDTO {
 
-    private Long idComune;
+    private Long id;
 
-    private String nome;
+    private String name;
 
-    private String cap;
+    private String postalCode;
 
-    private String siglaProvincia;
+    private String provinciaId;
 
 }

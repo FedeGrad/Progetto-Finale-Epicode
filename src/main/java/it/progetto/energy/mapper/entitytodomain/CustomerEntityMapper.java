@@ -7,11 +7,9 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {InvoiceEntityMapper.class, AddressOperationalEntityMapper.class,
-        AddressMainEntityMapper.class})
+@Mapper(componentModel = "spring", uses = {InvoiceEntityMapper.class, AddressEntityMapper.class})
 public interface CustomerEntityMapper {
 
-     @Mapping(target = "addressOperational", ignore = true)
      @Mapping(target = "addressMain", ignore = true)
      @Mapping(target = "type", source = "tipologia.tipologia")
      @Mapping(target = "surname", source = "cognomeContatto")

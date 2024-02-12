@@ -59,7 +59,7 @@ public class EnergyConfiguration {
 		customerDomain.setTelefonoContatto("32711223344");
 		customerDomain.setEmailContatto("utente@email.com");
 		customerDomain.setIndirizzoLegale(indirizzoLegaleRepository.findById(3L).orElse(null));
-		customerDomain.setIndirizzoOperativo(indirizzoOperativoRepository.findById(2L).orElse(null));
+
 		return customerDomain;
 	}
 

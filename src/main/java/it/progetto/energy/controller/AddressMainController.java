@@ -3,14 +3,14 @@ package it.progetto.energy.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.AddressMainApi;
-import it.progetto.energy.dto.indirizzo.IndirizzoDTO;
-import it.progetto.energy.dto.indirizzo.IndirizzoUpdateDTO;
-import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.persistence.entity.IndirizzoLegale;
-import it.progetto.energy.service.IndirizzoLegaleService;
+import it.progetto.energy.dto.address.AddressDTO;
+import it.progetto.energy.dto.address.AddressOutputDTO;
+import it.progetto.energy.dto.address.AddressUpdateDTO;
+import it.progetto.energy.mapper.dtotodomain.AddressDTOMapper;
+import it.progetto.energy.model.AddressDomain;
+import it.progetto.energy.service.AddressMainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,21 +34,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AddressMainController implements AddressMainApi {
 
-	private final IndirizzoLegaleService indirizzoLegServ;
+	private final AddressMainService addressMainService;
+	private final AddressDTOMapper addressDTOMapper;
 
 	@Deprecated
 	@Override
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<IndirizzoLegale> findAllMainAddress() {
-		return indirizzoLegServ.getAllIndirizziLegali();
+	public List<AddressOutputDTO> findAllMainAddress() {
+		List<AddressDomain> addressDomainList = addressMainService.getAllIndirizziLegali();
+		return addressDTOMapper.fromAddressDomainListToAddressOutputDTOList(addressDomainList);
 	}
 
 	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<IndirizzoLegale> findAllMainAddress(Pageable page) {
-		return indirizzoLegServ.getAllIndirizziLegali(page);
+	public List<AddressOutputDTO> findAllMainAddress(Pageable page) {
+		List<AddressDomain> addressDomainList = addressMainService.getAllIndirizziLegali(page);
+		return addressDTOMapper.fromAddressDomainListToAddressOutputDTOList(addressDomainList);
 	}
 
 	@Override
@@ -56,9 +59,10 @@ public class AddressMainController implements AddressMainApi {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void createMainAddress(@Valid @RequestBody IndirizzoDTO dto) throws ElementAlreadyPresentException {
-		log.info(dto.getVia() + dto.getCap() + dto.getCivico() + dto.getLocalita());
-		indirizzoLegServ.inserisciIndirizzoLegale(dto);
+	public AddressOutputDTO createMainAddress(@Valid @RequestBody AddressDTO addressDTO) {
+		AddressDomain addressDomain = addressDTOMapper.fromAddressDTOToAddressDomain(addressDTO);
+		AddressDomain addressCreated = addressMainService.createIndirizzo(addressDomain);
+		return addressDTOMapper.fromAddressDomainToAddressOutputDTO(addressCreated);
 	}
 
 	@Override
@@ -66,9 +70,10 @@ public class AddressMainController implements AddressMainApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateMainAddress(@RequestBody IndirizzoUpdateDTO indirizzoUpdateDTO) {
-		indirizzoLegServ.updateMainAddress(indirizzoUpdateDTO);
-		log.info("Main address updated");
+	public AddressOutputDTO updateMainAddress(@RequestBody AddressUpdateDTO addressUpdateDTO) {
+		AddressDomain addressDomain = addressDTOMapper.fromAddressUpdateDTOToAddressDomain(addressUpdateDTO);
+		AddressDomain addressUpdated = addressMainService.updateMainAddress(addressDomain);
+		return addressDTOMapper.fromAddressDomainToAddressOutputDTO(addressUpdated);
 	}
 
 	@Override
@@ -76,9 +81,8 @@ public class AddressMainController implements AddressMainApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteMainAddress(@PathVariable("id") Long addressMailId) {
-		indirizzoLegServ.deleteMainAddress(addressMailId);
-		log.info("Main address deleted");
+	public void deleteMainAddress(@PathVariable("id") Long mainAddressId) {
+		addressMainService.deleteMainAddress(mainAddressId);
 	}
 
 }

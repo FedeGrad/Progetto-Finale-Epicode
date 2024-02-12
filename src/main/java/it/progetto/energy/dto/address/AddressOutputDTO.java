@@ -1,4 +1,4 @@
-package it.progetto.energy.dto.comune;
+package it.progetto.energy.dto.address;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,14 +7,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ComuneUpdateDTO {
+public class AddressOutputDTO {
 	
 	private Long id;
 
-	private String name;
+	private String way;
+
+	private String number;
 
 	private String postalCode;
 
-	private String provinciaId;
+	private String comuneId;
 
 }

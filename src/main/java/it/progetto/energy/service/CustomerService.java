@@ -9,8 +9,9 @@ import it.progetto.energy.mapper.entitytodomain.CustomerEntityMapper;
 import it.progetto.energy.model.CustomerDomain;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
-import it.progetto.energy.persistence.entity.IndirizzoOperativo;
 import it.progetto.energy.persistence.repository.ClienteRepository;
+import it.progetto.energy.persistence.repository.IndirizzoLegaleRepository;
+import it.progetto.energy.persistence.repository.IndirizzoOperativoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
 import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
@@ -31,8 +33,8 @@ import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 public class CustomerService {
 
 	private final ClienteRepository clienteRepo;
-	private final IndirizzoLegaleService indirizzoLegServ;
-	private final IndirizzoOperativoService indirizzoOpServ;
+	private final IndirizzoLegaleRepository indirizzoLegaleRepository;
+	private final IndirizzoOperativoRepository indirizzoOperativoRepository;
 	private final CustomerEntityMapper customerEntityMapper;
 
 	/**
@@ -117,18 +119,14 @@ public class CustomerService {
 
 		if (email && phoneNumber && npi) {
 			Cliente cliente = customerEntityMapper.fromCustomerDomainToCustomer(customerDomain);
-			IndirizzoLegale indirizzoLegTrovato = indirizzoLegServ
-					.associaIndirizzoLegale(customerDomain.getAddressMain().getId());
-
-			cliente.setIndirizzoLegale(indirizzoLegTrovato);
-			indirizzoLegTrovato.setCliente(cliente);
-			log.info("Indirizzo Legale associato");
-
-			IndirizzoOperativo indirizzoOpTrovato = indirizzoOpServ
-					.associaIndirizzoOperativo(customerDomain.getAddressOperational().getId());
-			cliente.setIndirizzoOperativo(indirizzoOpTrovato);
-			indirizzoOpTrovato.setCliente(cliente);
-			log.info("Indirizzo Operativo associato");
+			IndirizzoLegale indirizzoLegTrovato = indirizzoLegaleRepository
+					.findById(customerDomain.getAddressMain().getId())
+					.orElse(null);
+			if(Objects.nonNull(indirizzoLegTrovato)) {
+				cliente.setIndirizzoLegale(indirizzoLegTrovato);
+				indirizzoLegTrovato.setCliente(cliente);
+				log.info("Indirizzo Legale associato");
+			}
 
 			Cliente saved = clienteRepo.save(cliente);
 			//TODO ADD FHIR
@@ -158,18 +156,14 @@ public class CustomerService {
 			BeanUtils.copyProperties(customerDomain, cliente);
 			//TODO MANAGE UPDATE
 
-			log.info("Il Cliente in data {} è stato modificato", cliente.getDataUltimoContatto());
-			IndirizzoLegale indirizzoLegale = indirizzoLegServ
-					.associaIndirizzoLegale(customerDomain.getAddressMain().getId());
-			cliente.setIndirizzoLegale(indirizzoLegale);
-			indirizzoLegale.setCliente(cliente);
-			log.info("Indirizzo Legale associato");
-
-			IndirizzoOperativo indirizzoOperativo = indirizzoOpServ
-					.associaIndirizzoOperativo(customerDomain.getAddressOperational().getId());
-			cliente.setIndirizzoOperativo(indirizzoOperativo);
-			indirizzoOperativo.setCliente(cliente);
-			log.info("Indirizzo Operativo associato");
+			IndirizzoLegale indirizzoLegTrovato = indirizzoLegaleRepository
+					.findById(customerDomain.getAddressMain().getId())
+					.orElse(null);
+			if(Objects.nonNull(indirizzoLegTrovato)) {
+				cliente.setIndirizzoLegale(indirizzoLegTrovato);
+				indirizzoLegTrovato.setCliente(cliente);
+				log.info("Indirizzo Legale associato");
+			}
 
 			Cliente updated = clienteRepo.save(cliente);
 			log.info("Customer updated id {}", updated.getId());

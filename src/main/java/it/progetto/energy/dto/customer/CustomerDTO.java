@@ -77,8 +77,6 @@ public class CustomerDTO {
 	@Schema(example = "3279999999", type = "string")
 	private String customerPhone;
 
-	private Long addressOperationalId;
-
 	private Long addressMainId;
 
 	private List<Long> invoiceIdList;

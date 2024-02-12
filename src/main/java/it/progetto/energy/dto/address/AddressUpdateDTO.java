@@ -1,30 +1,30 @@
-package it.progetto.energy.dto.indirizzo;
+package it.progetto.energy.dto.address;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IndirizzoUpdateDTO {
+public class AddressUpdateDTO {
 
-	@NotBlank
-	private Long idIndirizzo;
+	@NotNull
+	private Long id;
 
 	@Schema(example = "way", type = "string")
-	private String via;
+	private String way;
 
 	@Schema(example = "civic number", type = "string")
-	private String civico;
-
-	@Schema(example = "location", type = "string")
-	private String localita;
+	private String number;
 
 	@Schema(example = "postal code", type = "string")
-	private String cap;
+	private String postalCode;
+
+	@Schema(example = "location", type = "string")
+	private String comuneId;
 
 }

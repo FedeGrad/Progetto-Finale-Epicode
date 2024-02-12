@@ -1,5 +1,6 @@
 package it.progetto.energy.service;
 
+import it.progetto.energy.exception.FileException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -11,7 +12,11 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.stream.Stream;
+
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 
 @Slf4j
 public class FileService implements FileStorageService{
@@ -23,16 +28,16 @@ public class FileService implements FileStorageService{
         try{
             Files.createDirectories(root);
         }catch (IOException e){
-            throw new RuntimeException("Could not initialize folder for upload");
+            throw new FileException(ERROR_ONE);
         }
     }
 
     @Override
     public void save(MultipartFile file) {
         try {
-            Files.copy(file.getInputStream(), root.resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), root.resolve(Objects.requireNonNull(file.getOriginalFilename())));
         } catch (Exception e){
-            throw new RuntimeException("Could not store the file. Error " + e.getMessage());
+            throw new FileException(ERROR_ONE);
         }
     }
 
@@ -44,10 +49,10 @@ public class FileService implements FileStorageService{
             if(resource.exists() || resource.isReadable()){
                 return resource;
             } else {
-                throw new RuntimeException("Could not possible to get or read file");
+                throw new FileException(ERROR_TWO); //"Could not possible to get or read file"
             }
-        }catch (MalformedURLException e){
-            throw new RuntimeException("Error " + e.getMessage());
+        } catch (MalformedURLException e){
+            throw new FileException(ERROR_ONE);
         }
     }
 
@@ -61,7 +66,7 @@ public class FileService implements FileStorageService{
         try{
             return Files.walk(root, 1).filter(path -> !path.equals(root)).map(root::relativize);
         }catch (IOException e){
-            throw new RuntimeException("Could not possible to get File");
+            throw new FileException(ERROR_ONE); //"Could not possible to get File"
 
         }
     }

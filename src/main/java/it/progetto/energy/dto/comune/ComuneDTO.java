@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ComuneDTO {
 	
-	private String nome;
+	private String name;
 
-	private String cap;
+	private String postalCode;
 
-	private String siglaProvincia;
+	private String provinciaId;
 
 }

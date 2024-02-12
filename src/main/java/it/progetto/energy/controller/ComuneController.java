@@ -2,11 +2,12 @@ package it.progetto.energy.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.ComuneApi;
-import it.progetto.energy.persistence.entity.Comune;
+import it.progetto.energy.dto.comune.ComuneOutputDTO;
+import it.progetto.energy.mapper.dtotodomain.ComuneDTOMapper;
+import it.progetto.energy.model.ComuneDomain;
 import it.progetto.energy.service.ComuneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,20 +24,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ComuneController implements ComuneApi {
 
-	private final ComuneService comuneServ;
+	private final ComuneService comuneService;
+	private final ComuneDTOMapper comuneDTOMapper;
 
 	@Override
+	@Deprecated
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<Comune> findAllComuni() {
-		return comuneServ.getAllComuni();
+	public List<ComuneOutputDTO> findAllComuni() {
+		List<ComuneDomain> comuneDomainList = comuneService.getAllComuni();
+		return comuneDTOMapper.fromComuneDomainListToComuneOutputDTOList(comuneDomainList);
 	}
 
 	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<Comune> findAllComuni(Pageable page) {
-		return comuneServ.getAllComuni(page);
+	public List<ComuneOutputDTO> findAllComuni(Pageable page) {
+		List<ComuneDomain> comuneDomainList = comuneService.getAllComuni(page);
+		return comuneDTOMapper.fromComuneDomainListToComuneOutputDTOList(comuneDomainList);
 	}
 
 }

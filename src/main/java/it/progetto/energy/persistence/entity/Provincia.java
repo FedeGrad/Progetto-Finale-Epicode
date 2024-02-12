@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,6 +33,6 @@ public class Provincia {
 	@JsonIgnore @ToString.Exclude
 	@OneToMany(mappedBy = "provincia",
 			cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH })
-	private List<Comune> comuni = new ArrayList<Comune>();
+	private List<Comune> comuni;
 
 }

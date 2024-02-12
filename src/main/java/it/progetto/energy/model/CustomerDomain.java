@@ -45,9 +45,7 @@ public class CustomerDomain {
 
     private int anni;
 
-    private AddressOperationalDomain addressOperational;
-
-    private AddressMainDomain addressMain;
+    private AddressDomain addressMain;
 
     private List<InvoiceDomain> invoiceList;
 

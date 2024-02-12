@@ -45,8 +45,6 @@ public class CustomerOutputDTO {
 
     private String customerPhone;
 
-    private Long operationalAddressId;
-
     private Long mainAddressId;
 
     private List<Long> invoiceIdList;
