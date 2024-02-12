@@ -11,19 +11,22 @@ import java.util.Optional;
 
 public interface ComuneRepository extends PagingAndSortingRepository<Comune, Long> {
 
-	@Query(value = "SELECT * FROM Comune "
-			+ "JOIN Provincia ON Comune.id_provincia = Provincia.id "
-			+ "WHERE Provincia.nome = ?1", nativeQuery = true)
+	@Query(value = "SELECT * " +
+			"FROM Comune " +
+			"JOIN Provincia ON Comune.id_provincia = Provincia.id " +
+			"WHERE Provincia.nome = ?1", nativeQuery = true)
 	Page<Comune> findByProvinciaAllIgnoreCase(String provincia, Pageable page);
 
 	Optional<Comune> findByNomeAllIgnoreCase(String nome);
+
 	boolean existsByNomeAllIgnoreCase(String nome);
 
-	public List<Comune> findByNomeContainingAllIgnoreCase(String nome);
+	List<Comune> findByNomeContainingAllIgnoreCase(String nome);
 
-	public List<Comune> findByNomeStartingWithAllIgnoreCase(String nome);
+	List<Comune> findByNomeStartingWithAllIgnoreCase(String nome);
 
-	public List<Comune> findByNomeEndingWithAllIgnoreCase(String nome);
+	List<Comune> findByNomeEndingWithAllIgnoreCase(String nome);
 
-	public List<Comune> findByNomeLikeAllIgnoreCase(String nome);
+	List<Comune> findByNomeLikeAllIgnoreCase(String nome);
+
 }

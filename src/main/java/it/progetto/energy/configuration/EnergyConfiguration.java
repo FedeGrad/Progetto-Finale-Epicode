@@ -7,9 +7,8 @@ import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.model.Tipologia;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.Fattura;
-import it.progetto.energy.persistence.repository.ClienteRepository;
-import it.progetto.energy.persistence.repository.IndirizzoLegaleRepository;
-import it.progetto.energy.persistence.repository.IndirizzoOperativoRepository;
+import it.progetto.energy.persistence.repository.AddressRepository;
+import it.progetto.energy.persistence.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,9 +34,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class EnergyConfiguration {
 
-	private final IndirizzoLegaleRepository indirizzoLegaleRepository;
-	private final IndirizzoOperativoRepository indirizzoOperativoRepository;
-	private final ClienteRepository clienteRepository;
+	private final AddressRepository addressRepository;
+	private final CustomerRepository customerRepository;
 
 	@Lazy
     @Bean(name = "clienteDefault")
@@ -58,7 +56,7 @@ public class EnergyConfiguration {
 		customerDomain.setTelefono("32711223344");
 		customerDomain.setTelefonoContatto("32711223344");
 		customerDomain.setEmailContatto("utente@email.com");
-		customerDomain.setIndirizzoLegale(indirizzoLegaleRepository.findById(3L).orElse(null));
+		customerDomain.setIndirizzoLegale(addressRepository.findById(3L).orElse(null));
 
 		return customerDomain;
 	}
@@ -76,7 +74,7 @@ public class EnergyConfiguration {
 		fattura.setPercentualeSconto(0d);
 		fattura.setImportoSconto(fattura.getImporto()*fattura.getPercentualeSconto()/100);
 		fattura.setStato(StatoFattura.PAGATA);
-		fattura.setCliente(clienteRepository.findById(5L).orElse(null));
+		fattura.setCliente(customerRepository.findById(5L).orElse(null));
 
 		return fattura;
 	}

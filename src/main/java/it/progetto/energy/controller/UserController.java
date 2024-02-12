@@ -6,7 +6,7 @@ import it.progetto.energy.controller.api.UserApi;
 import it.progetto.energy.dto.user.UserDTO;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.impl.model.User;
-import it.progetto.energy.service.UserRuoliService;
+import it.progetto.energy.service.impl.UserRuoliService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

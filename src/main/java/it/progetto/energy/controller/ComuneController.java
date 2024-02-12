@@ -5,7 +5,7 @@ import it.progetto.energy.controller.api.ComuneApi;
 import it.progetto.energy.dto.comune.ComuneOutputDTO;
 import it.progetto.energy.mapper.dtotodomain.ComuneDTOMapper;
 import it.progetto.energy.model.ComuneDomain;
-import it.progetto.energy.service.ComuneService;
+import it.progetto.energy.service.impl.ComuneServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ComuneController implements ComuneApi {
 
-	private final ComuneService comuneService;
+	private final ComuneServiceImpl comuneServiceImpl;
 	private final ComuneDTOMapper comuneDTOMapper;
 
 	@Override
@@ -32,7 +32,7 @@ public class ComuneController implements ComuneApi {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<ComuneOutputDTO> findAllComuni() {
-		List<ComuneDomain> comuneDomainList = comuneService.getAllComuni();
+		List<ComuneDomain> comuneDomainList = comuneServiceImpl.getAllComuni();
 		return comuneDTOMapper.fromComuneDomainListToComuneOutputDTOList(comuneDomainList);
 	}
 
@@ -40,7 +40,7 @@ public class ComuneController implements ComuneApi {
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public List<ComuneOutputDTO> findAllComuni(Pageable page) {
-		List<ComuneDomain> comuneDomainList = comuneService.getAllComuni(page);
+		List<ComuneDomain> comuneDomainList = comuneServiceImpl.getAllComuni(page);
 		return comuneDTOMapper.fromComuneDomainListToComuneOutputDTOList(comuneDomainList);
 	}
 

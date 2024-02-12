@@ -13,7 +13,7 @@ import it.progetto.energy.dto.invoice.InvoiceUpdateDTO;
 import it.progetto.energy.mapper.dtotodomain.InvoiceDTOMapper;
 import it.progetto.energy.model.InvoiceDomain;
 import it.progetto.energy.model.StatoFattura;
-import it.progetto.energy.service.InvoiceService;
+import it.progetto.energy.service.impl.InvoiceServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +43,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InvoiceController implements InvoiceApi {
 
-	private final InvoiceService invoiceService;
+	private final InvoiceServiceImpl invoiceService;
 	private final InvoiceDTOMapper invoiceDTOMapper;
 
 	@Deprecated

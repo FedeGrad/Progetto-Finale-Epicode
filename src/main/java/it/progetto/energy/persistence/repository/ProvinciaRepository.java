@@ -8,16 +8,18 @@ import java.util.List;
 
 public interface ProvinciaRepository extends PagingAndSortingRepository<Provincia, Long> {
 
-	@Query(value = "SELECT * FROM Provincia JOIN Comune WHERE comune.nome = ?1", nativeQuery = true)
-	public Provincia findByComuneAllIgnoreCase(String comune);
+	@Query(value = "SELECT * " +
+			"FROM Provincia " +
+			"JOIN Comune " +
+			"WHERE comune.nome = ?1", nativeQuery = true)
+	Provincia findByComuneAllIgnoreCase(String comune);
 
-	public Provincia findByNomeAllIgnoreCase(String provincia);
-	public boolean existsByNomeAllIgnoreCase(String nome);
+	Provincia findByNomeAllIgnoreCase(String provincia);
 
-//	@Query(value = "SELECT * FROM Provincia WHERE sigla = ?1", nativeQuery = true)
-	public Provincia findBySiglaAllIgnoreCase(String sigla);
-	public boolean existsBySiglaAllIgnoreCase(String sigla);
+	Provincia findBySiglaAllIgnoreCase(String sigla);
 
-	public List<Provincia> findByRegioneAllIgnoreCase(String regione);
+	boolean existsBySiglaAllIgnoreCase(String sigla);
+
+	List<Provincia> findByRegioneAllIgnoreCase(String regione);
 
 }

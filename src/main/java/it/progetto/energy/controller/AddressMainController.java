@@ -8,7 +8,7 @@ import it.progetto.energy.dto.address.AddressOutputDTO;
 import it.progetto.energy.dto.address.AddressUpdateDTO;
 import it.progetto.energy.mapper.dtotodomain.AddressDTOMapper;
 import it.progetto.energy.model.AddressDomain;
-import it.progetto.energy.service.AddressMainService;
+import it.progetto.energy.service.impl.AddressServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AddressMainController implements AddressMainApi {
 
-	private final AddressMainService addressMainService;
+	private final AddressServiceImpl addressServiceImpl;
 	private final AddressDTOMapper addressDTOMapper;
 
 	@Deprecated
@@ -42,7 +42,7 @@ public class AddressMainController implements AddressMainApi {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<AddressOutputDTO> findAllMainAddress() {
-		List<AddressDomain> addressDomainList = addressMainService.getAllIndirizziLegali();
+		List<AddressDomain> addressDomainList = addressServiceImpl.getAllIndirizziLegali();
 		return addressDTOMapper.fromAddressDomainListToAddressOutputDTOList(addressDomainList);
 	}
 
@@ -50,7 +50,7 @@ public class AddressMainController implements AddressMainApi {
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public List<AddressOutputDTO> findAllMainAddress(Pageable page) {
-		List<AddressDomain> addressDomainList = addressMainService.getAllIndirizziLegali(page);
+		List<AddressDomain> addressDomainList = addressServiceImpl.getAllIndirizziLegali(page);
 		return addressDTOMapper.fromAddressDomainListToAddressOutputDTOList(addressDomainList);
 	}
 
@@ -61,7 +61,7 @@ public class AddressMainController implements AddressMainApi {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public AddressOutputDTO createMainAddress(@Valid @RequestBody AddressDTO addressDTO) {
 		AddressDomain addressDomain = addressDTOMapper.fromAddressDTOToAddressDomain(addressDTO);
-		AddressDomain addressCreated = addressMainService.createIndirizzo(addressDomain);
+		AddressDomain addressCreated = addressServiceImpl.createIndirizzo(addressDomain);
 		return addressDTOMapper.fromAddressDomainToAddressOutputDTO(addressCreated);
 	}
 
@@ -72,7 +72,7 @@ public class AddressMainController implements AddressMainApi {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public AddressOutputDTO updateMainAddress(@RequestBody AddressUpdateDTO addressUpdateDTO) {
 		AddressDomain addressDomain = addressDTOMapper.fromAddressUpdateDTOToAddressDomain(addressUpdateDTO);
-		AddressDomain addressUpdated = addressMainService.updateMainAddress(addressDomain);
+		AddressDomain addressUpdated = addressServiceImpl.updateMainAddress(addressDomain);
 		return addressDTOMapper.fromAddressDomainToAddressOutputDTO(addressUpdated);
 	}
 
@@ -82,7 +82,7 @@ public class AddressMainController implements AddressMainApi {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteMainAddress(@PathVariable("id") Long mainAddressId) {
-		addressMainService.deleteMainAddress(mainAddressId);
+		addressServiceImpl.deleteMainAddress(mainAddressId);
 	}
 
 }

@@ -1,7 +1,7 @@
 package it.progetto.energy.thread;
 
 import it.progetto.energy.persistence.entity.Cliente;
-import it.progetto.energy.persistence.repository.ClienteRepository;
+import it.progetto.energy.persistence.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,7 +13,7 @@ import java.util.TimerTask;
 public class AggiornaAnniThread {
 
 	@Autowired
-	ClienteRepository clienteRepo;
+    CustomerRepository clienteRepo;
 
 	class TassaAnnuale extends TimerTask {
 		@Override

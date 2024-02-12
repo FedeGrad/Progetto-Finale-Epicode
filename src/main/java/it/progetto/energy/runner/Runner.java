@@ -2,11 +2,10 @@ package it.progetto.energy.runner;
 
 import it.progetto.energy.impl.repository.RoleAccessRepository;
 import it.progetto.energy.impl.repository.UserAccessRepository;
-import it.progetto.energy.persistence.repository.ClienteRepository;
+import it.progetto.energy.persistence.repository.AddressRepository;
 import it.progetto.energy.persistence.repository.ComuneRepository;
-import it.progetto.energy.persistence.repository.FatturaRepository;
-import it.progetto.energy.persistence.repository.IndirizzoLegaleRepository;
-import it.progetto.energy.persistence.repository.IndirizzoOperativoRepository;
+import it.progetto.energy.persistence.repository.CustomerRepository;
+import it.progetto.energy.persistence.repository.InvoiceRepository;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
 import it.progetto.energy.thread.AggiornaAnniThread;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +18,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Runner implements ApplicationRunner {
 
-	private final ClienteRepository clienteRepository;
-	private final FatturaRepository fatturaRepository;
+	private final CustomerRepository customerRepository;
+	private final InvoiceRepository invoiceRepository;
 	private final ComuneRepository comuneRepository;
 	private final ProvinciaRepository provinciaRepository;
-	private final IndirizzoLegaleRepository indirizzoLegaleRepository;
-	private final IndirizzoOperativoRepository indirizzoOperativoRepository;
+	private final AddressRepository addressRepository;
 	private final UserAccessRepository userAccessRepository;
 	private final RoleAccessRepository roleAccessRepository;
 	private final PasswordEncoder passwordEncoder;

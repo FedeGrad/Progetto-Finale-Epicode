@@ -1,6 +1,6 @@
 package it.progetto.energy.service;
 
-public interface InvoiceService {
+public interface AddressService {
 
 
 }

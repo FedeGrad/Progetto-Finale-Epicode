@@ -21,7 +21,7 @@ public class LoggingAspect {
     User user;
 
     @Pointcut("execution(public java.util.List<it.progetto.energy.impl.model.User> " +
-            "it.progetto.energy.service.UserRuoliService.getAllUser())")
+            "it.progetto.energy.service.impl.UserRuoliService.getAllUser())")
     public void pointCut(){
     }
 

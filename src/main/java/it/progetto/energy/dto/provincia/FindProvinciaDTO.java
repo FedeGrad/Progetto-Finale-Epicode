@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FindProvinciaDTO {
 	
-	@Schema(example = "Verona", type = "string")
-	private String provincia;
+	@Schema(example = "1", type = "long")
+	private Long provinciaId;
 
 }
