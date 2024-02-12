@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.UserApi;
 import it.progetto.energy.dto.user.UserDTO;
-import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.impl.model.User;
+import it.progetto.energy.dto.user.UserOutputDTO;
+import it.progetto.energy.dto.user.UserUpdateDTO;
+import it.progetto.energy.mapper.dtotodomain.UserDTOMapper;
+import it.progetto.energy.model.UserDomain;
 import it.progetto.energy.service.impl.UserRuoliService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,20 +35,23 @@ import java.util.List;
 public class UserController implements UserApi {
 
 	private final UserRuoliService userRuoliService;
+	private final UserDTOMapper userDTOMapper;
 
 	@Deprecated
 	@Override
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<User> findAllUser() {
-		return userRuoliService.findAllUser();
+	public List<UserOutputDTO> findAllUser() {
+		List<UserDomain> userDomainList = userRuoliService.findAllUser();
+		return userDTOMapper.fromUserDomainListToUserOutputDTOList(userDomainList);
 	}
 
 	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<User> findAllUser(Pageable page) {
-		return userRuoliService.findAllUser(page);
+	public List<UserOutputDTO> findAllUser(Pageable page) {
+		List<UserDomain> userDomainList = userRuoliService.findAllUser(page);
+		return userDTOMapper.fromUserDomainListToUserOutputDTOList(userDomainList);
 	}
 
 	@Override
@@ -55,9 +59,10 @@ public class UserController implements UserApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void createUser(@Valid @RequestBody UserDTO userDTO) throws ElementAlreadyPresentException {
-		userRuoliService.createUser(userDTO);
-		log.info("User created");
+	public UserOutputDTO createUser(@Valid @RequestBody UserDTO userDTO) {
+		UserDomain userDomain = userDTOMapper.fromUserDTOToUserDomain(userDTO);
+		UserDomain userCreated = userRuoliService.createUser(userDomain);
+		return userDTOMapper.fromUserDomainToUserOutputDTO(userCreated);
 	}
 
 	@Override
@@ -65,9 +70,10 @@ public class UserController implements UserApi {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void updateUser(@RequestBody UserDTO updateDTO) {
-		userRuoliService.updateUser(updateDTO);
-		log.info("User updated");
+	public UserOutputDTO updateUser(@RequestBody UserUpdateDTO updateDTO) {
+		UserDomain userDomain = userDTOMapper.fromUserUpdateDTOToUserDomain(updateDTO);
+		UserDomain userUpdated = userRuoliService.updateUser(userDomain);
+		return userDTOMapper.fromUserDomainToUserOutputDTO(userUpdated);
 	}
 
 	@Override
