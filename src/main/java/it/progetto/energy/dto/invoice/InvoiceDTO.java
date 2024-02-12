@@ -13,12 +13,12 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+import static it.progetto.energy.utils.ConstantUtils.DATE_PATTERN;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class InvoiceDTO {
-
-	static final String DATE_PATTERN = "dd/MM/yyyy";
 
 	@Schema(hidden = true)
 	private Integer year;

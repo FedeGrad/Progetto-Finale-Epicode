@@ -40,14 +40,14 @@ public class UserController implements UserApi {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<User> findAllUser() {
-		return userRuoliService.getAllUser();
+		return userRuoliService.findAllUser();
 	}
 
 	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public Page<User> findAllUser(Pageable page) {
-		return userRuoliService.getAllUser(page);
+		return userRuoliService.findAllUser(page);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class UserController implements UserApi {
 	@PostMapping
 	@ResponseStatus(HttpStatus.OK)
 	public void createUser(@Valid @RequestBody UserDTO userDTO) throws ElementAlreadyPresentException {
-		userRuoliService.inserisciUser(userDTO);
+		userRuoliService.createUser(userDTO);
 		log.info("User created");
 	}
 
@@ -66,7 +66,7 @@ public class UserController implements UserApi {
 	@PutMapping
 	@ResponseStatus(HttpStatus.OK)
 	public void updateUser(@RequestBody UserDTO updateDTO) {
-		userRuoliService.modificaUser(updateDTO);
+		userRuoliService.updateUser(updateDTO);
 		log.info("User updated");
 	}
 
@@ -76,7 +76,7 @@ public class UserController implements UserApi {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteUser(@PathVariable("id") Long userId) {
-		userRuoliService.eliminaUser(userId);
+		userRuoliService.deleteUser(userId);
 		log.info("User deleted");
 	}
 

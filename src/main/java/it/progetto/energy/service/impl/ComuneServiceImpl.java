@@ -1,6 +1,5 @@
 package it.progetto.energy.service.impl;
 
-import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.exception.NotUpdatableException;
@@ -10,6 +9,7 @@ import it.progetto.energy.persistence.entity.Comune;
 import it.progetto.energy.persistence.entity.Provincia;
 import it.progetto.energy.persistence.repository.ComuneRepository;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
+import it.progetto.energy.service.ComuneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ComuneServiceImpl {
+public class ComuneServiceImpl implements ComuneService {
 
 	private final ComuneRepository comuneRepository;
 	private final ProvinciaRepository provinciaRepository;
@@ -33,7 +33,7 @@ public class ComuneServiceImpl {
 	 * Recupera tutti i Comuni
 	 */
 	@Deprecated
-	public List<ComuneDomain> getAllComuni() {
+	public List<ComuneDomain> findAllComuni() {
 		List<Comune> comuneList = (List<Comune>) comuneRepository.findAll();
 		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneList);
 	}
@@ -41,7 +41,7 @@ public class ComuneServiceImpl {
 	/**
 	 * Recupera tutti i Comuni per pagina
 	 */
-	public List<ComuneDomain> getAllComuni(Pageable page) {
+	public List<ComuneDomain> findAllComuni(Pageable page) {
 		List<Comune> comuneList = comuneRepository.findAll(page)
 				.getContent();
 		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneList);
@@ -50,7 +50,7 @@ public class ComuneServiceImpl {
 	/**
 	 * Inserisce un Comune nel sistema
 	 */
-	public ComuneDomain createComune(ComuneDomain comuneDomain) throws ElementAlreadyPresentException {
+	public ComuneDomain createComune(ComuneDomain comuneDomain) {
 		if (!comuneRepository.existsByNomeAllIgnoreCase(comuneDomain.getName())) {
 
 			Comune comune = comuneEntityMapper.fromComuneDomainToComune(comuneDomain);
@@ -72,7 +72,7 @@ public class ComuneServiceImpl {
 	/**
 	 * Modifica un Comune nel sistema
 	 */
-	public ComuneDomain updateComune(ComuneDomain comuneDomain) throws ElementAlreadyPresentException {
+	public ComuneDomain updateComune(ComuneDomain comuneDomain) {
 //		if (comuneRepository.existsById(comuneDomain.getId())) {
 		Comune comune = comuneRepository.findById(comuneDomain.getId())
 				.orElseThrow(() -> new NotUpdatableException(ERROR_ONE));

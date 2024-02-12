@@ -7,7 +7,6 @@ import it.progetto.energy.persistence.repository.ComuneRepository;
 import it.progetto.energy.persistence.repository.CustomerRepository;
 import it.progetto.energy.persistence.repository.InvoiceRepository;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
-import it.progetto.energy.thread.AggiornaAnniThread;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -33,7 +32,7 @@ public class Runner implements ApplicationRunner {
 //	@Qualifier("fatturaDefault")
 //	private final Fattura fattura;
 
-	AggiornaAnniThread aggiornaAnniThread = new AggiornaAnniThread();
+//	AggiornaAnniThread aggiornaAnniThread = new AggiornaAnniThread(customerRepository);
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {

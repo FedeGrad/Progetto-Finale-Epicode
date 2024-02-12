@@ -5,6 +5,7 @@ import it.progetto.energy.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
 import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 
+@Service
 @Slf4j
 public class FileServiceImpl implements FileService {
 
@@ -58,18 +60,20 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void deleteAll() {
-        FileSystemUtils.deleteRecursively(root.toFile());
-    }
-
-    @Override
     public Stream<Path> loadAll() {
         try{
-            return Files.walk(root, 1).filter(path -> !path.equals(root)).map(root::relativize);
+            return Files.walk(root, 1)
+                    .filter(path -> !path.equals(root))
+                    .map(root::relativize);
         }catch (IOException e){
             throw new FileException(ERROR_ONE); //"Could not possible to get File"
 
         }
+    }
+
+    @Override
+    public void deleteAll() {
+        FileSystemUtils.deleteRecursively(root.toFile());
     }
 
 }

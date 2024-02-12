@@ -5,24 +5,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import it.progetto.energy.model.Tipologia;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import static it.progetto.energy.utils.ConstantUtils.DATE_PATTERN;
+
 @Data
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerUpdateDTO {
-	
-	static final String DATE_PATTERN = "dd/MM/yyyy";
-	static final String DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm:ss";
 
 	@NotNull
 	private Long id;

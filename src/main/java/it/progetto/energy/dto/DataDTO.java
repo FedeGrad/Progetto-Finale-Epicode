@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+import static it.progetto.energy.utils.ConstantUtils.DATE_PATTERN;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class DataDTO {
-	
-	static final String DATE_PATTERN = "dd/MM/yyyy";
 
 	@NotNull
 	@Schema(example = "20/01/2000", type = "string")

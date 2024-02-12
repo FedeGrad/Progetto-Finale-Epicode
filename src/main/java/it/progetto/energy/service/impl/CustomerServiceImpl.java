@@ -10,6 +10,7 @@ import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.entity.IndirizzoLegale;
 import it.progetto.energy.persistence.repository.AddressRepository;
 import it.progetto.energy.persistence.repository.CustomerRepository;
+import it.progetto.energy.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +29,7 @@ import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CustomerServiceImpl {
+public class CustomerServiceImpl implements CustomerService {
 
 	private final CustomerRepository customerRepository;
 	private final AddressRepository addressRepository;
@@ -39,7 +40,7 @@ public class CustomerServiceImpl {
 	 * @deprecated
 	 */
 	@Deprecated
-	public List<CustomerDomain> getAllClienti() {
+	public List<CustomerDomain> findAllCustomer() {
 		List<Cliente> clienteList = customerRepository.findAll();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(clienteList);
 	}
@@ -47,7 +48,7 @@ public class CustomerServiceImpl {
 	/**
 	 * Recupera tutti i Clienti, per pagina
 	 */
-	public List<CustomerDomain> getAllClienti(Pageable page) {
+	public List<CustomerDomain> findAllCustomer(Pageable page) {
 		List<Cliente> clientePage = customerRepository.findAll(page).getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
@@ -55,8 +56,8 @@ public class CustomerServiceImpl {
 	/**
 	 * Recupera i Clienti per nome
 	 */
-	public List<CustomerDomain> getClientiByNome(String nome, Pageable page) {
-		List<Cliente> clientePage = customerRepository.findByNomeContattoAllIgnoreCase(nome, page)
+	public List<CustomerDomain> findCustomerByName(String name, Pageable page) {
+		List<Cliente> clientePage = customerRepository.findByNomeContattoAllIgnoreCase(name, page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
@@ -64,7 +65,7 @@ public class CustomerServiceImpl {
 	/**
 	 * Recupera i Clienti che nel nome è presente il valore passato nel parametro, nel nome
 	 */
-	public List<CustomerDomain> getClientiByNomeContain(String nomeContiene, Pageable page) {
+	public List<CustomerDomain> findCustomerByNameContain(String nomeContiene, Pageable page) {
 		List<Cliente> clientePage = customerRepository.findByNomeContattoContainingAllIgnoreCase(nomeContiene, page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
@@ -73,8 +74,8 @@ public class CustomerServiceImpl {
 	/**
 	 * Recupera i Clienti con uno specifico fatturato
 	 */
-	public List<CustomerDomain> getClientiByFatturato(Double fatturato, Pageable page) {
-		List<Cliente> clientePage = customerRepository.findByFatturatoAnnuale(fatturato, page)
+	public List<CustomerDomain> findCustomerByAnnualTurnover(Double annualTurnover, Pageable page) {
+		List<Cliente> clientePage = customerRepository.findByFatturatoAnnuale(annualTurnover, page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
@@ -82,7 +83,7 @@ public class CustomerServiceImpl {
 	/**
 	 * Recupera i Clienti registrati in una determinata data
 	 */
-	public List<CustomerDomain> getClientiByDataInserimento(DataDomain dataCreate, Pageable page) {
+	public List<CustomerDomain> findCustomerByDataCreate(DataDomain dataCreate, Pageable page) {
 		List<Cliente> clientePage = customerRepository.findByDataInserimento(dataCreate.getData(), page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
@@ -91,8 +92,8 @@ public class CustomerServiceImpl {
 	/**
 	 * Recupera i Clienti contattati in una determinata data
 	 */
-	public List<CustomerDomain> getClientiByDataUltimoContatto(DataDomain dataLastContact, Pageable page) {
-		List<Cliente> clientePage = customerRepository.findByDataUltimoContatto(dataLastContact.getData(), page)
+	public List<CustomerDomain> findCustomerByDataLastUpdate(DataDomain dataLastUpdate, Pageable page) {
+		List<Cliente> clientePage = customerRepository.findByDataUltimoContatto(dataLastUpdate.getData(), page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
 	}
@@ -100,7 +101,7 @@ public class CustomerServiceImpl {
 	/**
 	 * Recupera i Clienti di una specifica provincia
 	 */
-	public List<CustomerDomain> getClientiByProvincia(Long provinciaId) {
+	public List<CustomerDomain> findCustomerByProvincia(Long provinciaId) {
 		List<Cliente> clienteList = customerRepository.findByProvincia_IdAllIgnoreCase(provinciaId);
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(clienteList);
 	}
@@ -117,7 +118,7 @@ public class CustomerServiceImpl {
 		if (email && phoneNumber && npi) {
 			Cliente cliente = customerEntityMapper.fromCustomerDomainToCustomer(customerDomain);
 			IndirizzoLegale indirizzoLegTrovato = addressRepository
-					.findById(customerDomain.getAddressMain().getId())
+					.findById(customerDomain.getAddress().getId())
 					.orElse(null);
 			if(Objects.nonNull(indirizzoLegTrovato)) {
 				cliente.setIndirizzoLegale(indirizzoLegTrovato);
@@ -154,7 +155,7 @@ public class CustomerServiceImpl {
 			//TODO MANAGE UPDATE
 
 			IndirizzoLegale indirizzoLegTrovato = addressRepository
-					.findById(customerDomain.getAddressMain().getId())
+					.findById(customerDomain.getAddress().getId())
 					.orElse(null);
 			if(Objects.nonNull(indirizzoLegTrovato)) {
 				cliente.setIndirizzoLegale(indirizzoLegTrovato);
@@ -176,7 +177,7 @@ public class CustomerServiceImpl {
 	/**
 	 * Elimina un cliente
 	 */
-	public void eliminaCliente(Long id) {
+	public void deleteCustomer(Long id) {
 		if (customerRepository.existsById(id)) {
 			customerRepository.deleteById(id);
 			log.info("Customer id {} deleted", id);

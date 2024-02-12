@@ -46,7 +46,7 @@ public class CustomerController implements CustomerApi {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<CustomerOutputDTO> findAllCustomer() {
-		List<CustomerDomain> customerDomain = customerServiceImpl.getAllClienti();
+		List<CustomerDomain> customerDomain = customerServiceImpl.findAllCustomer();
 		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerDomain);
 	}
 
@@ -56,7 +56,7 @@ public class CustomerController implements CustomerApi {
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public List<CustomerOutputDTO> findAllCustomer(Pageable page) {
-		List<CustomerDomain> customerPage = customerServiceImpl.getAllClienti(page);
+		List<CustomerDomain> customerPage = customerServiceImpl.findAllCustomer(page);
 		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
@@ -66,7 +66,7 @@ public class CustomerController implements CustomerApi {
 	@GetMapping("/name/{name}/page")
 	@ResponseStatus(HttpStatus.OK)
 	public List<CustomerOutputDTO> findCustomerByName(@PathVariable("name") String name, Pageable page) {
-		List<CustomerDomain> customerPage = customerServiceImpl.getClientiByNome(name, page);
+		List<CustomerDomain> customerPage = customerServiceImpl.findCustomerByName(name, page);
 		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
@@ -76,7 +76,7 @@ public class CustomerController implements CustomerApi {
 	@GetMapping("/name/contains/{name}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<CustomerOutputDTO> findCustomerByNameContains(@PathVariable("name") String name, Pageable page) {
-		List<CustomerDomain> customerPage = customerServiceImpl.getClientiByNomeContain(name, page);
+		List<CustomerDomain> customerPage = customerServiceImpl.findCustomerByNameContain(name, page);
 		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
@@ -89,7 +89,7 @@ public class CustomerController implements CustomerApi {
 		DataDomain dataDomain = DataDomain.builder()
 				.data(dataDTO.getData())
 				.build();
-		List<CustomerDomain> customerPage = customerServiceImpl.getClientiByDataInserimento(dataDomain, page);
+		List<CustomerDomain> customerPage = customerServiceImpl.findCustomerByDataCreate(dataDomain, page);
 		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
@@ -102,7 +102,7 @@ public class CustomerController implements CustomerApi {
 		DataDomain dataDomain = DataDomain.builder()
 				.data(dataDTO.getData())
 				.build();
-		List<CustomerDomain> customerPage = customerServiceImpl.getClientiByDataUltimoContatto(dataDomain, page);
+		List<CustomerDomain> customerPage = customerServiceImpl.findCustomerByDataLastUpdate(dataDomain, page);
 		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerPage);
 	}
 
@@ -113,7 +113,7 @@ public class CustomerController implements CustomerApi {
 	@ResponseStatus(HttpStatus.OK)
 	public List<CustomerOutputDTO> findCustomerByProvincia(@RequestBody FindProvinciaDTO findProvinciaDTO) {
 		Long provinciaId = findProvinciaDTO.getProvinciaId();
-		List<CustomerDomain> customerList = customerServiceImpl.getClientiByProvincia(provinciaId);
+		List<CustomerDomain> customerList = customerServiceImpl.findCustomerByProvincia(provinciaId);
 		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerList);
 	}
 
@@ -145,7 +145,7 @@ public class CustomerController implements CustomerApi {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteCustomer(@PathVariable("id") Long customerId) {
-		customerServiceImpl.eliminaCliente(customerId);
+		customerServiceImpl.deleteCustomer(customerId);
 		log.info("Customer deleted");
 	}
 

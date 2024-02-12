@@ -10,8 +10,8 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {InvoiceEntityMapper.class, AddressEntityMapper.class})
 public interface CustomerEntityMapper {
 
-     @Mapping(target = "addressMain", ignore = true)
-     @Mapping(target = "type", source = "tipologia.tipologia")
+     @Mapping(target = "address", ignore = true)
+     @Mapping(target = "type", source = "tipologia.type")
      @Mapping(target = "surname", source = "cognomeContatto")
      @Mapping(target = "name", source = "nomeContatto")
      @Mapping(target = "invoiceList", source = "fatture")

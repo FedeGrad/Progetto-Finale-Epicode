@@ -42,7 +42,7 @@ public class AddressMainController implements AddressMainApi {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<AddressOutputDTO> findAllMainAddress() {
-		List<AddressDomain> addressDomainList = addressServiceImpl.getAllIndirizziLegali();
+		List<AddressDomain> addressDomainList = addressServiceImpl.findAllIndirizziLegali();
 		return addressDTOMapper.fromAddressDomainListToAddressOutputDTOList(addressDomainList);
 	}
 
@@ -50,7 +50,7 @@ public class AddressMainController implements AddressMainApi {
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public List<AddressOutputDTO> findAllMainAddress(Pageable page) {
-		List<AddressDomain> addressDomainList = addressServiceImpl.getAllIndirizziLegali(page);
+		List<AddressDomain> addressDomainList = addressServiceImpl.findAllIndirizziLegali(page);
 		return addressDTOMapper.fromAddressDomainListToAddressOutputDTOList(addressDomainList);
 	}
 
@@ -72,7 +72,7 @@ public class AddressMainController implements AddressMainApi {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public AddressOutputDTO updateMainAddress(@RequestBody AddressUpdateDTO addressUpdateDTO) {
 		AddressDomain addressDomain = addressDTOMapper.fromAddressUpdateDTOToAddressDomain(addressUpdateDTO);
-		AddressDomain addressUpdated = addressServiceImpl.updateMainAddress(addressDomain);
+		AddressDomain addressUpdated = addressServiceImpl.updateAddress(addressDomain);
 		return addressDTOMapper.fromAddressDomainToAddressOutputDTO(addressUpdated);
 	}
 

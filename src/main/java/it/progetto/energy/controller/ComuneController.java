@@ -32,7 +32,7 @@ public class ComuneController implements ComuneApi {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<ComuneOutputDTO> findAllComuni() {
-		List<ComuneDomain> comuneDomainList = comuneServiceImpl.getAllComuni();
+		List<ComuneDomain> comuneDomainList = comuneServiceImpl.findAllComuni();
 		return comuneDTOMapper.fromComuneDomainListToComuneOutputDTOList(comuneDomainList);
 	}
 
@@ -40,7 +40,7 @@ public class ComuneController implements ComuneApi {
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public List<ComuneOutputDTO> findAllComuni(Pageable page) {
-		List<ComuneDomain> comuneDomainList = comuneServiceImpl.getAllComuni(page);
+		List<ComuneDomain> comuneDomainList = comuneServiceImpl.findAllComuni(page);
 		return comuneDTOMapper.fromComuneDomainListToComuneOutputDTOList(comuneDomainList);
 	}
 

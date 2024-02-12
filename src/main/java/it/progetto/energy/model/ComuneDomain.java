@@ -20,7 +20,5 @@ public class ComuneDomain {
     private ProvinciaDomain provincia;
 
     private List<AddressDomain> addressDomainList;
-
-    private List<AddressDomain> indirizziOperationalDomainList;
-
+    
 }

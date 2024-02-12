@@ -53,7 +53,7 @@ public class InvoiceController implements InvoiceApi {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findAllInvoice() {
-		List<InvoiceDomain> invoiceList = invoiceService.getAllFatture();
+		List<InvoiceDomain> invoiceList = invoiceService.findAllInvoice();
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoiceList);
 	}
 
@@ -63,7 +63,7 @@ public class InvoiceController implements InvoiceApi {
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findAllInvoice(Pageable page) {
-		List<InvoiceDomain> invoicePage = invoiceService.getAllFatture(page);
+		List<InvoiceDomain> invoicePage = invoiceService.findAllInvoice(page);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
@@ -73,7 +73,7 @@ public class InvoiceController implements InvoiceApi {
 	@GetMapping("/customer/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByCustomer(@PathVariable("id") Long invoiceId) {
-		List<InvoiceDomain> invoiceList = invoiceService.getFatturaByCliente(invoiceId);
+		List<InvoiceDomain> invoiceList = invoiceService.findInvoiceByCustomer(invoiceId);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoiceList);
 	}
 
@@ -84,7 +84,7 @@ public class InvoiceController implements InvoiceApi {
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByState(@RequestBody StatoDTO statoDTO, Pageable page) {
 		StatoFattura statoFattura = statoDTO.getStato();
-		List<InvoiceDomain> invoicePage = invoiceService.getFatturaByStato(statoFattura, page);
+		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByState(statoFattura, page);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
@@ -94,7 +94,7 @@ public class InvoiceController implements InvoiceApi {
 	@PostMapping("/date")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByDate(@RequestBody DataDTO dataDTO, Pageable page) {
-		List<InvoiceDomain> invoicePage = invoiceService.getFatturaByData(dataDTO, page);
+		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByDate(dataDTO, page);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
@@ -104,7 +104,7 @@ public class InvoiceController implements InvoiceApi {
 	@GetMapping("/year/{year}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByYear(@PathVariable("year") Integer year, Pageable page) {
-		List<InvoiceDomain> invoicePage = invoiceService.getFatturaByAnno(year, page);
+		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByYear(year, page);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
@@ -114,7 +114,7 @@ public class InvoiceController implements InvoiceApi {
 	@PostMapping("/range")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByRange(@RequestBody RangeDTO rangeDTO, Pageable page) {
-		List<InvoiceDomain> invoicePage = invoiceService.getFatturaByImporto(rangeDTO, page);
+		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByAmountBetween(rangeDTO, page);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 

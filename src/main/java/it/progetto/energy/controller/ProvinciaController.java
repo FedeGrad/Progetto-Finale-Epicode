@@ -29,14 +29,14 @@ public class ProvinciaController implements ProvinciaApi {
 	@Override
 	@GetMapping
 	public List<ProvinciaOutputDTO> findAllProvince() {
-		List<ProvinciaDomain> provinciaDomainList = provinciaServiceImpl.getAllProvince();
+		List<ProvinciaDomain> provinciaDomainList = provinciaServiceImpl.findAllProvince();
 		return provinciaDTOMapper.fromProvinciaDomainListToProvinciaOutputDTOList(provinciaDomainList);
 	}
 
 	@Override
 	@GetMapping("/page")
 	public List<ProvinciaOutputDTO> findAllProvince(Pageable page) {
-		List<ProvinciaDomain> provinciaDomainList = provinciaServiceImpl.getAllProvince(page);
+		List<ProvinciaDomain> provinciaDomainList = provinciaServiceImpl.findAllProvince(page);
 		return provinciaDTOMapper.fromProvinciaDomainListToProvinciaOutputDTOList(provinciaDomainList);
 	}
 

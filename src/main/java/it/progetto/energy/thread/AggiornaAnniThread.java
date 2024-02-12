@@ -1,19 +1,23 @@
 package it.progetto.energy.thread;
 
+import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.persistence.entity.Cliente;
 import it.progetto.energy.persistence.repository.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
+
 @Slf4j
+@RequiredArgsConstructor
 public class AggiornaAnniThread {
 
-	@Autowired
-    CustomerRepository clienteRepo;
+	private final CustomerRepository clienteRepo;
 
 	class TassaAnnuale extends TimerTask {
 		@Override
@@ -23,25 +27,20 @@ public class AggiornaAnniThread {
 			long giorno = ora*24;
 			long anno = giorno*365;
 			try {
-				List<Cliente> clienti = (List<Cliente>) clienteRepo.findAll();
+				List<Cliente> clienti = clienteRepo.findAll();
 				if(clienti == null) {
-					throw new NullPointerException("lista vuota");
+					log.info("No One Client");
 				} else {
 					Timer timer = new Timer();
 					timer.schedule(new TassaAnnuale(), anno);
-					//TODO SETTARE GLI ANNI
-//					clienti.stream().map(cliente -> cliente.setAnni());
+
+					clienti.forEach(cliente -> cliente.setAnni(LocalDate.now().getYear()));
 					log.info("importo annuo");
 				}
-			} catch (NullPointerException e){
-				log.info("errore " + e.getMessage());
-			}
-			catch (Exception e){
-				log.info(e.getMessage());
-				e.printStackTrace();
+			} catch (Exception e){
+				throw new NotUpdatableException(ERROR_ONE); //TODO
 			}
 		}
 	}
-
 
 }

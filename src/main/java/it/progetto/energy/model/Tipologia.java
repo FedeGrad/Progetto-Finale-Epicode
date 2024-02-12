@@ -12,6 +12,6 @@ public enum Tipologia {
 	SPA("SPA"),
 	SRL("SRL");
 
-	private final String tipologia;
+	private final String type;
 
 }

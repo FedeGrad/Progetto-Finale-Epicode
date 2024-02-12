@@ -7,6 +7,7 @@ import it.progetto.energy.mapper.entitytodomain.ProvinciaEntityMapper;
 import it.progetto.energy.model.ProvinciaDomain;
 import it.progetto.energy.persistence.entity.Provincia;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
+import it.progetto.energy.service.ProvinciaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ProvinciaServiceImpl {
+public class ProvinciaServiceImpl implements ProvinciaService {
 
 	private final ProvinciaRepository provinciaRepository;
 	private final ProvinciaEntityMapper provinciaEntityMapper;
@@ -30,7 +31,9 @@ public class ProvinciaServiceImpl {
 	 * @deprecated
 	 * @return List<ProvinciaDomain>
 	 */
-	public List<ProvinciaDomain> getAllProvince() {
+	@Deprecated
+	@Override
+	public List<ProvinciaDomain> findAllProvince() {
 		List<Provincia> provinciaList = (List<Provincia>) provinciaRepository.findAll();
 		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaList);
 	}
@@ -39,7 +42,8 @@ public class ProvinciaServiceImpl {
 	 * Recupera tutte le Province per pagina
 	 * @return List<ProvinciaDomain>
 	 */
-	public List<ProvinciaDomain> getAllProvince(Pageable page) {
+	@Override
+	public List<ProvinciaDomain> findAllProvince(Pageable page) {
 		List<Provincia> provinciaList = provinciaRepository.findAll(page)
 				.getContent();
 		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaList);
@@ -48,6 +52,7 @@ public class ProvinciaServiceImpl {
 	/**
 	 * Inserisce una Provincia
 	 */
+	@Override
 	public ProvinciaDomain createProvincia(ProvinciaDomain provinciaDomain) {
 		if (!provinciaRepository.existsBySiglaAllIgnoreCase(provinciaDomain.getSigla())) {
 			Provincia provincia = provinciaEntityMapper.fromProvinciaDomainToProvinciaEntity(provinciaDomain);
@@ -63,6 +68,7 @@ public class ProvinciaServiceImpl {
 	/**
 	 * Modifica una Provincia
 	 */
+	@Override
 	public ProvinciaDomain updateProvincia(ProvinciaDomain provinciaDomain) {
 //		if (provinciaRepository.existsById(provinciaDomain.getId())) {
 		Provincia provinciaToUpdate = provinciaRepository.findById(provinciaDomain.getId())
@@ -82,6 +88,7 @@ public class ProvinciaServiceImpl {
 	/**
 	 * Elimina una Provincia
 	 */
+	@Override
 	public void deleteProvincia(Long id) {
 		if (provinciaRepository.existsById(id)) {
 			provinciaRepository.deleteById(id);

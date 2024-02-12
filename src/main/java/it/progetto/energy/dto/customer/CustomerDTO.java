@@ -15,14 +15,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import static it.progetto.energy.utils.ConstantUtils.DATE_PATTERN;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class CustomerDTO {
-	
-	static final String DATE_PATTERN = "dd/MM/yyyy";
-	static final String DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm:ss";
 
 	@NotEmpty
 	@Schema(example = "company name", type = "string", defaultValue = "new Company")
@@ -38,7 +37,7 @@ public class CustomerDTO {
 	private String email;
 
 	@Schema(hidden = true)
-	@JsonFormat(pattern = DATE_TIME_PATTERN)
+	@JsonFormat(pattern = DATE_PATTERN)
 	private LocalDate dataCreate = LocalDate.now();
 
 	@Schema(hidden = true)

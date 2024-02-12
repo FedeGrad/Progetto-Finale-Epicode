@@ -7,6 +7,7 @@ import it.progetto.energy.impl.model.RoleAccess;
 import it.progetto.energy.impl.model.User;
 import it.progetto.energy.impl.repository.RoleAccessRepository;
 import it.progetto.energy.impl.repository.UserAccessRepository;
+import it.progetto.energy.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -24,7 +25,7 @@ import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserRuoliService {
+public class UserRuoliService implements UserService {
 
 	private final UserAccessRepository userAccessRepository;
 	private final RoleAccessRepository roleAccessRepository;
@@ -36,7 +37,7 @@ public class UserRuoliService {
 	 * @return List<User>
 	 */
 	@Deprecated
-	public List<User> getAllUser() {
+	public List<User> findAllUser() {
 		return userAccessRepository.findAll();
 	}
 
@@ -44,20 +45,20 @@ public class UserRuoliService {
 	 * Recupera tutti gli User per pagina
 	 * @return Page<User>
 	 */
-	public Page<User> getAllUser(Pageable page) {
+	public Page<User> findAllUser(Pageable page) {
 		return userAccessRepository.findAll(page);
 	}
 
 	/**
 	 * Metodo per inserire un User nel sistema
 	 */
-	public void inserisciUser(UserDTO dto) {
+	public void createUser(UserDTO userDTO) {
 		User user = new User();
-		if (!userAccessRepository.existsByUsername(dto.getUsername())) {
-			BeanUtils.copyProperties(dto, user);
-			user.setPassword(passwordEncoder.encode(dto.getPassword()));
+		if (Boolean.FALSE.equals(userAccessRepository.existsByUsername(userDTO.getUsername()))) {
+			BeanUtils.copyProperties(userDTO, user);
+			user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 			user.setAccountAttivo(true);
-			String elencoRuoli = dto.getRoles();
+			String elencoRuoli = userDTO.getRoles();
 			if (elencoRuoli.isBlank()) {
 				elencoRuoli = "ROLE_USER";
 			}
@@ -83,7 +84,7 @@ public class UserRuoliService {
 	/**
 	 * Metodo per modificare un User nel sistema
 	 */
-	public void modificaUser(UserDTO dto) {
+	public void updateUser(UserDTO dto) {
 		if (Boolean.TRUE.equals(userAccessRepository.existsByUsername(dto.getUsername()))) {
 			User user = userAccessRepository.findByUsername(dto.getUsername())
 					.get();
@@ -116,7 +117,7 @@ public class UserRuoliService {
 	/**
 	 * Metodo per eliminare un User
 	 */
-	public void eliminaUser(Long id) {
+	public void deleteUser(Long id) {
 		if (userAccessRepository.existsById(id)) {
 			userAccessRepository.deleteById(id);
 			log.info("User id {} deleted", id);

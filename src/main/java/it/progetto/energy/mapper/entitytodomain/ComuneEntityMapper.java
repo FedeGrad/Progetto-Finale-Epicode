@@ -16,7 +16,6 @@ public interface ComuneEntityMapper {
     @Mapping(target = "cap", source = "postalCode")
     Comune fromComuneDomainToComune(ComuneDomain comuneDomain);
 
-    @Mapping(target = "indirizziOperationalDomainList", ignore = true)
     @Mapping(target = "addressDomainList", ignore = true)
     @Mapping(target = "postalCode", source = "cap")
     @Mapping(target = "name", source = "nome")
