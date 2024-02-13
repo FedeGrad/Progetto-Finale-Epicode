@@ -19,7 +19,7 @@ public interface ProvinciaRepository extends JpaRepository<ProvinciaEntity, Long
 
 	ProvinciaEntity findByNameAllIgnoreCase(String name);
 
-	ProvinciaEntity findBySiglaAllIgnoreCase(String sigla);
+	List<ProvinciaEntity> findBySiglaAllIgnoreCase(String sigla);
 
 	boolean existsBySiglaAllIgnoreCase(String sigla);
 

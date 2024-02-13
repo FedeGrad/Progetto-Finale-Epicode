@@ -1,42 +1,54 @@
 
 package it.progetto.energy.impl.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.impl.dto.UserResponse;
 import it.progetto.energy.impl.model.User;
-import it.progetto.energy.impl.repository.UserAccessRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.progetto.energy.impl.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Objects;
+
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
-	@Autowired
-	UserAccessRepository userRepository;
-	
-	public List<UserResponse> getAllUsersBasicInformations() {
+
+	private final UserRepository userRepository;
+
+	public List<UserResponse> getAllUsersBasicInformation() {
 		return userRepository.findAll()
 				.stream()
-				.map( user ->  UserResponse
-								.builder()
-								.userName(  user.getUsername()  )
-								.role( user.getRoles().stream().findFirst().get().getRoleName().name() )
-								.build()   
-				).collect(Collectors.toList());
+				.map(user -> UserResponse
+						.builder()
+						.userName(user.getUsername())
+						.role(Objects.requireNonNull(user.getRoles().stream()
+										.findFirst()
+										.orElse(null))
+								.getRoleName()
+								.name())
+						.build()
+				).toList();
 	}
-	
-	public UserResponse getUserBasicInformations(String userName) {
-		User user = userRepository.findByUsername(userName).get();
+
+	public UserResponse getUserBasicInformation(String userName) {
+		User user = userRepository.findByUsername(userName)
+				.orElseThrow(() -> new NotFoundException(ERROR_ONE));
 
 		return UserResponse
-		.builder()
-		.userName(userName)
-		.role( user.getRoles().stream().findFirst().get().getRoleName().name()).build();
+				.builder()
+				.userName(userName)
+				.role(Objects.requireNonNull(user.getRoles().stream()
+								.findFirst()
+								.orElse(null))
+						.getRoleName()
+						.name())
+				.build();
 	}
-	
 
 }

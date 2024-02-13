@@ -2,7 +2,7 @@ package it.progetto.energy.impl.service;
 
 import it.progetto.energy.impl.configuration.UserDetailsImpl;
 import it.progetto.energy.impl.model.User;
-import it.progetto.energy.impl.repository.UserAccessRepository;
+import it.progetto.energy.impl.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	private final UserAccessRepository userRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	@Transactional

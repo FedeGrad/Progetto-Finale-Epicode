@@ -57,10 +57,10 @@ public class ComuneServiceImpl implements ComuneService {
 			ProvinciaEntity provinciaEntity = provinciaRepository.findById(comuneDomain.getProvincia().getId())
 					.orElseThrow(() -> new NotCreatableException(ERROR_ONE));
 //			if(Objects.nonNull(provincia)){
-				comuneEntity.setProvincia(provinciaEntity);
-				ComuneEntity saved = comuneRepository.save(comuneEntity);
-				log.info("Comune id {} saved", saved.getId());
-				return comuneEntityMapper.fromComuneToComuneDomain(saved);
+			comuneEntity.setProvincia(provinciaEntity);
+			ComuneEntity saved = comuneRepository.save(comuneEntity);
+			log.info("Comune id {} saved", saved.getId());
+			return comuneEntityMapper.fromComuneToComuneDomain(saved);
 //			} else {
 //				throw new NotCreatableException(ERROR_ONE);
 //			}
@@ -78,7 +78,8 @@ public class ComuneServiceImpl implements ComuneService {
 				.orElseThrow(() -> new NotUpdatableException(ERROR_ONE));
 
 		if(Objects.nonNull(comuneDomain.getProvincia())){
-			ProvinciaEntity provinciaEntity = provinciaRepository.findBySiglaAllIgnoreCase(comuneDomain.getProvincia().getSigla());
+			ProvinciaEntity provinciaEntity = provinciaRepository.findBySiglaAllIgnoreCase(comuneDomain.getProvincia().getSigla())
+					.stream().findFirst().orElse(null);
 			comuneEntity.setProvincia(provinciaEntity);
 		}
 

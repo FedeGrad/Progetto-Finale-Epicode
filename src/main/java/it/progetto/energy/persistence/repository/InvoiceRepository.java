@@ -15,8 +15,6 @@ public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
 
 	List<InvoiceEntity> findByCustomer_Id(Long customerId);
 
-//	List<InvoiceEntity> findAll();
-
 	Page<InvoiceEntity> findByAmountBetween(Double amountMin, Double amountMax, Pageable page);
 
 	Page<InvoiceEntity> findByStateAllIgnoreCase(StatoFattura state, Pageable page);
@@ -27,9 +25,6 @@ public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
 
 	InvoiceEntity findByNumber(Integer number);
 
-//	Optional<InvoiceEntity> findById(Long id);
-//
-//	boolean existsById(Long id);
-//
-//	void deleteById(Long id);
+    boolean existsByCustomer_Id(long customerId);
+
 }

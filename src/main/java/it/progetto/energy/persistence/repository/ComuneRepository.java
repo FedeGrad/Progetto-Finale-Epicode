@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ComuneRepository extends JpaRepository<ComuneEntity, Long> {
@@ -28,7 +27,7 @@ public interface ComuneRepository extends JpaRepository<ComuneEntity, Long> {
 //
 //	List<ComuneEntity> findAll();
 
-	Optional<ComuneEntity> findByNameAllIgnoreCase(String name);
+	List<ComuneEntity> findByNameAllIgnoreCase(String name);
 
 	boolean existsByNameAllIgnoreCase(String nome);
 
@@ -40,4 +39,5 @@ public interface ComuneRepository extends JpaRepository<ComuneEntity, Long> {
 
 	List<ComuneEntity> findByNameLikeAllIgnoreCase(String name);
 
+	boolean existsByName(String name);
 }

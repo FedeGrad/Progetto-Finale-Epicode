@@ -1,6 +1,5 @@
 package it.progetto.energy.utils;
 
-import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.persistence.entity.CustomerEntity;
 import it.progetto.energy.persistence.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -11,35 +10,26 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
-
 @Slf4j
-public class AggiornaAnniThread {
-
+public class AggiornaAnniThread extends TimerTask{
 	@Autowired
-	private CustomerRepository customerRepository;
+	CustomerRepository customerRepository;
 
-	class TassaAnnuale extends TimerTask {
-		@Override
-		public void run() {
-			long minuto = 10000*60;
-			long ora = minuto*60;
-			long giorno = ora*24;
-			long anno = giorno*365;
-			try {
-				List<CustomerEntity> clienti = customerRepository.findAll();
-				if(clienti == null) {
-					log.info("No One Client");
-				} else {
-					Timer timer = new Timer();
-					timer.schedule(new TassaAnnuale(), anno);
+	@Override
+	public void run() {
+		long minuto = 10000*60;
+		long ora = minuto*60;
+		long giorno = ora*24;
+		long anno = giorno*365;
+		List<CustomerEntity> clienti = customerRepository.findAll();
 
-					clienti.forEach(cliente -> cliente.setAge(LocalDate.now().getYear()));
-					log.info("importo annuo");
-				}
-			} catch (Exception e){
-				throw new NotUpdatableException(ERROR_ONE); //TODO
-			}
+		if(clienti.isEmpty()) {
+			log.info("No One Client");
+		} else {
+			new Timer().schedule(new AggiornaAnniThread(), anno);
+
+			clienti.forEach(cliente -> cliente.setAge(LocalDate.now().getYear()));
+			log.info("importo annuo");
 		}
 	}
 

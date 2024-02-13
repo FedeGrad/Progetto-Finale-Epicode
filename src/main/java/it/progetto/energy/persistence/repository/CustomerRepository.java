@@ -22,14 +22,6 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
 					"WHERE Provincia.id = ?1", nativeQuery = true)
 	List<CustomerEntity> findByProvincia_IdAllIgnoreCase(Long provinciaId);
 
-//	Optional<CustomerEntity> findById(Long id);
-//
-//	List<CustomerEntity> findAll();
-
-//	boolean existsById(Long id);
-//
-//	void deleteById(Long id);
-
 	Page<CustomerEntity> findByNameAllIgnoreCase(String name, Pageable page);
 
 	Page<CustomerEntity> findByNameContainingAllIgnoreCase(String name, Pageable page);
@@ -52,4 +44,5 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
 
 	CustomerEntity findByCustomerPhoneAllIgnoreCase(String customerPhone);
 
+    boolean existsByPecIgnoreCase(String pec);
 }

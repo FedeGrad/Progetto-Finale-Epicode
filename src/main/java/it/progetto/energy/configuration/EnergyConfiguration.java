@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.model.Tipologia;
+import it.progetto.energy.persistence.entity.AddressEntity;
 import it.progetto.energy.persistence.entity.CustomerEntity;
 import it.progetto.energy.persistence.entity.InvoiceEntity;
-import it.progetto.energy.persistence.repository.AddressRepository;
 import it.progetto.energy.persistence.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,11 +34,10 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class EnergyConfiguration {
 
-	private final AddressRepository addressRepository;
 	private final CustomerRepository customerRepository;
 
 	@Lazy
-    @Bean(name = "clienteDefault")
+	@Bean(name = "clienteDefault")
 	public CustomerEntity clienteDefault() {
 		CustomerEntity customerEntityDomain = new CustomerEntity();
 		customerEntityDomain.setName("Mario");
@@ -56,27 +55,26 @@ public class EnergyConfiguration {
 		customerEntityDomain.setCompanyPhone("32711223344");
 		customerEntityDomain.setCustomerPhone("32711223344");
 		customerEntityDomain.setCustomerEmail("utente@email.com");
-		customerEntityDomain.setAddress(addressRepository.findById(3L).orElse(null));
+		customerEntityDomain.setAddress(new AddressEntity());
 
 		return customerEntityDomain;
 	}
 
 	@Lazy
-	@Bean(name = "fatturaDefault")
-	public InvoiceEntity fatturaDefault(){
-		InvoiceEntity invoiceEntity = new InvoiceEntity();
-		invoiceEntity.setYear(String.valueOf(LocalDate.now().getYear()));
-		invoiceEntity.setDate(LocalDate.now());
-		invoiceEntity.setAmount(3000d);
-		invoiceEntity.setNumber(1);
-		invoiceEntity.setPercentageIVA(22d);
-		invoiceEntity.setAmountIVA(invoiceEntity.getAmount()* invoiceEntity.getPercentageIVA()/100);
-		invoiceEntity.setPercentageDiscount(0d);
-		invoiceEntity.setAmountDiscount(invoiceEntity.getAmount()* invoiceEntity.getPercentageDiscount()/100);
-		invoiceEntity.setState(StatoFattura.PAGATA);
-		invoiceEntity.setCustomer(customerRepository.findById(5L).orElse(null));
-
-		return invoiceEntity;
+	@Bean(name = "invoiceDefault")
+	public InvoiceEntity invoiceDefault(){
+		return InvoiceEntity.builder()
+				.year(String.valueOf(LocalDate.now().getYear()))
+				.date(LocalDate.now())
+				.amount(3000d)
+				.number(1)
+				.percentageIVA(22d)
+				.amountIVA(3000d * 22d / 100)
+				.percentageDiscount(2d)
+				.amountDiscount(3000d * 2d / 100)
+				.state(StatoFattura.PAGATA)
+				.customer(customerRepository.findById(1L).orElse(null))
+				.build();
 	}
 
 }

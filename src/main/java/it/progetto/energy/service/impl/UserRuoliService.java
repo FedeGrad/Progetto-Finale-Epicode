@@ -6,7 +6,7 @@ import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.impl.model.RoleAccess;
 import it.progetto.energy.impl.model.User;
 import it.progetto.energy.impl.repository.RoleAccessRepository;
-import it.progetto.energy.impl.repository.UserAccessRepository;
+import it.progetto.energy.impl.repository.UserRepository;
 import it.progetto.energy.mapper.entitytodomain.UserEntityMapper;
 import it.progetto.energy.model.UserDomain;
 import it.progetto.energy.service.UserService;
@@ -29,7 +29,7 @@ import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
 @RequiredArgsConstructor
 public class UserRuoliService implements UserService {
 
-	private final UserAccessRepository userAccessRepository;
+	private final UserRepository userAccessRepository;
 	private final RoleAccessRepository roleAccessRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final UserEntityMapper userEntityMapper;
