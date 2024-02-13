@@ -1,11 +1,18 @@
 package it.progetto.energy.controller;
 
-import javax.validation.Valid;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.progetto.energy.controller.api.UserApi;
+import it.progetto.energy.dto.user.UserDTO;
+import it.progetto.energy.dto.user.UserOutputDTO;
+import it.progetto.energy.dto.user.UserUpdateDTO;
+import it.progetto.energy.mapper.dtotodomain.UserDTOMapper;
+import it.progetto.energy.model.UserDomain;
+import it.progetto.energy.service.impl.UserRuoliService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,79 +21,69 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import it.progetto.energy.dto.UserDTO;
-import it.progetto.energy.exception.ElementAlreadyPresentException;
-import it.progetto.energy.service.UserRuoliService;
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 @Tag(name = "User Controller", description = "Gestione registrazione e accessi")
-public class UserController {
+@Slf4j
+@RequiredArgsConstructor
+public class UserController implements UserApi {
 
-	@Autowired
-	UserRuoliService userServ;
+	private final UserRuoliService userRuoliService;
+	private final UserDTOMapper userDTOMapper;
 
 	@Deprecated
-	@Operation(summary = "Recupero Utenti",
-			description = "Restituisce gli Utenti presenti nel sistema")
-	@ApiResponse(responseCode = "200", description = "Utenti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Utente trovato")
+	@Override
 	@GetMapping
-	public ResponseEntity getAllUser() {
-		return ResponseEntity.ok(userServ.getAllUser());
+	@ResponseStatus(HttpStatus.OK)
+	public List<UserOutputDTO> findAllUser() {
+		List<UserDomain> userDomainList = userRuoliService.findAllUser();
+		return userDTOMapper.fromUserDomainListToUserOutputDTOList(userDomainList);
 	}
 
-	@Operation(summary = "Recupero Utenti per pagina",
-			description = "Restituisce gli Utenti presenti nel sistema per pagina")
-	@ApiResponse(responseCode = "200", description = "Utenti trovati")
-	@ApiResponse(responseCode = "404", description = "Nessun Utente trovato")
-	@GetMapping("/getAllUser")
-	public ResponseEntity getAllUser(Pageable page) {
-		return ResponseEntity.ok(userServ.getAllUser(page));
+	@Override
+	@GetMapping("/page")
+	@ResponseStatus(HttpStatus.OK)
+	public List<UserOutputDTO> findAllUser(Pageable page) {
+		List<UserDomain> userDomainList = userRuoliService.findAllUser(page);
+		return userDTOMapper.fromUserDomainListToUserOutputDTOList(userDomainList);
 	}
 
-	@Operation(summary = "Inserimento Utente",
-			description = "Inserisce un Utente nel sistema")
-	@ApiResponse(responseCode = "200", description = "Utente inserito correttamente nel sistema")
-	@ApiResponse(responseCode = "400", description = "Utente gia presente nel sistema")
-	@ApiResponse(responseCode = "500", description = "ERRORE nell'inserimento")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
-	public ResponseEntity inserisciUser(@Valid @RequestBody UserDTO dto) throws ElementAlreadyPresentException {
-		userServ.inserisciUser(dto);
-		return ResponseEntity.ok("Utente inserito");
+	@ResponseStatus(HttpStatus.OK)
+	public UserOutputDTO createUser(@Valid @RequestBody UserDTO userDTO) {
+		UserDomain userDomain = userDTOMapper.fromUserDTOToUserDomain(userDTO);
+		UserDomain userCreated = userRuoliService.createUser(userDomain);
+		return userDTOMapper.fromUserDomainToUserOutputDTO(userCreated);
 	}
 
-	@Operation(summary = "Modifica Utente",
-			description = "Modifica un Utente presente nel sistema")
-	@ApiResponse(responseCode = "200", description = "Utente modificato")
-	@ApiResponse(responseCode = "404", description = "Utente non trovato")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
-	public ResponseEntity modificaUser(@RequestBody UserDTO modificaDTO) {
-		userServ.modificaUser(modificaDTO);
-		return ResponseEntity.ok("Utente modificato");
+	@ResponseStatus(HttpStatus.OK)
+	public UserOutputDTO updateUser(@RequestBody UserUpdateDTO updateDTO) {
+		UserDomain userDomain = userDTOMapper.fromUserUpdateDTOToUserDomain(updateDTO);
+		UserDomain userUpdated = userRuoliService.updateUser(userDomain);
+		return userDTOMapper.fromUserDomainToUserOutputDTO(userUpdated);
 	}
 
-	@Operation(summary = "Eliminazione Utente", 
-			description = "Elimina un Utente presente nel sistema")
-	@ApiResponse(responseCode = "200", description = "Utente eliminato")
-	@ApiResponse(responseCode = "404", description = "Utente non trovato")
-	@ApiResponse(responseCode = "500", description = "Errore modifica")
+	@Override
 	@SecurityRequirement(name = "bearerAuth")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
-	public ResponseEntity eliminaUser(@PathVariable Long id) {
-		userServ.eliminaUser(id);
-		return ResponseEntity.ok("Utente eliminato");
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteUser(@PathVariable("id") Long userId) {
+		userRuoliService.deleteUser(userId);
+		log.info("User deleted");
 	}
 
 }

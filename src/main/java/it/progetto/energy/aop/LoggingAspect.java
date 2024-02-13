@@ -17,12 +17,13 @@ import java.util.List;
 @Slf4j
 public class LoggingAspect {
 
-    @Pointcut("execution(public java.util.List<it.progetto.energy.impl.model.User> " +
-            "it.progetto.energy.service.UserRuoliService.getAllUser())")
-    public void pointCut(){
-    }
     List<User> users = new ArrayList<>();
     User user;
+
+    @Pointcut("execution(public java.util.List<it.progetto.energy.impl.model.User> " +
+            "it.progetto.energy.service.impl.UserRuoliService.getAllUser())")
+    public void pointCut(){
+    }
 
     @After("pointCut()")
     public void afther(){

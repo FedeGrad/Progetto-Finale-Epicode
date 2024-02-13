@@ -1,48 +1,38 @@
 package it.progetto.energy.runner;
 
-import it.progetto.energy.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.progetto.energy.impl.repository.RoleAccessRepository;
+import it.progetto.energy.impl.repository.UserAccessRepository;
+import it.progetto.energy.persistence.repository.AddressRepository;
+import it.progetto.energy.persistence.repository.ComuneRepository;
+import it.progetto.energy.persistence.repository.CustomerRepository;
+import it.progetto.energy.persistence.repository.InvoiceRepository;
+import it.progetto.energy.persistence.repository.ProvinciaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import it.progetto.energy.impl.repository.RoleAccessRepository;
-import it.progetto.energy.impl.repository.UserAccessRepository;
-import it.progetto.energy.thread.AggiornaAnniThread;
-
-//@Data
-//@AllArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class Runner implements ApplicationRunner {
 
-	@Autowired
-	ClienteRepository clienteRepository;
-	@Autowired
-	FatturaRepository fatturaRepository;
-	@Autowired
-	ComuneRepository comuneRepo;
-	@Autowired
-	ProvinciaRepository provinciaRepo;
-	@Autowired
-	IndirizzoLegaleRepository indiLegRepo;
-	@Autowired
-	IndirizzoOperativoRepository indiOpRepo;
-	@Autowired
-	UserAccessRepository userRepo;
-	@Autowired
-	PasswordEncoder passEncod;
-	@Autowired
-	RoleAccessRepository roleRepo;
-//	@Autowired
-//	@Qualifier("clienteDefault")
-//	Cliente cliente;
-//
-//	@Autowired
-//	@Qualifier("fatturaDefault")
-//	Fattura fattura;
+	private final CustomerRepository customerRepository;
+	private final InvoiceRepository invoiceRepository;
+	private final ComuneRepository comuneRepository;
+	private final ProvinciaRepository provinciaRepository;
+	private final AddressRepository addressRepository;
+	private final UserAccessRepository userAccessRepository;
+	private final RoleAccessRepository roleAccessRepository;
+	private final PasswordEncoder passwordEncoder;
 
-	AggiornaAnniThread thread = new AggiornaAnniThread();
+//	@Qualifier("clienteDefault")
+//	private final Cliente cliente;
+//
+//	@Qualifier("fatturaDefault")
+//	private final Fattura fattura;
+
+//	AggiornaAnniThread aggiornaAnniThread = new AggiornaAnniThread(customerRepository);
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -51,7 +41,7 @@ public class Runner implements ApplicationRunner {
 //		fatturaRepository.save(fattura);
 
 
-//		thread.run();
+//		aggiornaAnniThread.run();
 
 		/*
 		 * IMPORTAZIONE PROVINCE

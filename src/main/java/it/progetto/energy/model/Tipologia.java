@@ -1,12 +1,17 @@
 package it.progetto.energy.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum Tipologia {
-	PA,
-	SAS,
-	SPA,
-	SRL;
-	
-	private Tipologia() {
-	}
+
+	PA("PA"),
+	SAS("SAS"),
+	SPA("SPA"),
+	SRL("SRL");
+
+	private final String type;
 
 }
