@@ -1,5 +1,8 @@
 package it.progetto.energy.runner;
 
+import it.progetto.energy.impl.model.ERoleAccess;
+import it.progetto.energy.impl.model.RoleAccess;
+import it.progetto.energy.impl.model.User;
 import it.progetto.energy.impl.model.UserRepository;
 import it.progetto.energy.impl.repository.RoleAccessRepository;
 import it.progetto.energy.impl.repository.UserAccessRepository;
@@ -8,12 +11,16 @@ import it.progetto.energy.persistence.repository.ComuneRepository;
 import it.progetto.energy.persistence.repository.CustomerRepository;
 import it.progetto.energy.persistence.repository.InvoiceRepository;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
+import it.progetto.energy.utils.AggiornaAnniThread;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -36,7 +43,7 @@ public class Runner implements ApplicationRunner {
 //	@Qualifier("fatturaDefault")
 //	private final Fattura fattura;
 
-//	AggiornaAnniThread aggiornaAnniThread = new AggiornaAnniThread(customerRepository);
+	AggiornaAnniThread aggiornaAnniThread = new AggiornaAnniThread();
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -126,49 +133,51 @@ public class Runner implements ApplicationRunner {
 		/*
 		 * INSERT DEFAULT USERS
 		 */
-//		RoleAccess roleAdmin = new RoleAccess();
-//		roleAdmin.setRoleName(ERoleAccess.ROLE_ADMIN);
-//		if(!roleAccessRepository.existsByRoleName(roleAdmin.getRoleName())){
-//			roleAccessRepository.save(roleAdmin);
-//		}
-//
-//		RoleAccess roleUser = new RoleAccess();
-//		roleUser.setRoleName(ERoleAccess.ROLE_USER);
-//		if(!roleAccessRepository.existsByRoleName(roleUser.getRoleName())){
-//			roleAccessRepository.save(roleUser);
-//		}
-//
-//		Set<RoleAccess> roleAccessSet = new HashSet<>(Set.of(roleAdmin, roleUser));
-//
-//		if(!userRepository.existsByUsernameIgnoreCase("user")) {
-//			User userDefault = User.builder()
-//					.name("default")
-//					.surname("default")
-//					.username("user")
-//					.password(passwordEncoder.encode("123"))
-//					.email("user@email.com")
-//					.roles(Set.of(roleUser))
-//					.accountAttivo(true)
-//					.build();
-//
-//			userRepository.save(userDefault);
-//			log.info("User {} created", userDefault.getUsername());
-//		}
-//
-//		if(!userRepository.existsByUsernameIgnoreCase("Fedegrad")) {
-//			User userAdmin = User.builder()
-//					.name("Federico")
-//					.surname("Fox")
-//					.username("Fedegrad")
-//					.password(passwordEncoder.encode("fox"))
-//					.email("federico.fox@email.com")
-//					.roles(roleAccessSet)
-//					.accountAttivo(true)
-//					.build();
-//
-//			userRepository.save(userAdmin);
-//			log.info("User {} created", userAdmin.getUsername());
-//		}
+		RoleAccess roleAdmin = new RoleAccess();
+		roleAdmin.setRoleName(ERoleAccess.ROLE_ADMIN);
+		if(!roleAccessRepository.existsByRoleName(roleAdmin.getRoleName())){
+			roleAccessRepository.save(roleAdmin);
+			log.info("Role {} added", roleAdmin.getRoleName());
+		}
+
+		RoleAccess roleUser = new RoleAccess();
+		roleUser.setRoleName(ERoleAccess.ROLE_USER);
+		if(!roleAccessRepository.existsByRoleName(roleUser.getRoleName())){
+			roleAccessRepository.save(roleUser);
+			log.info("Role {} added", roleUser.getRoleName());
+		}
+
+		Set<RoleAccess> roleAccessSet = new HashSet<>(Set.of(roleAdmin, roleUser));
+
+		if(!userRepository.existsByUsernameIgnoreCase("user")) {
+			User userDefault = User.builder()
+					.name("default")
+					.surname("default")
+					.username("user")
+					.password(passwordEncoder.encode("123"))
+					.email("user@email.com")
+					.roles(Set.of(roleUser))
+					.accountAttivo(true)
+					.build();
+
+			userRepository.save(userDefault);
+			log.info("User {} created", userDefault.getUsername());
+		}
+
+		if(!userRepository.existsByUsernameIgnoreCase("Fedegrad")) {
+			User userAdmin = User.builder()
+					.name("Federico")
+					.surname("Fox")
+					.username("Fedegrad")
+					.password(passwordEncoder.encode("fox"))
+					.email("federico.fox@email.com")
+					.roles(roleAccessSet)
+					.accountAttivo(true)
+					.build();
+
+			userRepository.save(userAdmin);
+			log.info("User {} created", userAdmin.getUsername());
+		}
 
 	}
 

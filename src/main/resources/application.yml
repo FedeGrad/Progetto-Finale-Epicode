@@ -10,7 +10,7 @@ spring:
 
     jpa:
         hibernate:
-            ddl-auto: ${DB_PERSIST:create-drop}
+            ddl-auto: ${DB_CONFIG:create}
         properties:
             hibernate:
                 jdbc:

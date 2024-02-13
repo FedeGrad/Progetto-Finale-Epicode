@@ -3,8 +3,8 @@ package it.progetto.energy.utils;
 import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.persistence.entity.CustomerEntity;
 import it.progetto.energy.persistence.repository.CustomerRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,10 +14,10 @@ import java.util.TimerTask;
 import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
 
 @Slf4j
-@RequiredArgsConstructor
 public class AggiornaAnniThread {
 
-	private final CustomerRepository clienteRepo;
+	@Autowired
+	private CustomerRepository customerRepository;
 
 	class TassaAnnuale extends TimerTask {
 		@Override
@@ -27,7 +27,7 @@ public class AggiornaAnniThread {
 			long giorno = ora*24;
 			long anno = giorno*365;
 			try {
-				List<CustomerEntity> clienti = clienteRepo.findAll();
+				List<CustomerEntity> clienti = customerRepository.findAll();
 				if(clienti == null) {
 					log.info("No One Client");
 				} else {
