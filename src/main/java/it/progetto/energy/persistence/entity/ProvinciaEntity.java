@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,8 @@ import lombok.ToString;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "provincia")
+@Entity
+@Table(name = "provincia")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -42,8 +44,7 @@ public class ProvinciaEntity {
 	private String region;
 
 	@JsonIgnore @ToString.Exclude
-	@OneToMany(mappedBy = "provincia",
-			cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+	@OneToMany(mappedBy = "provincia", cascade = {CascadeType.DETACH})
 	private List<ComuneEntity> comuneList;
 
 	@Override

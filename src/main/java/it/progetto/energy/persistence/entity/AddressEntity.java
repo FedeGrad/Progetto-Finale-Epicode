@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,8 @@ import org.apache.commons.lang3.builder.ToStringExclude;
 
 import java.util.Objects;
 
-@Entity(name = "address")
+@Entity
+@Table(name = "address")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,8 @@ import lombok.ToString;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "comune")
+@Entity
+@Table(name = "comune")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -40,22 +42,21 @@ public class ComuneEntity {
 	@Column(name = "postal_code")
 	private String postalCode;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	@ManyToOne(cascade = {CascadeType.DETACH})
 //	@ManyToOne
 	@JoinColumn(name = "id_provincia")
 	private ProvinciaEntity provincia;
 
 	@JsonIgnore
 	@ToString.Exclude
-	@OneToMany(mappedBy = "comune")
+	@OneToMany(mappedBy = "comune", cascade = CascadeType.DETACH)
 	private List<AddressEntity> addressList;
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof ComuneEntity)) return false;
-		ComuneEntity comuneEntity = (ComuneEntity) o;
-		return Objects.equals(id, comuneEntity.id) && Objects.equals(name, comuneEntity.name)
+		if (!(o instanceof ComuneEntity comuneEntity)) return false;
+        return Objects.equals(id, comuneEntity.id) && Objects.equals(name, comuneEntity.name)
 				&& Objects.equals(postalCode, comuneEntity.postalCode)
 				&& Objects.equals(provincia, comuneEntity.provincia)
 				&& Objects.equals(addressList, comuneEntity.addressList);

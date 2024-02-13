@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +29,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "customer")
+@Entity
+@Table(name = "customer")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -90,23 +92,20 @@ public class CustomerEntity {
 	@Column(name = "customer_phone")
 	private String customerPhone;
 
-	// @JsonIgnore
-	// @ToStringExclude
-	@OneToOne(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
 	private AddressEntity address;
 
 	@JsonIgnore
 	@ToStringExclude
-	@OneToMany(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE},
+	@OneToMany(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST},
 	fetch = FetchType.LAZY)
 	private List<InvoiceEntity> invoiceList;
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof CustomerEntity)) return false;
-		CustomerEntity customerEntity = (CustomerEntity) o;
-		return age == customerEntity.age && Objects.equals(id, customerEntity.id)
+		if (!(o instanceof CustomerEntity customerEntity)) return false;
+        return age == customerEntity.age && Objects.equals(id, customerEntity.id)
 				&& Objects.equals(companyName, customerEntity.companyName) && Objects.equals(npi, customerEntity.npi)
 				&& Objects.equals(email, customerEntity.email) && Objects.equals(dateOfBirth, customerEntity.dateOfBirth)
 				&& Objects.equals(dataCreate, customerEntity.dataCreate)

@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jdk.jfr.Percentage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,8 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Entity(name = "invoice")
+@Entity
+@Table(name = "invoice")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -69,7 +71,7 @@ public class InvoiceEntity {
 	@Enumerated(EnumType.STRING)
 	private StatoFattura state;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	@ManyToOne(cascade = {CascadeType.DETACH})
 	@JoinColumn(name = "id_customer")
 	private CustomerEntity customer;
 
