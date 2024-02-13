@@ -1,13 +1,13 @@
 package it.progetto.energy.dto.user;
 
 import it.progetto.energy.model.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -19,11 +19,11 @@ public class UserDTO {
 
 	@NotBlank
 	@Size(max = 120)
-	private String nome;
+	private String name;
 
 	@NotBlank
 	@Size(max = 120)
-	private String cognome;
+	private String surname;
 
 	@NotBlank
 	@Size(max = 20)

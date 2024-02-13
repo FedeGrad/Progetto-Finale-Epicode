@@ -34,7 +34,7 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 	@Deprecated
 	@Override
 	public List<ProvinciaDomain> findAllProvince() {
-		List<ProvinciaEntity> provinciaEntityList = (List<ProvinciaEntity>) provinciaRepository.findAll();
+		List<ProvinciaEntity> provinciaEntityList = provinciaRepository.findAll();
 		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaEntityList);
 	}
 

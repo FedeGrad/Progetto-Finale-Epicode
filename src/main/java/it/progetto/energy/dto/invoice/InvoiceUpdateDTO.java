@@ -3,13 +3,13 @@ package it.progetto.energy.dto.invoice;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.progetto.energy.model.StatoFattura;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jdk.jfr.Percentage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 

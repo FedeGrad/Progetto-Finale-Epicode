@@ -1,25 +1,29 @@
 package it.progetto.energy.impl.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Objects;
 
 @Entity
+@Table(name = "roles")
 @Builder
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="roles")
 public class RoleAccess {
 
 	@Id
@@ -27,7 +31,20 @@ public class RoleAccess {
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(length = 20)
+	@Column(name = "role_name", length = 20)
 	private ERoleAccess roleName;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof RoleAccess)) return false;
+		RoleAccess that = (RoleAccess) o;
+		return Objects.equals(id, that.id) && roleName == that.roleName;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, roleName);
+	}
 
 }

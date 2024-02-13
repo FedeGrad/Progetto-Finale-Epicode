@@ -4,22 +4,18 @@ import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.persistence.entity.InvoiceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface InvoiceRepository extends PagingAndSortingRepository<InvoiceEntity, Long> {
+@Repository
+public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
 
-//	@Query(value =
-//			"SELECT * " +
-//					"FROM invoice " +
-//					"JOIN cliente ON fattura.id_cliente = cliente.id " +
-//					"WHERE cliente.id = ?1", nativeQuery = true)
 	List<InvoiceEntity> findByCustomer_Id(Long customerId);
 
-	@Override
-	List<InvoiceEntity> findAll();
+//	List<InvoiceEntity> findAll();
 
 	Page<InvoiceEntity> findByAmountBetween(Double amountMin, Double amountMax, Pageable page);
 
@@ -31,4 +27,9 @@ public interface InvoiceRepository extends PagingAndSortingRepository<InvoiceEnt
 
 	InvoiceEntity findByNumber(Integer number);
 
+//	Optional<InvoiceEntity> findById(Long id);
+//
+//	boolean existsById(Long id);
+//
+//	void deleteById(Long id);
 }

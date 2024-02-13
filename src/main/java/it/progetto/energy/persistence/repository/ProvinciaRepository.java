@@ -1,12 +1,14 @@
 package it.progetto.energy.persistence.repository;
 
 import it.progetto.energy.persistence.entity.ProvinciaEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ProvinciaRepository extends PagingAndSortingRepository<ProvinciaEntity, Long> {
+@Repository
+public interface ProvinciaRepository extends JpaRepository<ProvinciaEntity, Long> {
 
 	@Query(value =
 			"SELECT * " +
@@ -23,4 +25,11 @@ public interface ProvinciaRepository extends PagingAndSortingRepository<Provinci
 
 	List<ProvinciaEntity> findByRegionAllIgnoreCase(String region);
 
+//	Optional<ProvinciaEntity> findById(Long id);
+//
+//	List<ProvinciaEntity> findAll();
+//
+//	boolean existsById(Long id);
+//
+//	void deleteById(Long id);
 }

@@ -2,12 +2,11 @@ package it.progetto.energy.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.progetto.energy.model.StatoFattura;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
 @Data
 @AllArgsConstructor

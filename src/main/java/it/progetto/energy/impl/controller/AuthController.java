@@ -1,14 +1,10 @@
 package it.progetto.energy.impl.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
-import it.progetto.energy.impl.dto.JwtResponse;
-import it.progetto.energy.impl.utils.JwtUtils;
-import it.progetto.energy.impl.model.LoginRequest;
 import it.progetto.energy.impl.configuration.UserDetailsImpl;
+import it.progetto.energy.impl.dto.JwtResponse;
+import it.progetto.energy.impl.model.LoginRequest;
+import it.progetto.energy.impl.utils.JwtUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins="*")

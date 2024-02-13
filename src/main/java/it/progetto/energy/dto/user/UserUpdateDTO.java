@@ -1,11 +1,11 @@
 package it.progetto.energy.dto.user;
 
 import it.progetto.energy.model.Role;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.List;
 

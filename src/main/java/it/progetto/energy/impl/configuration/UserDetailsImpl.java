@@ -1,21 +1,19 @@
 package it.progetto.energy.impl.configuration;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.progetto.energy.impl.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDetailsImpl  implements UserDetails{
 
 	private Long id;
 	private String username;
-//	private String email;
 	@JsonIgnore
 	private String password;
 	private Collection<? extends GrantedAuthority> authorities;

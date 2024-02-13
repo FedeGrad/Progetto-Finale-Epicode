@@ -3,13 +3,15 @@ package it.progetto.energy.persistence.repository;
 import it.progetto.energy.persistence.entity.CustomerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface CustomerRepository extends PagingAndSortingRepository<CustomerEntity, Long> {
+@Repository
+public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
 
 	@Query(value =
 			"SELECT * " +
@@ -20,8 +22,13 @@ public interface CustomerRepository extends PagingAndSortingRepository<CustomerE
 					"WHERE Provincia.id = ?1", nativeQuery = true)
 	List<CustomerEntity> findByProvincia_IdAllIgnoreCase(Long provinciaId);
 
-	@Override
-	List<CustomerEntity> findAll();
+//	Optional<CustomerEntity> findById(Long id);
+//
+//	List<CustomerEntity> findAll();
+
+//	boolean existsById(Long id);
+//
+//	void deleteById(Long id);
 
 	Page<CustomerEntity> findByNameAllIgnoreCase(String name, Pageable page);
 

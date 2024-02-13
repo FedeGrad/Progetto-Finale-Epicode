@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +38,7 @@ public class AddressServiceImpl implements AddressService {
 	 */
 	@Deprecated
 	public List<AddressDomain> findAllIndirizziLegali() {
-		List<AddressEntity> addressEntityList = (List<AddressEntity>) addressRepository.findAll();
+		List<AddressEntity> addressEntityList = addressRepository.findAll();
 		return addressEntityMapper.fromAddressEntityListToAddressDomainList(addressEntityList);
 	}
 
@@ -53,6 +54,7 @@ public class AddressServiceImpl implements AddressService {
 	/**
 	 * Inserisce un Indirizzo Legale
 	 */
+	@Transactional
 	public AddressDomain createIndirizzo(AddressDomain addressDomain) {
 		if (!addressRepository.existsByWayAllIgnoreCase(addressDomain.getWay()) ||
 				!addressRepository.existsByNumber(addressDomain.getNumber()) ||

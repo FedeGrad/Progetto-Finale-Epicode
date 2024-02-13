@@ -34,7 +34,7 @@ public class ComuneServiceImpl implements ComuneService {
 	 */
 	@Deprecated
 	public List<ComuneDomain> findAllComuni() {
-		List<ComuneEntity> comuneEntityList = (List<ComuneEntity>) comuneRepository.findAll();
+		List<ComuneEntity> comuneEntityList = comuneRepository.findAll();
 		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneEntityList);
 	}
 
@@ -54,7 +54,7 @@ public class ComuneServiceImpl implements ComuneService {
 		if (!comuneRepository.existsByNameAllIgnoreCase(comuneDomain.getName())) {
 
 			ComuneEntity comuneEntity = comuneEntityMapper.fromComuneDomainToComune(comuneDomain);
-			ProvinciaEntity provinciaEntity = provinciaRepository.findById(comuneDomain.getId())
+			ProvinciaEntity provinciaEntity = provinciaRepository.findById(comuneDomain.getProvincia().getId())
 					.orElseThrow(() -> new NotCreatableException(ERROR_ONE));
 //			if(Objects.nonNull(provincia)){
 				comuneEntity.setProvincia(provinciaEntity);

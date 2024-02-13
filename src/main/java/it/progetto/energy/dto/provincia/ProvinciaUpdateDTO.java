@@ -1,6 +1,6 @@
 package it.progetto.energy.dto.provincia;
 
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
