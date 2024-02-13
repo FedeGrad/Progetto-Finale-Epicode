@@ -1,32 +1,33 @@
 package it.progetto.energy.persistence.repository;
 
-import it.progetto.energy.persistence.entity.IndirizzoLegale;
+import it.progetto.energy.persistence.entity.AddressEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface AddressRepository extends PagingAndSortingRepository<IndirizzoLegale, Long> {
+public interface AddressRepository extends PagingAndSortingRepository<AddressEntity, Long> {
 
-	@Query(value = "SELECT * " +
-			"FROM IndirizzoLegale " +
-			"JOIN Comune ON IndirizzoLegale.id_comune = Comune.id " +
-			"WHERE comune.nome = ?1", nativeQuery = true)
-	List<IndirizzoLegale> findByComuneAllIgnoreCase(String comune, Pageable page);
+	@Query(value =
+			"SELECT * " +
+					"FROM Address " +
+					"JOIN Comune ON Address.id_comune = Comune.id " +
+					"WHERE comune.name = ?1", nativeQuery = true)
+	List<AddressEntity> findByComuneAllIgnoreCase(String comuneName, Pageable page);
 
-	List<IndirizzoLegale> findByViaAllIgnoreCase(String via, Pageable page);
+	List<AddressEntity> findByWayAllIgnoreCase(String way, Pageable page);
 
-	boolean existsByViaAllIgnoreCase(String via);
+	boolean existsByWayAllIgnoreCase(String way);
 
-	List<IndirizzoLegale> findByCivico(String civico);
+	List<AddressEntity> findByNumber(String number);
 
-	boolean existsByCivico(String civico);
+	boolean existsByNumber(String civico);
 
-	List<IndirizzoLegale> findByLocalitaAllIgnoreCase(String localita, Pageable page);
+	List<AddressEntity> findByLocationAllIgnoreCase(String location, Pageable page);
 
-	List<IndirizzoLegale> findByCap(String cap, Pageable page);
+	List<AddressEntity> findByPostalCode(String cap, Pageable page);
 
-	boolean existsByCap(String cap);
+	boolean existsByPostalCode(String cap);
 
 }

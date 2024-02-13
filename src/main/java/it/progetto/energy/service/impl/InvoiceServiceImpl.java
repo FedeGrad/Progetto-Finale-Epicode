@@ -9,8 +9,8 @@ import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.mapper.entitytodomain.InvoiceEntityMapper;
 import it.progetto.energy.model.InvoiceDomain;
 import it.progetto.energy.model.StatoFattura;
-import it.progetto.energy.persistence.entity.Cliente;
-import it.progetto.energy.persistence.entity.Fattura;
+import it.progetto.energy.persistence.entity.CustomerEntity;
+import it.progetto.energy.persistence.entity.InvoiceEntity;
 import it.progetto.energy.persistence.repository.CustomerRepository;
 import it.progetto.energy.persistence.repository.InvoiceRepository;
 import it.progetto.energy.service.InvoiceService;
@@ -45,8 +45,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	@Deprecated
 	@Override
 	public List<InvoiceDomain> findAllInvoice() {
-		List<Fattura> invoiceList = invoiceRepository.findAll();
-		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceList);
+		List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
+		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityList);
 	}
 
 	/**
@@ -54,9 +54,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 */
 	@Override
 	public List<InvoiceDomain> findAllInvoice(Pageable page) {
-		List<Fattura> invoicePage = invoiceRepository.findAll(page)
+		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findAll(page)
 				.getContent();
-		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoicePage);
+		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
 	}
 
 	/**
@@ -64,8 +64,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 */
 	@Override
 	public List<InvoiceDomain> findInvoiceByCustomer(Long customerId) {
-		List<Fattura> invoiceList = invoiceRepository.findByCliente(customerId);
-		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceList);
+		List<InvoiceEntity> invoiceEntityList = invoiceRepository.findByCustomer_Id(customerId);
+		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityList);
 	}
 
 	/**
@@ -73,9 +73,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 */
 	@Override
 	public List<InvoiceDomain> findInvoiceByAmountBetween(RangeDTO rangeDTO, Pageable page) {
-		List<Fattura> invoicePage = invoiceRepository.findByImportoBetween(rangeDTO.getImportoMin(), rangeDTO.getImportoMax(), page)
+		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findByAmountBetween(rangeDTO.getImportoMin(), rangeDTO.getImportoMax(), page)
 				.getContent();
-		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoicePage);
+		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
 	}
 
 	/**
@@ -83,9 +83,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 */
 	@Override
 	public List<InvoiceDomain> findInvoiceByState(StatoFattura stato, Pageable page) {
-		List<Fattura> invoicePage = invoiceRepository.findByStatoAllIgnoreCase(stato, page)
+		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findByStateAllIgnoreCase(stato, page)
 				.getContent();
-		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoicePage);
+		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
 	}
 
 	/**
@@ -93,19 +93,19 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 */
 	@Override
 	public List<InvoiceDomain> findInvoiceByDate(DataDTO data, Pageable page) {
-		List<Fattura> invoicePage = invoiceRepository.findByData(data.getData(), page)
+		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findByDate(data.getData(), page)
 				.getContent();
-		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoicePage);
+		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
 	}
 
 	/**
 	 * Recupera tutte le fatture per anno
 	 */
 	@Override
-	public List<InvoiceDomain> findInvoiceByYear(Integer year, Pageable page) {
-		List<Fattura> invoicePage = invoiceRepository.findByAnno(year, page)
+	public List<InvoiceDomain> findInvoiceByYear(String year, Pageable page) {
+		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findByYearContains(year, page)
 				.getContent();
-		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoicePage);
+		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
 	}
 
 	/**
@@ -113,15 +113,15 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 */
 	@Override
 	public InvoiceDomain createInvoice(InvoiceDomain invoiceDomain) {
-		Fattura invoice = invoiceEntityMapper.fromInvoiceDomainToInvoiceEntity(invoiceDomain);
-		Cliente cliente = customerRepository.findById(invoiceDomain.getCustomer().getId())
+		InvoiceEntity invoiceEntity = invoiceEntityMapper.fromInvoiceDomainToInvoiceEntity(invoiceDomain);
+		CustomerEntity customerEntity = customerRepository.findById(invoiceDomain.getCustomer().getId())
 				.orElseThrow(() -> new NotCreatableException(ERROR_ONE));
-		cliente.getFatture().add(invoice);
-		invoice.setCliente(cliente);
+		customerEntity.getInvoiceList().add(invoiceEntity);
+		invoiceEntity.setCustomer(customerEntity);
 		log.info("Cliente associato");
 
-		Fattura saved = invoiceRepository.save(invoice);
-		log.info("invoice id {} saved", invoice.getId());
+		InvoiceEntity saved = invoiceRepository.save(invoiceEntity);
+		log.info("invoice id {} saved", invoiceEntity.getId());
 		return invoiceEntityMapper.fromInvoiceEntityToInvoiceDomain(saved);
 	}
 
@@ -131,19 +131,19 @@ public class InvoiceServiceImpl implements InvoiceService {
 	@Override
 	public InvoiceDomain updateInvoice(InvoiceDomain invoiceDomain) {
 //		if (fatturaRepository.existsById(invoiceDomain.getIdFattura())) {
-		Fattura fattura = invoiceRepository.findById(invoiceDomain.getId())
+		InvoiceEntity invoiceEntity = invoiceRepository.findById(invoiceDomain.getId())
 				.orElseThrow(() -> new NotUpdatableException(ERROR_TWO));
 
 		if(invoiceDomain.getCustomer().getId() != null){
 			//TODO REFACT
-			Cliente cliente = customerRepository.findById(invoiceDomain.getCustomer().getId())
+			CustomerEntity customerEntity = customerRepository.findById(invoiceDomain.getCustomer().getId())
 					.orElseThrow(() -> new NotCreatableException(ERROR_ONE));
-			cliente.getFatture().add(fattura);
-			fattura.setCliente(cliente);
+			customerEntity.getInvoiceList().add(invoiceEntity);
+			invoiceEntity.setCustomer(customerEntity);
 			log.info("Cliente associato");
 		}
 
-		Fattura updated = invoiceRepository.save(fattura);
+		InvoiceEntity updated = invoiceRepository.save(invoiceEntity);
 		log.info("Invoice id {} updated", updated.getId());
 		return invoiceEntityMapper.fromInvoiceEntityToInvoiceDomain(updated);
 //		} else {
@@ -159,9 +159,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 		invoiceAddPDFDTO.getFileFattura()
 				.transferTo(file);
 
-		Fattura fattura = invoiceRepository.findById(invoiceAddPDFDTO.getIdFattura())
+		InvoiceEntity invoiceEntity = invoiceRepository.findById(invoiceAddPDFDTO.getIdFattura())
 				.orElseThrow(() -> new NotFoundException(ERROR_ONE));
-		fattura.setFile(file);
+		invoiceEntity.setFile(file);
 		fileService.save(invoiceAddPDFDTO.getFileFattura());
 		log.info("PDF upload");
 	}

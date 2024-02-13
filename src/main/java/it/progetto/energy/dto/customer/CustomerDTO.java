@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -29,7 +31,7 @@ public class CustomerDTO {
 
 	@NotEmpty
 	@Schema(example = "000990000099", type = "string", defaultValue = "000990000099")
-	private String NPI;
+	private String npi;
 
 	@NotEmpty
 	@Email
@@ -48,8 +50,10 @@ public class CustomerDTO {
 
 	@NotEmpty
 	@Schema(example = "PA / SAS / SPA / SRL", type = "string", defaultValue = "SRL")
+	@Enumerated(EnumType.STRING)
 	private Tipologia type;
 
+	@Email
 	@Schema(example = "example@pec.it", type = "string")
 	private String pec;
 
@@ -76,7 +80,7 @@ public class CustomerDTO {
 	@Schema(example = "3279999999", type = "string")
 	private String customerPhone;
 
-	private Long addressMainId;
+	private Long addressId;
 
 	private List<Long> invoiceIdList;
 

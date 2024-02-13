@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.model.Tipologia;
-import it.progetto.energy.persistence.entity.Cliente;
-import it.progetto.energy.persistence.entity.Fattura;
+import it.progetto.energy.persistence.entity.CustomerEntity;
+import it.progetto.energy.persistence.entity.InvoiceEntity;
 import it.progetto.energy.persistence.repository.AddressRepository;
 import it.progetto.energy.persistence.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,44 +39,44 @@ public class EnergyConfiguration {
 
 	@Lazy
     @Bean(name = "clienteDefault")
-	public Cliente clienteDefault() {
-		Cliente customerDomain = new Cliente();
-		customerDomain.setNomeContatto("Mario");
-		customerDomain.setCognomeContatto("Rossi");
-		customerDomain.setAnni(33);
-		customerDomain.setTipologia(Tipologia.PA);
-		customerDomain.setEmail("azienda@email.com");
-		customerDomain.setRagioneSociale("Label");
-		customerDomain.setPartitaIva("12345678901");
-		customerDomain.setDataDiNascita(LocalDate.of(1989, 4, 9));
-		customerDomain.setDataInserimento(LocalDate.now());
-		customerDomain.setDataUltimoContatto(LocalDate.now());
-		customerDomain.setFatturatoAnnuale(BigDecimal.valueOf(1000));
-		customerDomain.setPec("utente@pec.com");
-		customerDomain.setTelefono("32711223344");
-		customerDomain.setTelefonoContatto("32711223344");
-		customerDomain.setEmailContatto("utente@email.com");
-		customerDomain.setIndirizzoLegale(addressRepository.findById(3L).orElse(null));
+	public CustomerEntity clienteDefault() {
+		CustomerEntity customerEntityDomain = new CustomerEntity();
+		customerEntityDomain.setName("Mario");
+		customerEntityDomain.setSurname("Rossi");
+		customerEntityDomain.setAge(33);
+		customerEntityDomain.setType(Tipologia.PA);
+		customerEntityDomain.setEmail("azienda@email.com");
+		customerEntityDomain.setCompanyName("Label");
+		customerEntityDomain.setNpi("12345678901");
+		customerEntityDomain.setDateOfBirth(LocalDate.of(1989, 4, 9));
+		customerEntityDomain.setDataCreate(LocalDate.now());
+		customerEntityDomain.setDataLastUpdate(LocalDate.now());
+		customerEntityDomain.setAnnualTurnover(BigDecimal.valueOf(1000));
+		customerEntityDomain.setPec("utente@pec.com");
+		customerEntityDomain.setCompanyPhone("32711223344");
+		customerEntityDomain.setCustomerPhone("32711223344");
+		customerEntityDomain.setCustomerEmail("utente@email.com");
+		customerEntityDomain.setAddress(addressRepository.findById(3L).orElse(null));
 
-		return customerDomain;
+		return customerEntityDomain;
 	}
 
 	@Lazy
 	@Bean(name = "fatturaDefault")
-	public Fattura fatturaDefault(){
-		Fattura fattura = new Fattura();
-		fattura.setAnno(LocalDate.now().getYear());
-		fattura.setData(LocalDate.now());
-		fattura.setImporto(3000d);
-		fattura.setNumero(1);
-		fattura.setPercentualeIVA(22d);
-		fattura.setImportoIVA(fattura.getImporto()*fattura.getPercentualeIVA()/100);
-		fattura.setPercentualeSconto(0d);
-		fattura.setImportoSconto(fattura.getImporto()*fattura.getPercentualeSconto()/100);
-		fattura.setStato(StatoFattura.PAGATA);
-		fattura.setCliente(customerRepository.findById(5L).orElse(null));
+	public InvoiceEntity fatturaDefault(){
+		InvoiceEntity invoiceEntity = new InvoiceEntity();
+		invoiceEntity.setYear(String.valueOf(LocalDate.now().getYear()));
+		invoiceEntity.setDate(LocalDate.now());
+		invoiceEntity.setAmount(3000d);
+		invoiceEntity.setNumber(1);
+		invoiceEntity.setPercentageIVA(22d);
+		invoiceEntity.setAmountIVA(invoiceEntity.getAmount()* invoiceEntity.getPercentageIVA()/100);
+		invoiceEntity.setPercentageDiscount(0d);
+		invoiceEntity.setAmountDiscount(invoiceEntity.getAmount()* invoiceEntity.getPercentageDiscount()/100);
+		invoiceEntity.setState(StatoFattura.PAGATA);
+		invoiceEntity.setCustomer(customerRepository.findById(5L).orElse(null));
 
-		return fattura;
+		return invoiceEntity;
 	}
 
 }

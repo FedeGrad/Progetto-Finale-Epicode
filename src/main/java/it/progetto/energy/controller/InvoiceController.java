@@ -103,7 +103,7 @@ public class InvoiceController implements InvoiceApi {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/year/{year}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<InvoiceOutputDTO> findInvoiceByYear(@PathVariable("year") Integer year, Pageable page) {
+	public List<InvoiceOutputDTO> findInvoiceByYear(@PathVariable("year") String year, Pageable page) {
 		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByYear(year, page);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}

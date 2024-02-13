@@ -20,9 +20,6 @@ import static it.progetto.energy.utils.ConstantUtils.DATE_PATTERN;
 @NoArgsConstructor
 public class InvoiceDTO {
 
-	@Schema(hidden = true)
-	private Integer year;
-
 	@NotNull
 	@Schema(example = "20/01/2022", type = "string")
 	@JsonFormat(pattern = DATE_PATTERN)
@@ -49,5 +46,8 @@ public class InvoiceDTO {
 
 	@NotNull
 	private Long customerId;
+
+	@Schema(hidden = true)
+	private String year;
 
 }

@@ -16,7 +16,7 @@ public class InvoiceDomain {
 
     private Long id;
 
-    private Integer year;
+    private String year;
 
     private LocalDate date;
 

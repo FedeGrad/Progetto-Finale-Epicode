@@ -50,7 +50,7 @@ public interface InvoiceApi {
             description = "Restituisce tutte le Fatture di un determinato anno")
     @ApiResponse(responseCode = "200", description = "Fatture trovate")
     @ApiResponse(responseCode = "404", description = "Nessuna Fattura trovata")
-    List<InvoiceOutputDTO> findInvoiceByYear(Integer year, Pageable page);
+    List<InvoiceOutputDTO> findInvoiceByYear(String year, Pageable page);
 
     @Operation(summary = "Recupera Fatture by range",
             description = "Restituisce tutte le Fatture in un range")

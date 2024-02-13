@@ -21,10 +21,10 @@ import static it.progetto.energy.utils.ConstantUtils.DATE_PATTERN;
 public class InvoiceUpdateDTO {
 
 	@NotNull
-	private Long invoiceId;
+	private Long id;
 
 	@Schema(hidden = true)
-	private Integer year;
+	private String year;
 
 	@Schema(example = "20/01/2000", type = "string")
 	@JsonFormat(pattern = DATE_PATTERN)

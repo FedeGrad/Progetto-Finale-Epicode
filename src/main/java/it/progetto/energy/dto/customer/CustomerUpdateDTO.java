@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,9 +28,10 @@ public class CustomerUpdateDTO {
 	@Schema(example = "Company name", type = "string")
 	private String companyName;
 
-	@Schema(example = "NPI", type = "string")
-	private String NPI;
+	@Schema(example = "000990000099", type = "string")
+	private String npi;
 
+	@Email
 	@Schema(example = "example@example.it", type = "string")
 	private String email;
 
@@ -38,14 +42,17 @@ public class CustomerUpdateDTO {
 	private BigDecimal annualTurnover;
 
 	@Schema(example = "PA / SAS / SPA / SRL", type = "string")
+	@Enumerated(EnumType.STRING)
 	private Tipologia type;
 
+	@Email
 	@Schema(example = "example@pec.it", type = "string")
 	private String pec;
 
 	@Schema(example = "3279999999", type = "string")
 	private String companyPhone;
 
+	@Email
 	@Schema(example = "example@example.it", type = "string")
 	private String customerEmail;
 
@@ -60,7 +67,7 @@ public class CustomerUpdateDTO {
 	@Schema(example = "3279999999", type = "string")
 	private String customerPhone;
 
-	private Long addressMainId;
+	private Long addressId;
 
 	private List<Long> invoiceIdList;
 

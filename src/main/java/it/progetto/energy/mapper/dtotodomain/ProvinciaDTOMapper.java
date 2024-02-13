@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 public interface ProvinciaDTOMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "comuneList", source = "comuneId", qualifiedByName = "fromComuneIdListToComuneDomainList")
+    @Mapping(target = "comuneList", source = "comuneIdList", qualifiedByName = "fromComuneIdListToComuneDomainList")
     ProvinciaDomain fromProvinciaDTOToProvinciaDomain(ProvinciaDTO provinciaDTO);
 
-    @Mapping(target = "comuneList", source = "comuneId", qualifiedByName = "fromComuneIdListToComuneDomainList")
+    @Mapping(target = "comuneList", source = "comuneIdList", qualifiedByName = "fromComuneIdListToComuneDomainList")
     ProvinciaDomain fromProvinciaUpdateDTOToProvinciaDomain(ProvinciaUpdateDTO provinciaUpdateDTO);
 
     @Mapping(target = "comuneIdList", source = "comuneList", qualifiedByName = "fromComuneDomainListToComuneIdList")

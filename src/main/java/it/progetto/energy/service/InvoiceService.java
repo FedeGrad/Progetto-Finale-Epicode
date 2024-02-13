@@ -24,7 +24,7 @@ public interface InvoiceService {
 
     List<InvoiceDomain> findInvoiceByDate(DataDTO data, Pageable page);
 
-    List<InvoiceDomain> findInvoiceByYear(Integer year, Pageable page);
+    List<InvoiceDomain> findInvoiceByYear(String year, Pageable page);
 
     InvoiceDomain createInvoice(InvoiceDomain invoiceDomain);
 

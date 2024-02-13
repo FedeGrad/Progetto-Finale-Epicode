@@ -23,6 +23,6 @@ public class ProvinciaUpdateDTO {
 
 	private String region;
 
-	private List<Long> comuneId;
+	private List<Long> comuneIdList;
 
 }

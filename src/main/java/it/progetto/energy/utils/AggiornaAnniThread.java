@@ -1,7 +1,7 @@
 package it.progetto.energy.utils;
 
 import it.progetto.energy.exception.NotUpdatableException;
-import it.progetto.energy.persistence.entity.Cliente;
+import it.progetto.energy.persistence.entity.CustomerEntity;
 import it.progetto.energy.persistence.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +27,14 @@ public class AggiornaAnniThread {
 			long giorno = ora*24;
 			long anno = giorno*365;
 			try {
-				List<Cliente> clienti = clienteRepo.findAll();
+				List<CustomerEntity> clienti = clienteRepo.findAll();
 				if(clienti == null) {
 					log.info("No One Client");
 				} else {
 					Timer timer = new Timer();
 					timer.schedule(new TassaAnnuale(), anno);
 
-					clienti.forEach(cliente -> cliente.setAnni(LocalDate.now().getYear()));
+					clienti.forEach(cliente -> cliente.setAge(LocalDate.now().getYear()));
 					log.info("importo annuo");
 				}
 			} catch (Exception e){

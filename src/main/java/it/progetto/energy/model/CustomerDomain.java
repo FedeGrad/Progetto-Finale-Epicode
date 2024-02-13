@@ -17,7 +17,7 @@ public class CustomerDomain {
 
     private String companyName;
 
-    private String NPI;
+    private String npi;
 
     private String email;
 
@@ -43,7 +43,7 @@ public class CustomerDomain {
 
     private String customerPhone;
 
-    private int anni;
+    private int age;
 
     private AddressDomain address;
 

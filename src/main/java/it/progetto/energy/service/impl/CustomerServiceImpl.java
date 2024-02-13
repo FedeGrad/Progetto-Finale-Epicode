@@ -6,8 +6,8 @@ import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.mapper.entitytodomain.CustomerEntityMapper;
 import it.progetto.energy.model.CustomerDomain;
 import it.progetto.energy.model.DataDomain;
-import it.progetto.energy.persistence.entity.Cliente;
-import it.progetto.energy.persistence.entity.IndirizzoLegale;
+import it.progetto.energy.persistence.entity.AddressEntity;
+import it.progetto.energy.persistence.entity.CustomerEntity;
 import it.progetto.energy.persistence.repository.AddressRepository;
 import it.progetto.energy.persistence.repository.CustomerRepository;
 import it.progetto.energy.service.CustomerService;
@@ -41,69 +41,69 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Deprecated
 	public List<CustomerDomain> findAllCustomer() {
-		List<Cliente> clienteList = customerRepository.findAll();
-		return customerEntityMapper.fromCustomerListToCustomerDomainList(clienteList);
+		List<CustomerEntity> customerEntityList = customerRepository.findAll();
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityList);
 	}
 
 	/**
 	 * Recupera tutti i Clienti, per pagina
 	 */
 	public List<CustomerDomain> findAllCustomer(Pageable page) {
-		List<Cliente> clientePage = customerRepository.findAll(page).getContent();
-		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
+		List<CustomerEntity> customerEntityPage = customerRepository.findAll(page).getContent();
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
 	}
 
 	/**
 	 * Recupera i Clienti per nome
 	 */
 	public List<CustomerDomain> findCustomerByName(String name, Pageable page) {
-		List<Cliente> clientePage = customerRepository.findByNomeContattoAllIgnoreCase(name, page)
+		List<CustomerEntity> customerEntityPage = customerRepository.findByNameAllIgnoreCase(name, page)
 				.getContent();
-		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
 	}
 
 	/**
 	 * Recupera i Clienti che nel nome è presente il valore passato nel parametro, nel nome
 	 */
 	public List<CustomerDomain> findCustomerByNameContain(String nomeContiene, Pageable page) {
-		List<Cliente> clientePage = customerRepository.findByNomeContattoContainingAllIgnoreCase(nomeContiene, page)
+		List<CustomerEntity> customerEntityPage = customerRepository.findByNameContainingAllIgnoreCase(nomeContiene, page)
 				.getContent();
-		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
 	}
 
 	/**
 	 * Recupera i Clienti con uno specifico fatturato
 	 */
 	public List<CustomerDomain> findCustomerByAnnualTurnover(Double annualTurnover, Pageable page) {
-		List<Cliente> clientePage = customerRepository.findByFatturatoAnnuale(annualTurnover, page)
+		List<CustomerEntity> customerEntityPage = customerRepository.findByAnnualTurnover(annualTurnover, page)
 				.getContent();
-		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
 	}
 
 	/**
 	 * Recupera i Clienti registrati in una determinata data
 	 */
 	public List<CustomerDomain> findCustomerByDataCreate(DataDomain dataCreate, Pageable page) {
-		List<Cliente> clientePage = customerRepository.findByDataInserimento(dataCreate.getData(), page)
+		List<CustomerEntity> customerEntityPage = customerRepository.findByDataCreate(dataCreate.getData(), page)
 				.getContent();
-		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
 	}
 
 	/**
 	 * Recupera i Clienti contattati in una determinata data
 	 */
 	public List<CustomerDomain> findCustomerByDataLastUpdate(DataDomain dataLastUpdate, Pageable page) {
-		List<Cliente> clientePage = customerRepository.findByDataUltimoContatto(dataLastUpdate.getData(), page)
+		List<CustomerEntity> customerEntityPage = customerRepository.findByDataLastUpdate(dataLastUpdate.getData(), page)
 				.getContent();
-		return customerEntityMapper.fromCustomerListToCustomerDomainList(clientePage);
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
 	}
 
 	/**
 	 * Recupera i Clienti di una specifica provincia
 	 */
 	public List<CustomerDomain> findCustomerByProvincia(Long provinciaId) {
-		List<Cliente> clienteList = customerRepository.findByProvincia_IdAllIgnoreCase(provinciaId);
-		return customerEntityMapper.fromCustomerListToCustomerDomainList(clienteList);
+		List<CustomerEntity> customerEntityList = customerRepository.findByProvincia_IdAllIgnoreCase(provinciaId);
+		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityList);
 	}
 
 	/**
@@ -113,20 +113,20 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDomain createCustomer(CustomerDomain customerDomain) {
 		boolean email = checkEmail(customerDomain.getEmail(), customerDomain.getCustomerEmail(), customerDomain.getPec());
 		boolean phoneNumber = checkPhoneNumber(customerDomain.getCompanyPhone(), customerDomain.getCustomerPhone());
-		boolean npi = checkNPI(customerDomain.getNPI());
+		boolean npi = checkNPI(customerDomain.getNpi());
 
 		if (email && phoneNumber && npi) {
-			Cliente cliente = customerEntityMapper.fromCustomerDomainToCustomer(customerDomain);
-			IndirizzoLegale indirizzoLegTrovato = addressRepository
+			CustomerEntity customerEntity = customerEntityMapper.fromCustomerDomainToCustomer(customerDomain);
+			AddressEntity indirizzoLegTrovato = addressRepository
 					.findById(customerDomain.getAddress().getId())
 					.orElse(null);
 			if(Objects.nonNull(indirizzoLegTrovato)) {
-				cliente.setIndirizzoLegale(indirizzoLegTrovato);
-				indirizzoLegTrovato.setCliente(cliente);
+				customerEntity.setAddress(indirizzoLegTrovato);
+				indirizzoLegTrovato.setCustomer(customerEntity);
 				log.info("Indirizzo Legale associato");
 			}
 
-			Cliente saved = customerRepository.save(cliente);
+			CustomerEntity saved = customerRepository.save(customerEntity);
 			//TODO ADD FHIR
 			log.info("Customer create id {}", saved.getId());
 			return customerEntityMapper.fromCustomerToCustomerDomain(saved);
@@ -141,29 +141,29 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional
 	public CustomerDomain updateCustomer(CustomerDomain customerDomain) {
 //		if (clienteRepo.existsById(customerDomain.getIdCliente())) {
-		Cliente cliente = customerRepository.findById(customerDomain.getId())
+		CustomerEntity customerEntity = customerRepository.findById(customerDomain.getId())
 				.orElseThrow(() -> new NotFoundException(ERROR_ONE));
 
 		boolean email = checkEmail(customerDomain.getEmail(), customerDomain.getCustomerEmail(), customerDomain.getPec());
 		boolean phoneNumber = checkPhoneNumber(customerDomain.getCompanyPhone(), customerDomain.getCustomerPhone());
-		boolean npi = checkNPI(customerDomain.getNPI());
+		boolean npi = checkNPI(customerDomain.getNpi());
 
 		if (email && phoneNumber && npi) {
-			cliente.setDataUltimoContatto(LocalDate.now());
-			cliente.setTipologia(customerDomain.getType());
-			BeanUtils.copyProperties(customerDomain, cliente);
+			customerEntity.setDataLastUpdate(LocalDate.now());
+			customerEntity.setType(customerDomain.getType());
+			BeanUtils.copyProperties(customerDomain, customerEntity);
 			//TODO MANAGE UPDATE
 
-			IndirizzoLegale indirizzoLegTrovato = addressRepository
+			AddressEntity indirizzoLegTrovato = addressRepository
 					.findById(customerDomain.getAddress().getId())
 					.orElse(null);
 			if(Objects.nonNull(indirizzoLegTrovato)) {
-				cliente.setIndirizzoLegale(indirizzoLegTrovato);
-				indirizzoLegTrovato.setCliente(cliente);
+				customerEntity.setAddress(indirizzoLegTrovato);
+				indirizzoLegTrovato.setCustomer(customerEntity);
 				log.info("Indirizzo Legale associato");
 			}
 
-			Cliente updated = customerRepository.save(cliente);
+			CustomerEntity updated = customerRepository.save(customerEntity);
 			log.info("Customer updated id {}", updated.getId());
 			return customerEntityMapper.fromCustomerToCustomerDomain(updated);
 		} else {

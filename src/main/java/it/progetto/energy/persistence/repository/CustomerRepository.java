@@ -1,6 +1,6 @@
 package it.progetto.energy.persistence.repository;
 
-import it.progetto.energy.persistence.entity.Cliente;
+import it.progetto.energy.persistence.entity.CustomerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -9,39 +9,40 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface CustomerRepository extends PagingAndSortingRepository<Cliente, Long> {
+public interface CustomerRepository extends PagingAndSortingRepository<CustomerEntity, Long> {
 
 	@Query(value =
-			"SELECT * FROM cliente "
-					+ "JOIN indirizzo_legale ON cliente.id = indirizzo_legale.cliente_id "
-					+ "JOIN comune ON indirizzo_legale.id_comune = comune.id "
-					+ "JOIN provincia ON comune.id_provincia = provincia.id "
-					+ "WHERE provincia.id = ?1", nativeQuery = true)
-	List<Cliente> findByProvincia_IdAllIgnoreCase(Long provinciaId);
+			"SELECT * " +
+					"FROM Customer " +
+					"JOIN Address ON Customer.id = Address.customer_id " +
+					"JOIN Comune ON Address.id_comune = Comune.id " +
+					"JOIN provincia ON comune.id_provincia = provincia.id " +
+					"WHERE Provincia.id = ?1", nativeQuery = true)
+	List<CustomerEntity> findByProvincia_IdAllIgnoreCase(Long provinciaId);
 
 	@Override
-	List<Cliente> findAll();
+	List<CustomerEntity> findAll();
 
-	Page<Cliente> findByNomeContattoAllIgnoreCase(String nomeContatto, Pageable page);
+	Page<CustomerEntity> findByNameAllIgnoreCase(String name, Pageable page);
 
-	Page<Cliente> findByNomeContattoContainingAllIgnoreCase(String nomeContatto, Pageable page);
+	Page<CustomerEntity> findByNameContainingAllIgnoreCase(String name, Pageable page);
 
-	List<Cliente> findByNomeContattoContains(String nome);
+	List<CustomerEntity> findByNameContains(String name);
 
-	List<Cliente> findByFatturatoAnnuale(Double fatturatoAnnuale);
+	List<CustomerEntity> findByAnnualTurnover(Double annualTurnover);
 
-	Page<Cliente> findByFatturatoAnnuale(Double fatturatoAnnuale, Pageable page);
+	Page<CustomerEntity> findByAnnualTurnover(Double annualTurnover, Pageable page);
 
-	Page<Cliente> findByDataInserimento(LocalDate dataInserimento, Pageable page);
+	Page<CustomerEntity> findByDataCreate(LocalDate dataCreate, Pageable page);
 
-	Page<Cliente> findByDataUltimoContatto(LocalDate dataUltimoContatto, Pageable page);
+	Page<CustomerEntity> findByDataLastUpdate(LocalDate dataLastUpdate, Pageable page);
 
-	Cliente findByEmailAllIgnoreCase(String email);
+	CustomerEntity findByEmailAllIgnoreCase(String email);
 
-	Cliente findByEmailContattoAllIgnoreCase(String emailContatto);
+	CustomerEntity findByCustomerEmailAllIgnoreCase(String customerEmail);
 
-	Cliente findByPecAllIgnoreCase(String pec);
+	CustomerEntity findByPecAllIgnoreCase(String pec);
 
-	Cliente findByTelefonoContattoAllIgnoreCase(String telefonoContatto);
+	CustomerEntity findByCustomerPhoneAllIgnoreCase(String customerPhone);
 
 }

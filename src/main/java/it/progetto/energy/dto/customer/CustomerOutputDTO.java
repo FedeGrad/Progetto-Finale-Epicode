@@ -19,7 +19,7 @@ public class CustomerOutputDTO {
 
     private String companyName;
 
-    private String NPI;
+    private String npi;
 
     private String email;
 

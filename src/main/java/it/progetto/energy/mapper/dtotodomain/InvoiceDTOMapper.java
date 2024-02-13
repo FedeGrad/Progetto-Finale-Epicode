@@ -19,7 +19,6 @@ public interface InvoiceDTOMapper {
     InvoiceDomain fromInvoiceDTOToInvoiceDomain(InvoiceDTO invoiceDTO);
 
     @Mapping(target = "file", ignore = true)
-    @Mapping(target = "id", source = "invoiceId")
     @Mapping(target = "customer.id", source = "customerId")
     InvoiceDomain fromInvoiceUpdateDTOToInvoiceDomain(InvoiceUpdateDTO invoiceDTO);
 

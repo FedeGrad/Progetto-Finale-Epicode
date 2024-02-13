@@ -5,7 +5,7 @@ import it.progetto.energy.exception.NotDeletableException;
 import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.mapper.entitytodomain.ProvinciaEntityMapper;
 import it.progetto.energy.model.ProvinciaDomain;
-import it.progetto.energy.persistence.entity.Provincia;
+import it.progetto.energy.persistence.entity.ProvinciaEntity;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
 import it.progetto.energy.service.ProvinciaService;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +34,8 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 	@Deprecated
 	@Override
 	public List<ProvinciaDomain> findAllProvince() {
-		List<Provincia> provinciaList = (List<Provincia>) provinciaRepository.findAll();
-		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaList);
+		List<ProvinciaEntity> provinciaEntityList = (List<ProvinciaEntity>) provinciaRepository.findAll();
+		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaEntityList);
 	}
 
 	/**
@@ -44,9 +44,9 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 	 */
 	@Override
 	public List<ProvinciaDomain> findAllProvince(Pageable page) {
-		List<Provincia> provinciaList = provinciaRepository.findAll(page)
+		List<ProvinciaEntity> provinciaEntityList = provinciaRepository.findAll(page)
 				.getContent();
-		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaList);
+		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaEntityList);
 	}
 
 	/**
@@ -55,8 +55,8 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 	@Override
 	public ProvinciaDomain createProvincia(ProvinciaDomain provinciaDomain) {
 		if (!provinciaRepository.existsBySiglaAllIgnoreCase(provinciaDomain.getSigla())) {
-			Provincia provincia = provinciaEntityMapper.fromProvinciaDomainToProvinciaEntity(provinciaDomain);
-			Provincia saved = provinciaRepository.save(provincia);
+			ProvinciaEntity provinciaEntity = provinciaEntityMapper.fromProvinciaDomainToProvinciaEntity(provinciaDomain);
+			ProvinciaEntity saved = provinciaRepository.save(provinciaEntity);
 			log.info("Provincia id {} saved", saved.getId());
 
 			return provinciaEntityMapper.fromProvinciaEntityToProvinciaDomain(saved);
@@ -71,12 +71,12 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 	@Override
 	public ProvinciaDomain updateProvincia(ProvinciaDomain provinciaDomain) {
 //		if (provinciaRepository.existsById(provinciaDomain.getId())) {
-		Provincia provinciaToUpdate = provinciaRepository.findById(provinciaDomain.getId())
+		ProvinciaEntity provinciaEntityToUpdate = provinciaRepository.findById(provinciaDomain.getId())
 				.orElseThrow(() -> new NotUpdatableException(ERROR_ONE));
-		Provincia provincia = provinciaEntityMapper.fromProvinciaDomainToProvinciaEntity(provinciaDomain);
+		ProvinciaEntity provinciaEntity = provinciaEntityMapper.fromProvinciaDomainToProvinciaEntity(provinciaDomain);
 
 		//TODO MERGE TWO PROVINCIA
-		Provincia updated = provinciaRepository.save(provinciaToUpdate);
+		ProvinciaEntity updated = provinciaRepository.save(provinciaEntityToUpdate);
 		log.info("Provincia id {} updated", updated.getId());
 
 		return provinciaEntityMapper.fromProvinciaEntityToProvinciaDomain(updated);

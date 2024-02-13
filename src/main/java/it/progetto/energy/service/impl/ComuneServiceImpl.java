@@ -5,8 +5,8 @@ import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.mapper.entitytodomain.ComuneEntityMapper;
 import it.progetto.energy.model.ComuneDomain;
-import it.progetto.energy.persistence.entity.Comune;
-import it.progetto.energy.persistence.entity.Provincia;
+import it.progetto.energy.persistence.entity.ComuneEntity;
+import it.progetto.energy.persistence.entity.ProvinciaEntity;
 import it.progetto.energy.persistence.repository.ComuneRepository;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
 import it.progetto.energy.service.ComuneService;
@@ -34,31 +34,31 @@ public class ComuneServiceImpl implements ComuneService {
 	 */
 	@Deprecated
 	public List<ComuneDomain> findAllComuni() {
-		List<Comune> comuneList = (List<Comune>) comuneRepository.findAll();
-		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneList);
+		List<ComuneEntity> comuneEntityList = (List<ComuneEntity>) comuneRepository.findAll();
+		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneEntityList);
 	}
 
 	/**
 	 * Recupera tutti i Comuni per pagina
 	 */
 	public List<ComuneDomain> findAllComuni(Pageable page) {
-		List<Comune> comuneList = comuneRepository.findAll(page)
+		List<ComuneEntity> comuneEntityList = comuneRepository.findAll(page)
 				.getContent();
-		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneList);
+		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneEntityList);
 	}
 
 	/**
 	 * Inserisce un Comune nel sistema
 	 */
 	public ComuneDomain createComune(ComuneDomain comuneDomain) {
-		if (!comuneRepository.existsByNomeAllIgnoreCase(comuneDomain.getName())) {
+		if (!comuneRepository.existsByNameAllIgnoreCase(comuneDomain.getName())) {
 
-			Comune comune = comuneEntityMapper.fromComuneDomainToComune(comuneDomain);
-			Provincia provincia = provinciaRepository.findById(comuneDomain.getId())
+			ComuneEntity comuneEntity = comuneEntityMapper.fromComuneDomainToComune(comuneDomain);
+			ProvinciaEntity provinciaEntity = provinciaRepository.findById(comuneDomain.getId())
 					.orElseThrow(() -> new NotCreatableException(ERROR_ONE));
 //			if(Objects.nonNull(provincia)){
-				comune.setProvincia(provincia);
-				Comune saved = comuneRepository.save(comune);
+				comuneEntity.setProvincia(provinciaEntity);
+				ComuneEntity saved = comuneRepository.save(comuneEntity);
 				log.info("Comune id {} saved", saved.getId());
 				return comuneEntityMapper.fromComuneToComuneDomain(saved);
 //			} else {
@@ -74,15 +74,15 @@ public class ComuneServiceImpl implements ComuneService {
 	 */
 	public ComuneDomain updateComune(ComuneDomain comuneDomain) {
 //		if (comuneRepository.existsById(comuneDomain.getId())) {
-		Comune comune = comuneRepository.findById(comuneDomain.getId())
+		ComuneEntity comuneEntity = comuneRepository.findById(comuneDomain.getId())
 				.orElseThrow(() -> new NotUpdatableException(ERROR_ONE));
 
 		if(Objects.nonNull(comuneDomain.getProvincia())){
-			Provincia provincia = provinciaRepository.findBySiglaAllIgnoreCase(comuneDomain.getProvincia().getSigla());
-			comune.setProvincia(provincia);
+			ProvinciaEntity provinciaEntity = provinciaRepository.findBySiglaAllIgnoreCase(comuneDomain.getProvincia().getSigla());
+			comuneEntity.setProvincia(provinciaEntity);
 		}
 
-		Comune updated = comuneRepository.save(comune);
+		ComuneEntity updated = comuneRepository.save(comuneEntity);
 		log.info("Comune id {} it was updated ", updated.getId());
 		return comuneEntityMapper.fromComuneToComuneDomain(updated);
 //		} else {

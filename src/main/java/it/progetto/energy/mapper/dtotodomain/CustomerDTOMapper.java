@@ -25,15 +25,15 @@ public interface CustomerDTOMapper {
      List<CustomerOutputDTO> fromCustomerDomainListToCustomerOutputDTOList(List<CustomerDomain> customerDomainDomain);
 
      @Mapping(target = "id", ignore = true)
-     @Mapping(target = "anni", ignore = true)
-     @Mapping(target = "address.id", source = "addressMainId")
+     @Mapping(target = "age", ignore = true)
+     @Mapping(target = "address.id", source = "addressId")
      @Mapping(target = "invoiceList", source = "invoiceIdList", qualifiedByName = "fromInvoiceIdListToInvoiceDomainList")
      CustomerDomain fromCustomerUpdateDTOToCustomerDomain(CustomerDTO customerDTO);
 
+     @Mapping(target = "age", ignore = true)
      @Mapping(target = "dataCreate", ignore = true)
-     @Mapping(target = "anni", ignore = true)
      @Mapping(target = "dataLastUpdate", ignore = true)
-     @Mapping(target = "address.id", source = "addressMainId")
+     @Mapping(target = "address.id", source = "addressId")
      @Mapping(target = "invoiceList", source = "invoiceIdList", qualifiedByName = "fromInvoiceIdListToInvoiceDomainList")
      CustomerDomain fromCustomerUpdateDTOToCustomerDomain(CustomerUpdateDTO customerDTO);
 

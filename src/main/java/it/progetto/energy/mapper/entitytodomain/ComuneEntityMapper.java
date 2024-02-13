@@ -1,7 +1,7 @@
 package it.progetto.energy.mapper.entitytodomain;
 
 import it.progetto.energy.model.ComuneDomain;
-import it.progetto.energy.persistence.entity.Comune;
+import it.progetto.energy.persistence.entity.ComuneEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -10,17 +10,12 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ComuneEntityMapper {
 
-    @Mapping(target = "indirizziOperativi", ignore = true)
-    @Mapping(target = "indirizziLegali", ignore = true)
-    @Mapping(target = "nome", source = "name")
-    @Mapping(target = "cap", source = "postalCode")
-    Comune fromComuneDomainToComune(ComuneDomain comuneDomain);
+    @Mapping(target = "addressList", ignore = true)
+    ComuneEntity fromComuneDomainToComune(ComuneDomain comuneDomain);
 
     @Mapping(target = "addressDomainList", ignore = true)
-    @Mapping(target = "postalCode", source = "cap")
-    @Mapping(target = "name", source = "nome")
-    ComuneDomain fromComuneToComuneDomain(Comune comune);
+    ComuneDomain fromComuneToComuneDomain(ComuneEntity comuneEntity);
 
-    List<ComuneDomain> fromComuneListToComuneDomainList(List<Comune> comuneList);
+    List<ComuneDomain> fromComuneListToComuneDomainList(List<ComuneEntity> comuneEntityList);
 
 }

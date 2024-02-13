@@ -14,7 +14,7 @@ public class InvoiceOutputDTO {
 
 	private Long id;
 
-	private Integer year;
+	private String year;
 
 	private LocalDate date;
 
