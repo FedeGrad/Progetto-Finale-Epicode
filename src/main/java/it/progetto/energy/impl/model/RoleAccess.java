@@ -37,9 +37,8 @@ public class RoleAccess {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof RoleAccess)) return false;
-		RoleAccess that = (RoleAccess) o;
-		return Objects.equals(id, that.id) && roleName == that.roleName;
+		if (!(o instanceof RoleAccess that)) return false;
+        return Objects.equals(id, that.id) && roleName == that.roleName;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package it.progetto.energy.runner;
 
+import it.progetto.energy.impl.model.UserRepository;
 import it.progetto.energy.impl.repository.RoleAccessRepository;
 import it.progetto.energy.impl.repository.UserAccessRepository;
 import it.progetto.energy.persistence.repository.AddressRepository;
@@ -8,6 +9,7 @@ import it.progetto.energy.persistence.repository.CustomerRepository;
 import it.progetto.energy.persistence.repository.InvoiceRepository;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class Runner implements ApplicationRunner {
 
 	private final CustomerRepository customerRepository;
@@ -25,6 +28,7 @@ public class Runner implements ApplicationRunner {
 	private final UserAccessRepository userAccessRepository;
 	private final RoleAccessRepository roleAccessRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final UserRepository userRepository;
 
 //	@Qualifier("clienteDefault")
 //	private final Cliente cliente;
@@ -120,32 +124,51 @@ public class Runner implements ApplicationRunner {
 //		 }
 
 		/*
-		 * INSERIMENTO DELLA PARTE SICUREZZA
+		 * INSERT DEFAULT USERS
 		 */
-//		 RoleAccess admin = new RoleAccess();
-//		 admin.setRoleName(ERoleAccess.ROLE_ADMIN);
-//		 RoleAccess user = new RoleAccess();
-//		 user.setRoleName(ERoleAccess.ROLE_USER);
-//		 User userAdmin = new User();
-//		 User userDefault = new User();
-//		 Set<RoleAccess> ruoli = new HashSet();
-//		 ruoli.add(admin);
+//		RoleAccess roleAdmin = new RoleAccess();
+//		roleAdmin.setRoleName(ERoleAccess.ROLE_ADMIN);
+//		if(!roleAccessRepository.existsByRoleName(roleAdmin.getRoleName())){
+//			roleAccessRepository.save(roleAdmin);
+//		}
 //
-//		 userDefault.setUsername("user");
-//		 userDefault.setPassword(BCrypt.hashpw("123", BCrypt.gensalt()));
-//		 userDefault.setEmail("user@libero.it");
-//		 userDefault.getRoles().add(user);
-//		 userDefault.setAccountAttivo(true);
-//		 userRepo.save(userDefault);
+//		RoleAccess roleUser = new RoleAccess();
+//		roleUser.setRoleName(ERoleAccess.ROLE_USER);
+//		if(!roleAccessRepository.existsByRoleName(roleUser.getRoleName())){
+//			roleAccessRepository.save(roleUser);
+//		}
 //
-//		 userAdmin.setRoles(ruoli);
-//		 userAdmin.setNome("Federico");
-//		 userAdmin.setCognome("Gradizzi");
-//		 userAdmin.setUsername("Fedegrad");
-//		 userAdmin.setPassword(passEncod.encode("fox"));
-//		 userAdmin.setEmail("federico.gradizzi@libero.it");
-//		 userAdmin.setAccountAttivo(true);
-//		 userRepo.save(userAdmin);
+//		Set<RoleAccess> roleAccessSet = new HashSet<>(Set.of(roleAdmin, roleUser));
+//
+//		if(!userRepository.existsByUsernameIgnoreCase("user")) {
+//			User userDefault = User.builder()
+//					.name("default")
+//					.surname("default")
+//					.username("user")
+//					.password(passwordEncoder.encode("123"))
+//					.email("user@email.com")
+//					.roles(Set.of(roleUser))
+//					.accountAttivo(true)
+//					.build();
+//
+//			userRepository.save(userDefault);
+//			log.info("User {} created", userDefault.getUsername());
+//		}
+//
+//		if(!userRepository.existsByUsernameIgnoreCase("Fedegrad")) {
+//			User userAdmin = User.builder()
+//					.name("Federico")
+//					.surname("Fox")
+//					.username("Fedegrad")
+//					.password(passwordEncoder.encode("fox"))
+//					.email("federico.fox@email.com")
+//					.roles(roleAccessSet)
+//					.accountAttivo(true)
+//					.build();
+//
+//			userRepository.save(userAdmin);
+//			log.info("User {} created", userAdmin.getUsername());
+//		}
 
 	}
 

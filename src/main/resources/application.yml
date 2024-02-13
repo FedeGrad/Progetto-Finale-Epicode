@@ -5,12 +5,12 @@ application:
 spring:
     datasource:
         password: ${DB_PASSWORD}
-        url: ${DB_URL}
+        url: jdbc:${DB_TYPE:postgresql}://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:ClinicDB}
         username: ${DB_USER}
 
     jpa:
         hibernate:
-            ddl-auto: ${DB_PERSIST}
+            ddl-auto: ${DB_PERSIST:create-drop}
         properties:
             hibernate:
                 jdbc:

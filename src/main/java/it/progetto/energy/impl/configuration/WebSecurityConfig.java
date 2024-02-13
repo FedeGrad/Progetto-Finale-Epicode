@@ -16,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,16 +24,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 @Slf4j
 public class WebSecurityConfig {
-    private final UserDetailsServiceImpl userDetailsService;
-	private final AuthEntryPointJwt unauthorizedHandler;
-
 	@Autowired
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
-        this.userDetailsService = userDetailsService;
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
+	UserDetailsServiceImpl userDetailsService;
+	@Autowired
+	AuthEntryPointJwt unauthorizedHandler;
 
-    @Bean
+	@Bean
 	public PasswordEncoder passwordEncoder() {
 		log.trace("passwordEncoder");
 		return new BCryptPasswordEncoder();
@@ -76,7 +73,8 @@ public class WebSecurityConfig {
 						httpSecuritySessionManagementConfigurer
 								.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-		return http.build();
+		return http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+				.build();
 	}
 
 //	protected void configure(HttpSecurity http) throws Exception {
