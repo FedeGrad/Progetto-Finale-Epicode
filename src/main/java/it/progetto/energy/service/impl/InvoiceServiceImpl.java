@@ -152,14 +152,14 @@ public class InvoiceServiceImpl implements InvoiceService {
 	public void uploadInvoicePDF(InvoiceAddPDFDTO invoiceAddPDFDTO) throws IOException {
 		Path root = Paths.get("resources/upload");
 		File file = new File(root.toUri());
-		invoiceAddPDFDTO.getFileFattura()
+		invoiceAddPDFDTO.getInvoicePDF()
 				.transferTo(file);
 
-		InvoiceEntity invoiceEntity = invoiceRepository.findById(invoiceAddPDFDTO.getIdFattura())
+		InvoiceEntity invoiceEntity = invoiceRepository.findById(invoiceAddPDFDTO.getInvoiceId())
 				.orElseThrow(() -> new NotFoundException(INVOICE_NOT_FOUND));
 		invoiceEntity.setFile(file);
 
-		fileService.save(invoiceAddPDFDTO.getFileFattura());
+		fileService.save(invoiceAddPDFDTO.getInvoicePDF());
 		log.info("PDF upload");
 	}
 

@@ -30,7 +30,7 @@ import java.util.List;
 @Tag(name = "Indirizzo Legale Controller", description = "Gestione degli indirizzi legali")
 @Slf4j
 @RequiredArgsConstructor
-public class AddressMainController implements AddressMainApi {
+public class AddressController implements AddressMainApi {
 
 	private final AddressServiceImpl addressServiceImpl;
 	private final AddressDTOMapper addressDTOMapper;

@@ -13,6 +13,6 @@ public class ComuneOutputDTO {
 
     private String postalCode;
 
-    private String provinciaId;
+    private Long provinciaId;
 
 }

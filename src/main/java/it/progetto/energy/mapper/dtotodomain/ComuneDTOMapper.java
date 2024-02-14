@@ -12,12 +12,12 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ComuneDTOMapper {
 
-    @Mapping(target = "addressDomainList", ignore = true)
+    @Mapping(target = "addressList", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "provincia.id", source = "provinciaId")
     ComuneDomain fromComuneDTOToComuneDomain(ComuneDTO comuneDTO);
 
-    @Mapping(target = "addressDomainList", ignore = true)
+    @Mapping(target = "addressList", ignore = true)
     @Mapping(target = "provincia.id", source = "provinciaId")
     ComuneDomain fromComuneUpdateDTOToComuneDomain(ComuneUpdateDTO comuneUpdateDTO);
 

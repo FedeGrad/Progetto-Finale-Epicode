@@ -3,6 +3,7 @@ package it.progetto.energy.dto.address;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AddressDTO {
 	
 	@NotBlank
@@ -26,6 +28,6 @@ public class AddressDTO {
 
 	@NotBlank
 	@Schema(example = "location", type = "string")
-	private String comuneId;
+	private Long comuneId;
 	
 }

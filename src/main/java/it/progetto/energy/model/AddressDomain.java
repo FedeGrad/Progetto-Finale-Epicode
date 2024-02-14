@@ -1,6 +1,5 @@
 package it.progetto.energy.model;
 
-import it.progetto.energy.persistence.entity.CustomerEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +19,6 @@ public class AddressDomain {
 
     private ComuneDomain comune;
 
-    private CustomerEntity customer;
+    private CustomerDomain customer;
 
 }

@@ -17,6 +17,6 @@ public class ComuneDTO {
 	private String postalCode;
 	
 	@NotBlank
-	private String provinciaId;
+	private Long provinciaId;
 
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindProvinciaDTO {
+public class ProvinciaSearchDTO {
 	
 	@Schema(example = "1", type = "long")
 	private Long provinciaId;

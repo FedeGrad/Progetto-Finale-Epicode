@@ -1,27 +1,44 @@
 application:
     jwtExpirationMs: 864000000
-    jwtSecret: ${SEC_JWT}
+    jwtSecret: ${SEC_JWT:}
 
 spring:
     datasource:
-        password: ${DB_PASSWORD}
+        password: ${DB_PASSWORD:postgress}
         url: jdbc:${DB_TYPE:postgresql}://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:ClinicDB}
-        username: ${DB_USER}
+        username: ${DB_USER:postgres}
 
+#    jpa:
+#        hibernate:
+#            ddl-auto: ${DB_CONFIG:create}
+#        properties:
+#            hibernate:
+#                jdbc:
+#                    lob:
+#                        non_contextual_creation: true
     jpa:
         hibernate:
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
             ddl-auto: ${DB_CONFIG:create}
+        show-sql: false
+        database: POSTGRESQL
         properties:
             hibernate:
-                jdbc:
-                    lob:
-                        non_contextual_creation: true
-    security:
-        user:
-            name: ${SEC_USERNAME}
-            password: ${SEC_PASSWORD}
+                dialect: org.hibernate.dialect.PostgreSQL81Dialect
+            format_sql: true
+            jdbc:
+                lob:
+                    non_contextual_creation: true
 
     sql:
         init:
             mode: always
             platform: postgres
+
+#    security:
+#        user:
+#            name: ${SEC_USERNAME}
+#            password: ${SEC_PASSWORD}
+
+

@@ -17,6 +17,6 @@ public class AddressOutputDTO {
 
 	private String postalCode;
 
-	private String comuneId;
+	private Long comuneId;
 
 }

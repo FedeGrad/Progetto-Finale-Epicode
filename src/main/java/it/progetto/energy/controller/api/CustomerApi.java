@@ -7,13 +7,15 @@ import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.customer.CustomerDTO;
 import it.progetto.energy.dto.customer.CustomerOutputDTO;
 import it.progetto.energy.dto.customer.CustomerUpdateDTO;
-import it.progetto.energy.dto.provincia.FindProvinciaDTO;
+import it.progetto.energy.dto.provincia.ProvinciaSearchDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 
 public interface CustomerApi {
+
+    //TODO REFACTOR
 
     @Operation(summary = "Recupero Clienti per pagina",
             description = "Restituisce tutti i Clienti presenti nel sistema per pagina")
@@ -50,7 +52,7 @@ public interface CustomerApi {
             description = "Restituisce i Clienti per provincia")
     @ApiResponse(responseCode = "200", description = "Clienti trovati")
     @ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
-    List<CustomerOutputDTO> findCustomerByProvincia(FindProvinciaDTO findProvinciaDTO);
+    List<CustomerOutputDTO> findCustomerByProvincia(ProvinciaSearchDTO provinciaSearchDTO);
 
     @Operation(summary = "Inserimento Cliente",
             description = "Inserisce un Cliente nel sistema")

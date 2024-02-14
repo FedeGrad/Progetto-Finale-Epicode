@@ -6,7 +6,7 @@ import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.customer.CustomerDTO;
 import it.progetto.energy.dto.customer.CustomerOutputDTO;
 import it.progetto.energy.dto.customer.CustomerUpdateDTO;
-import it.progetto.energy.dto.provincia.FindProvinciaDTO;
+import it.progetto.energy.dto.provincia.ProvinciaSearchDTO;
 import it.progetto.energy.mapper.dtotodomain.CustomerDTOMapper;
 import it.progetto.energy.model.CustomerDomain;
 import it.progetto.energy.model.DataDomain;
@@ -109,8 +109,8 @@ public class CustomerController implements CustomerApi {
 //	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/provincia")
 	@ResponseStatus(HttpStatus.OK)
-	public List<CustomerOutputDTO> findCustomerByProvincia(@RequestBody FindProvinciaDTO findProvinciaDTO) {
-		Long provinciaId = findProvinciaDTO.getProvinciaId();
+	public List<CustomerOutputDTO> findCustomerByProvincia(@RequestBody ProvinciaSearchDTO provinciaSearchDTO) {
+		Long provinciaId = provinciaSearchDTO.getProvinciaId();
 		List<CustomerDomain> customerList = customerServiceImpl.findCustomerByProvincia(provinciaId);
 		return customerDTOMapper.fromCustomerDomainListToCustomerOutputDTOList(customerList);
 	}

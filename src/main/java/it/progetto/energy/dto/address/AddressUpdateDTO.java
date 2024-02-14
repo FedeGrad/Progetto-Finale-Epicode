@@ -25,6 +25,6 @@ public class AddressUpdateDTO {
 	private String postalCode;
 
 	@Schema(example = "location", type = "string")
-	private String comuneId;
+	private Long comuneId;
 
 }

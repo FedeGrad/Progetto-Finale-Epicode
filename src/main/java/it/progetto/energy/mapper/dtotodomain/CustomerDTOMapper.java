@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public interface CustomerDTOMapper {
 
      @Mapping(target = "invoiceIdList", source = "invoiceList", qualifiedByName = "fromInvoiceDomainListToInvoiceIdList")
-     @Mapping(target = "mainAddressId", source = "address.id")
+     @Mapping(target = "addressId", source = "address.id")
      CustomerOutputDTO fromCustomerDomainToCustomerOutputDTO(CustomerDomain customerDomainDomain);
 
      List<CustomerOutputDTO> fromCustomerDomainListToCustomerOutputDTOList(List<CustomerDomain> customerDomainDomain);

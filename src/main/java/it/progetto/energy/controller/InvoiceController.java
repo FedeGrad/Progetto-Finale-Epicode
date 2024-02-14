@@ -146,7 +146,7 @@ public class InvoiceController implements InvoiceApi {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void uploadInvoice(@RequestHeader String token,
 							  @ModelAttribute InvoiceAddPDFDTO invoiceAddPDFDTO) throws IOException {
-		log.info("{}, {}, {}", token, invoiceAddPDFDTO.getIdFattura(), invoiceAddPDFDTO.getFileFattura().getOriginalFilename());
+		log.info("{}, {}, {}", token, invoiceAddPDFDTO.getInvoiceId(), invoiceAddPDFDTO.getInvoicePDF().getOriginalFilename());
 //				fatturaServ.inserisciFattuaPDF(fatturaPDFDTO);
 	}
 

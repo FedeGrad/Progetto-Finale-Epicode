@@ -18,6 +18,6 @@ public class ComuneUpdateDTO {
 
 	private String postalCode;
 
-	private String provinciaId;
+	private Long provinciaId;
 
 }

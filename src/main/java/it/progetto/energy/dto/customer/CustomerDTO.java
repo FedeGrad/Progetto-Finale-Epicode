@@ -57,7 +57,6 @@ public class CustomerDTO {
 	@Schema(example = "example@pec.it", type = "string")
 	private String pec;
 
-	@NotEmpty
 	@Schema(example = "3279999999", type = "string", defaultValue = "3279999999")
 	private String companyPhone;
 

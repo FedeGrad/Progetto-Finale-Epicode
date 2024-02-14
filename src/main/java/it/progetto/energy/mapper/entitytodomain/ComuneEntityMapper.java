@@ -13,7 +13,7 @@ public interface ComuneEntityMapper {
     @Mapping(target = "addressList", ignore = true)
     ComuneEntity fromComuneDomainToComune(ComuneDomain comuneDomain);
 
-    @Mapping(target = "addressDomainList", ignore = true)
+    @Mapping(target = "addressList", ignore = true)
     ComuneDomain fromComuneToComuneDomain(ComuneEntity comuneEntity);
 
     List<ComuneDomain> fromComuneListToComuneDomainList(List<ComuneEntity> comuneEntityList);

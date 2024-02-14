@@ -3,11 +3,13 @@ package it.progetto.energy.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ComuneDomain {
 
@@ -19,6 +21,6 @@ public class ComuneDomain {
 
     private ProvinciaDomain provincia;
 
-    private List<AddressDomain> addressDomainList;
+    private List<AddressDomain> addressList;
     
 }
