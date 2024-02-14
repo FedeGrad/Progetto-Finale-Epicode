@@ -5,3 +5,100 @@ Scritto utilizzando il Framework Spring Boot, gestisce tutti i clienti alla qual
 - Vengono inserite tramitre CSV tutte le citta e le province italiane.
 - Gestice inoltre l'accesso, l'autenticazione e la sicurezza.
 - Vengono effettuati alcuni test Junit.
+
+
+Il sistema, basato su Web Service REST Spring Boot e database PostgreSQL,
+deve permettere di gestire un elenco dei clienti, che sono caratterizzati dai seguenti dati:
+- ragioneSociale
+- partitaIva
+- email
+- dataInserimento
+- dataUltimoContatto
+- fatturatoAnnuale
+- pec
+- telefono
+- emailContatto
+- nomeContatto
+- cognomeContatto
+- telefonoContatto
+
+Ogni customerEntityDomain può avere fino a due indirizzi, uno per la sede legale ed uno per la sede operativa.
+
+Un indirizzo è composto da
+-via
+-civico
+-località
+-cap
+-comuneEntity
+
+I comuni sono gestiti attraverso un'anagrafica centralizza e sono caratterizzati
+da un nome e da un riferimento ad una provinciaEntity, anch'essa gestita in anagrafica centralizzata e
+caratterizzata da un nome ed una sigla.
+
+I clienti possono essere di vario tipo:
+PA
+SAS
+SPA
+SRL
+
+Associato ad ogni customerEntityDomain c'è un insieme di fatture. Le fatture sono caratterizzate dai seguenti dati:
+anno : Integer
+data : Date
+importo : BigDecimal
+numero : Integer
+
+Ogni invoiceEntity ha uno stato. Gli stati invoiceEntity possono essere dinamici,
+in quanto in base all'evoluzione del business possono essere inseriti nel sistema nuovi stati.
+
+Il back-end deve fornire al front-end tutte le funzioni necessarie a gestire in modo completo
+(Aggiungere, modificare ed eliminare)i suddetti elementi.
+
+-------------------------------------------------------------------------
+
+Deve essere possibile ordinare i clienti per:
+Nome - ok
+Fatturato annuale - ok
+Data di inserimento - ok
+Data di ultimo contatto - ok
+Provincia della sede legale - ok
+
+Deve essere possibile filtrare la lista clienti per:
+Fatturato annuale - ok
+Data di inserimento - ok
+Data di ultimo contatto - ok
+Parte del nome - ok
+
+Deve essere possibile filtrare le fatture per
+Cliente - ok
+Stato - ok
+Data - ok
+Anno - ok
+Range di importi - ok
+
+Per gestire in modo efficiente un numero cospicuo di elementi, occorre utilizzare la paginazione.
+
+Prevedere inoltre un sistema di autenticazione e autorizzazione basato su token JWT
+che permetta a diversi utenti di accedere alle funzioni del backend e di registrarsi al sistema.
+Un utente è caratterizzato dalle seguenti proprietà:
+username
+email
+password
+nome
+cognome
+
+Gli utenti possono essere di tipo USER, abilitato alle sole operazioni di lettura, oppure ADMIN,
+abilitato a tutte le operazioni. Un utente può avere più ruoli.
+
+* Importazione Comuni e Province
+  Viene fornito un elenco dei comuni in formato CSV (comuni-italiani.csv),
+  che deve essere importato nel sistema per mezzo di una appositoa procedura Java da eseguire manualmente
+  per popolare il db. Viene fornito inoltre un secondo file (province-italiane.csv)
+  contenente la corrispondenza tra nome provinciaEntity e sigla ed anch'esso deve essere importato ed integrato
+  con le informazioni relative ai comuni.
+
+Contestualmente alla realizzazione del sistema occorre inoltre:
+- Realizzare una collection Postman contenente tutte le chiamate alle API del servizio,
+  comprese quelle di autenticazione
+- Implementare i principali test con JUnit
+
+3. Documentare le API con OpenApi e Swagger. 

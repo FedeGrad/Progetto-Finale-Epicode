@@ -6,9 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -76,6 +78,16 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(root.toFile());
+    }
+
+    public File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
+        try {
+            File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            FileCopyUtils.copy(multipartFile.getBytes(), file);
+            return file;
+        } catch (IOException e) {
+            throw new IOException("ERROR DURING CONVERSION MultipartFile -> File: " + e.getMessage());
+        }
     }
 
 }

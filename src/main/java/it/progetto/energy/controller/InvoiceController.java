@@ -1,6 +1,5 @@
 package it.progetto.energy.controller;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.InvoiceApi;
 import it.progetto.energy.dto.DataDTO;
@@ -19,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -48,8 +46,8 @@ public class InvoiceController implements InvoiceApi {
 
 	@Deprecated
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("isAuthenticated()")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("isAuthenticated()")
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findAllInvoice() {
@@ -58,8 +56,8 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("isAuthenticated()")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findAllInvoice(Pageable page) {
@@ -68,8 +66,8 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("isAuthenticated()")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/customer/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByCustomer(@PathVariable("id") Long invoiceId) {
@@ -78,8 +76,8 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("isAuthenticated()")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/state")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByState(@RequestBody StatoDTO statoDTO, Pageable page) {
@@ -89,8 +87,8 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("isAuthenticated()")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/date")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByDate(@RequestBody DataDTO dataDTO, Pageable page) {
@@ -99,8 +97,8 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("isAuthenticated()")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/year/{year}")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByYear(@PathVariable("year") String year, Pageable page) {
@@ -109,8 +107,8 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("isAuthenticated()")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/range")
 	@ResponseStatus(HttpStatus.OK)
 	public List<InvoiceOutputDTO> findInvoiceByRange(@RequestBody RangeDTO rangeDTO, Pageable page) {
@@ -119,8 +117,8 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("hasRole('ADMIN')")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(consumes = {MediaType.MULTIPART_MIXED_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public InvoiceOutputDTO createInvoice(@Valid @ModelAttribute InvoiceDTO invoiceDTO) throws IOException {
@@ -130,8 +128,8 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("hasRole('ADMIN')")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public InvoiceOutputDTO updateInvoice(@Valid @RequestBody InvoiceUpdateDTO invoiceUpdateDTO) {
@@ -142,8 +140,8 @@ public class InvoiceController implements InvoiceApi {
 
 	//TODO IMPLEMENTARE
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("hasRole('ADMIN')")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void uploadInvoice(@RequestHeader String token,
@@ -153,8 +151,8 @@ public class InvoiceController implements InvoiceApi {
 	}
 
 	@Override
-	@SecurityRequirement(name = "bearerAuth")
-	@PreAuthorize("hasRole('ADMIN')")
+//	@SecurityRequirement(name = "bearerAuth")
+//	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteInvoice(@PathVariable("id") Long invoiceId) {
