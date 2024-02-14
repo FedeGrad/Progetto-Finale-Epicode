@@ -17,8 +17,9 @@ import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_INIT_FILE;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_LOAD_FILE;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_SAVE_FILE;
 
 @Service
 @Slf4j
@@ -31,7 +32,7 @@ public class FileServiceImpl implements FileService {
         try{
             Files.createDirectories(root);
         }catch (IOException e){
-            throw new FileException(ERROR_ONE);
+            throw new FileException(ERROR_INIT_FILE);
         }
     }
 
@@ -39,11 +40,12 @@ public class FileServiceImpl implements FileService {
     public void save(MultipartFile file) {
         try {
             Files.copy(file.getInputStream(), root.resolve(Objects.requireNonNull(file.getOriginalFilename())));
-        } catch (Exception e){
-            throw new FileException(ERROR_ONE);
+        } catch (IOException e){
+            throw new FileException(ERROR_SAVE_FILE);
         }
     }
 
+    //TODO REFACTOR CODE
     @Override
     public Resource load(String filename) {
         try{
@@ -52,10 +54,10 @@ public class FileServiceImpl implements FileService {
             if(resource.exists() || resource.isReadable()){
                 return resource;
             } else {
-                throw new FileException(ERROR_TWO); //"Could not possible to get or read file"
+                throw new FileException(ERROR_LOAD_FILE);
             }
         } catch (MalformedURLException e){
-            throw new FileException(ERROR_ONE);
+            throw new FileException(ERROR_LOAD_FILE);
         }
     }
 
@@ -66,7 +68,7 @@ public class FileServiceImpl implements FileService {
                     .filter(path -> !path.equals(root))
                     .map(root::relativize);
         }catch (IOException e){
-            throw new FileException(ERROR_ONE); //"Could not possible to get File"
+            throw new FileException(ERROR_LOAD_FILE);
 
         }
     }

@@ -1,6 +1,6 @@
 package it.progetto.energy.service.impl;
 
-import it.progetto.energy.exception.ElementAlreadyPresentException;
+import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.impl.model.RoleAccess;
@@ -21,8 +21,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.USERNAME_ALREADY_PRESENT;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.USER_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -74,7 +74,7 @@ public class UserRuoliService implements UserService {
 			User saved = userAccessRepository.save(user);
 			return userEntityMapper.fromUserEntityToUserDomain(saved);
 		} else {
-			throw new ElementAlreadyPresentException(ERROR_ONE);
+			throw new NotCreatableException(USERNAME_ALREADY_PRESENT);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class UserRuoliService implements UserService {
 	public UserDomain updateUser(UserDomain userDomain) {
 		if (Boolean.TRUE.equals(userAccessRepository.existsByUsername(userDomain.getUsername()))) {
 			User userToUpdate = userAccessRepository.findById(userDomain.getId())
-					.orElseThrow(() -> new NotUpdatableException(ERROR_TWO));
+					.orElseThrow(() -> new NotUpdatableException(USER_NOT_FOUND));
 
 			//TODO MANAGE UPDATE
 			User user = userEntityMapper.fromUserDomainToUserEntity(userDomain);
@@ -98,7 +98,7 @@ public class UserRuoliService implements UserService {
 			User updated = userAccessRepository.save(user);
 			return userEntityMapper.fromUserEntityToUserDomain(updated);
 		} else {
-			throw new ElementAlreadyPresentException(ERROR_ONE);
+			throw new NotUpdatableException(USERNAME_ALREADY_PRESENT);
 		}
 	}
 
@@ -111,7 +111,7 @@ public class UserRuoliService implements UserService {
 			userAccessRepository.deleteById(id);
 			log.info("User id {} deleted", id);
 		} else {
-			throw new NotFoundException(ERROR_ONE);
+			throw new NotFoundException(USER_NOT_FOUND);
 		}
 	}
 

@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.COMUNE_ALREADY_EXISTS;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.COMUNE_NOT_FOUND;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.PROVINCIA_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -55,17 +57,15 @@ public class ComuneServiceImpl implements ComuneService {
 
 			ComuneEntity comuneEntity = comuneEntityMapper.fromComuneDomainToComune(comuneDomain);
 			ProvinciaEntity provinciaEntity = provinciaRepository.findById(comuneDomain.getProvincia().getId())
-					.orElseThrow(() -> new NotCreatableException(ERROR_ONE));
-//			if(Objects.nonNull(provincia)){
+					.orElseThrow(() -> new NotCreatableException(PROVINCIA_NOT_FOUND));
+
 			comuneEntity.setProvincia(provinciaEntity);
 			ComuneEntity saved = comuneRepository.save(comuneEntity);
 			log.info("Comune id {} saved", saved.getId());
+
 			return comuneEntityMapper.fromComuneToComuneDomain(saved);
-//			} else {
-//				throw new NotCreatableException(ERROR_ONE);
-//			}
 		} else {
-			throw new NotCreatableException(ERROR_ONE); //TODO REFACT comune already exists
+			throw new NotCreatableException(COMUNE_ALREADY_EXISTS);
 		}
 	}
 
@@ -73,22 +73,20 @@ public class ComuneServiceImpl implements ComuneService {
 	 * Modifica un Comune nel sistema
 	 */
 	public ComuneDomain updateComune(ComuneDomain comuneDomain) {
-//		if (comuneRepository.existsById(comuneDomain.getId())) {
 		ComuneEntity comuneEntity = comuneRepository.findById(comuneDomain.getId())
-				.orElseThrow(() -> new NotUpdatableException(ERROR_ONE));
+				.orElseThrow(() -> new NotUpdatableException(COMUNE_NOT_FOUND));
 
 		if(Objects.nonNull(comuneDomain.getProvincia())){
 			ProvinciaEntity provinciaEntity = provinciaRepository.findBySiglaAllIgnoreCase(comuneDomain.getProvincia().getSigla())
-					.stream().findFirst().orElse(null);
+					.stream()
+					.findFirst()
+					.orElse(null);
 			comuneEntity.setProvincia(provinciaEntity);
 		}
-
 		ComuneEntity updated = comuneRepository.save(comuneEntity);
 		log.info("Comune id {} it was updated ", updated.getId());
+
 		return comuneEntityMapper.fromComuneToComuneDomain(updated);
-//		} else {
-//			throw new NotFoundException("Il Comune con l'id " + dto.getIdComune() + " non è presente nel sistema");
-//		}
 	}
 
 	/**
@@ -99,7 +97,7 @@ public class ComuneServiceImpl implements ComuneService {
 			comuneRepository.deleteById(id);
 			log.info("Comune id {} deleted", id);
 		} else {
-			throw new NotFoundException(ERROR_ONE); //TODO
+			throw new NotFoundException(COMUNE_NOT_FOUND);
 		}
 	}
 

@@ -20,8 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ADDRESS_ALREADY_EXISTS;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ADDRESS_NOT_FOUND;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.COMUNE_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -63,7 +64,7 @@ public class AddressServiceImpl implements AddressService {
 			AddressEntity addressEntity = addressEntityMapper.fromAddressDomainToAddressEntity(addressDomain);
 
 			ComuneEntity comuneEntityTrovato = comuneRepository.findById(addressDomain.getComune().getId())
-					.orElseThrow(() -> new NotCreatableException(ERROR_ONE));
+					.orElseThrow(() -> new NotCreatableException(COMUNE_NOT_FOUND));
 			addressEntity.setComune(comuneEntityTrovato);
 			comuneEntityTrovato.getAddressList().add(addressEntity);
 
@@ -71,7 +72,7 @@ public class AddressServiceImpl implements AddressService {
 			log.info("Main Address id {} saved", saved.getId());
 			return addressEntityMapper.fromAddressEntityToAddressDomain(saved);
 		} else {
-			throw new ElementAlreadyPresentException(ERROR_TWO);
+			throw new ElementAlreadyPresentException(ADDRESS_ALREADY_EXISTS);
 		}
 	}
 
@@ -81,13 +82,13 @@ public class AddressServiceImpl implements AddressService {
 	public AddressDomain updateAddress(AddressDomain addressDomain) {
 //		if (indirizzoLegaleRepository.existsById(addressDomain.getId())) {
 		AddressEntity indirizzo = addressRepository.findById(addressDomain.getId())
-				.orElseThrow(() -> new NotUpdatableException(ERROR_ONE)); //TODO
+				.orElseThrow(() -> new NotUpdatableException(ADDRESS_NOT_FOUND));
 		AddressEntity addressEntity = addressEntityMapper.fromAddressDomainToAddressEntity(addressDomain);
 		//TODO MERGE INDIRIZZO CON INDIRIZZO TROVATO
 
 		if(Objects.nonNull(addressDomain.getComune().getId())){
 			ComuneEntity comuneEntity = comuneRepository.findById(addressDomain.getComune().getId())
-					.orElseThrow(() -> new NotUpdatableException(ERROR_ONE));//TODO
+					.orElseThrow(() -> new NotUpdatableException(COMUNE_NOT_FOUND));
 			indirizzo.setComune(comuneEntity);
 			comuneEntity.getAddressList().add(indirizzo);
 		}
@@ -95,7 +96,7 @@ public class AddressServiceImpl implements AddressService {
 		log.info("Main Address id {} updated", updated.getId());
 		return addressEntityMapper.fromAddressEntityToAddressDomain(updated);
 //		} else {
-//			throw new NotFoundException(ERROR_ONE); //TODO
+//			throw new NotFoundException(ERROR_ONE);
 //		}
 	}
 
@@ -107,7 +108,7 @@ public class AddressServiceImpl implements AddressService {
 			addressRepository.deleteById(id);
 			log.info("Main Address id: {} deletes", id);
 		} else {
-			throw new NotFoundException(ERROR_ONE); //TODO
+			throw new NotFoundException(ADDRESS_NOT_FOUND);
 		}
 	}
 

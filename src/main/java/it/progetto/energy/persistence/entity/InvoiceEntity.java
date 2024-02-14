@@ -71,7 +71,7 @@ public class InvoiceEntity {
 	@Enumerated(EnumType.STRING)
 	private StatoFattura state;
 
-	@ManyToOne(cascade = {CascadeType.DETACH})
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name = "id_customer")
 	private CustomerEntity customer;
 

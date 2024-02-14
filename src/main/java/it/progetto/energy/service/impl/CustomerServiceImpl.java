@@ -23,8 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.CUSTOMER_NOT_FOUND;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.INVALID_IMPUT_VALUE;
 
 @Service
 @Slf4j
@@ -117,13 +117,13 @@ public class CustomerServiceImpl implements CustomerService {
 
 		if (email && phoneNumber && npi) {
 			CustomerEntity customerEntity = customerEntityMapper.fromCustomerDomainToCustomer(customerDomain);
-			AddressEntity indirizzoLegTrovato = addressRepository
+			AddressEntity addressEntity = addressRepository
 					.findById(customerDomain.getAddress().getId())
 					.orElse(null);
-			if(Objects.nonNull(indirizzoLegTrovato)) {
-				customerEntity.setAddress(indirizzoLegTrovato);
-				indirizzoLegTrovato.setCustomer(customerEntity);
-				log.info("Indirizzo Legale associato");
+			if(Objects.nonNull(addressEntity)) {
+				customerEntity.setAddress(addressEntity);
+//				addressEntity.setCustomer(customerEntity);
+				log.info("Address joined");
 			}
 
 			CustomerEntity saved = customerRepository.save(customerEntity);
@@ -131,8 +131,9 @@ public class CustomerServiceImpl implements CustomerService {
 			log.info("Customer create id {}", saved.getId());
 			return customerEntityMapper.fromCustomerToCustomerDomain(saved);
 		} else {
-			throw new NotCreatableException(ERROR_ONE); //TODO errore dati errati
+			throw new NotCreatableException(INVALID_IMPUT_VALUE);
 		}
+		// TODO VERIFY COMSTOMER_ALREADY_EXISTS
 	}
 
 	/**
@@ -140,9 +141,8 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Transactional
 	public CustomerDomain updateCustomer(CustomerDomain customerDomain) {
-//		if (clienteRepo.existsById(customerDomain.getIdCliente())) {
 		CustomerEntity customerEntity = customerRepository.findById(customerDomain.getId())
-				.orElseThrow(() -> new NotFoundException(ERROR_ONE));
+				.orElseThrow(() -> new NotFoundException(CUSTOMER_NOT_FOUND));
 
 		boolean email = checkEmail(customerDomain.getEmail(), customerDomain.getCustomerEmail(), customerDomain.getPec());
 		boolean phoneNumber = checkPhoneNumber(customerDomain.getCompanyPhone(), customerDomain.getCustomerPhone());
@@ -154,24 +154,21 @@ public class CustomerServiceImpl implements CustomerService {
 			BeanUtils.copyProperties(customerDomain, customerEntity);
 			//TODO MANAGE UPDATE
 
-			AddressEntity indirizzoLegTrovato = addressRepository
+			AddressEntity addressEntity = addressRepository
 					.findById(customerDomain.getAddress().getId())
 					.orElse(null);
-			if(Objects.nonNull(indirizzoLegTrovato)) {
-				customerEntity.setAddress(indirizzoLegTrovato);
-				indirizzoLegTrovato.setCustomer(customerEntity);
-				log.info("Indirizzo Legale associato");
+			if(Objects.nonNull(addressEntity)) {
+				customerEntity.setAddress(addressEntity);
+//				addressEntity.setCustomer(customerEntity);
+				log.info("Address joined");
 			}
 
 			CustomerEntity updated = customerRepository.save(customerEntity);
 			log.info("Customer updated id {}", updated.getId());
 			return customerEntityMapper.fromCustomerToCustomerDomain(updated);
 		} else {
-			throw new NotUpdatableException(ERROR_ONE); //TODO errore dati errati
+			throw new NotUpdatableException(INVALID_IMPUT_VALUE);
 		}
-//		} else {
-//			throw new NotFoundException(ERROR_ONE); //TODO
-//		}
 	}
 
 	/**
@@ -182,13 +179,9 @@ public class CustomerServiceImpl implements CustomerService {
 			customerRepository.deleteById(id);
 			log.info("Customer id {} deleted", id);
 		} else {
-			throw new NotFoundException(ERROR_TWO);
+			throw new NotFoundException(CUSTOMER_NOT_FOUND);
 		}
 	}
-
-	/**
-	 * RegEx per: [0]eMail, [1]numero, [2]partita Iva di un Utente
-	 */
 
 	private boolean checkEmail(String... emails) {
 		return Boolean.TRUE.equals(Arrays.stream(emails)

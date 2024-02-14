@@ -1,6 +1,6 @@
 package it.progetto.energy.service.impl;
 
-import it.progetto.energy.exception.ElementAlreadyPresentException;
+import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotDeletableException;
 import it.progetto.energy.exception.NotUpdatableException;
 import it.progetto.energy.mapper.entitytodomain.ProvinciaEntityMapper;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_TWO;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.PROVINCIA_ALREADY_PRESENT;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.PROVINCIA_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -61,7 +61,7 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 
 			return provinciaEntityMapper.fromProvinciaEntityToProvinciaDomain(saved);
 		} else {
-			throw new ElementAlreadyPresentException(ERROR_TWO);
+			throw new NotCreatableException(PROVINCIA_ALREADY_PRESENT);
 		}
 	}
 
@@ -70,9 +70,8 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 	 */
 	@Override
 	public ProvinciaDomain updateProvincia(ProvinciaDomain provinciaDomain) {
-//		if (provinciaRepository.existsById(provinciaDomain.getId())) {
 		ProvinciaEntity provinciaEntityToUpdate = provinciaRepository.findById(provinciaDomain.getId())
-				.orElseThrow(() -> new NotUpdatableException(ERROR_ONE));
+				.orElseThrow(() -> new NotUpdatableException(PROVINCIA_NOT_FOUND));
 		ProvinciaEntity provinciaEntity = provinciaEntityMapper.fromProvinciaDomainToProvinciaEntity(provinciaDomain);
 
 		//TODO MERGE TWO PROVINCIA
@@ -80,9 +79,6 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 		log.info("Provincia id {} updated", updated.getId());
 
 		return provinciaEntityMapper.fromProvinciaEntityToProvinciaDomain(updated);
-//		} else {
-//			throw new NotFoundException(ERROR_ONE); //TODO
-//		}
 	}
 
 	/**
@@ -94,7 +90,7 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 			provinciaRepository.deleteById(id);
 			log.info("Provincia id {} deleted", id);
 		} else {
-			throw new NotDeletableException(ERROR_ONE); //TODO
+			throw new NotDeletableException(PROVINCIA_NOT_FOUND);
 		}
 	}
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
-import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_ONE;
+import static it.progetto.energy.exception.model.ErrorCodeDomain.USER_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -38,7 +38,7 @@ public class UserService {
 
 	public UserResponse getUserBasicInformation(String userName) {
 		User user = userRepository.findByUsername(userName)
-				.orElseThrow(() -> new NotFoundException(ERROR_ONE));
+				.orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
 		return UserResponse
 				.builder()
