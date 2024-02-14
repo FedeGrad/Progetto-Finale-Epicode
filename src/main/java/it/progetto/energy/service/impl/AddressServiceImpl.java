@@ -4,8 +4,10 @@ import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.exception.NotUpdatableException;
+import it.progetto.energy.mapper.UtilsMapper;
 import it.progetto.energy.mapper.entitytodomain.AddressEntityMapper;
 import it.progetto.energy.model.AddressDomain;
+import it.progetto.energy.model.PageDomain;
 import it.progetto.energy.persistence.entity.AddressEntity;
 import it.progetto.energy.persistence.entity.ComuneEntity;
 import it.progetto.energy.persistence.repository.AddressRepository;
@@ -13,7 +15,7 @@ import it.progetto.energy.persistence.repository.ComuneRepository;
 import it.progetto.energy.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,7 @@ public class AddressServiceImpl implements AddressService {
 	private final AddressRepository addressRepository;
 	private final ComuneRepository comuneRepository;
 	private final AddressEntityMapper addressEntityMapper;
+	private final UtilsMapper utilsMapper;
 
 	/**
 	 * Recupera tutti gli Indirizzi Legali
@@ -46,8 +49,9 @@ public class AddressServiceImpl implements AddressService {
 	/**
 	 * Recupera tutti gli Indirizzi Legali per pagina
 	 */
-	public List<AddressDomain> findAllIndirizziLegali(Pageable page) {
-		List<AddressEntity> addressEntityList = addressRepository.findAll(page)
+	public List<AddressDomain> findAllAddressPaged(PageDomain pageDomain) {
+		PageRequest pageRequest = utilsMapper.fromPageDomainToPageable(pageDomain);
+		List<AddressEntity> addressEntityList = addressRepository.findAll(pageRequest)
 				.getContent();
 		return addressEntityMapper.fromAddressEntityListToAddressDomainList(addressEntityList);
 	}

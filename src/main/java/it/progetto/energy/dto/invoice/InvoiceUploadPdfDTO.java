@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class InvoiceAddPDFDTO {
+public class InvoiceUploadPdfDTO {
 
 	@Schema(example = "1", type = "long", description = "inserisci l'id Fattura", name = "Id fattura")
 	private Long invoiceId;

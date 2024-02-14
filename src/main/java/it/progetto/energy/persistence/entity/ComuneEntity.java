@@ -67,4 +67,15 @@ public class ComuneEntity {
 		return Objects.hash(id, name, postalCode, provincia, addressList);
 	}
 
+	@Override
+	public String toString() {
+		return "ComuneEntity{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", postalCode='" + postalCode + '\'' +
+				", provincia=" + provincia +
+				", addressList=" + addressList +
+				'}';
+	}
+
 }

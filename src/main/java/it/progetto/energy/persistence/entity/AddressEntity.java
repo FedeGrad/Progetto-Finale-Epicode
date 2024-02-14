@@ -61,9 +61,8 @@ public class AddressEntity {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof AddressEntity)) return false;
-		AddressEntity addressEntity = (AddressEntity) o;
-		return Objects.equals(id, addressEntity.id) && Objects.equals(way, addressEntity.way)
+		if (!(o instanceof AddressEntity addressEntity)) return false;
+        return Objects.equals(id, addressEntity.id) && Objects.equals(way, addressEntity.way)
 				&& Objects.equals(number, addressEntity.number) && Objects.equals(location, addressEntity.location)
 				&& Objects.equals(postalCode, addressEntity.postalCode)
 				&& Objects.equals(comune, addressEntity.comune)
@@ -75,4 +74,16 @@ public class AddressEntity {
 		return Objects.hash(id, way, number, location, postalCode, comune, customer);
 	}
 
+	@Override
+	public String toString() {
+		return "AddressEntity{" +
+				"id=" + id +
+				", way='" + way + '\'' +
+				", number='" + number + '\'' +
+				", location='" + location + '\'' +
+				", postalCode='" + postalCode + '\'' +
+				", comune=" + comune +
+				", customer=" + customer +
+				'}';
+	}
 }

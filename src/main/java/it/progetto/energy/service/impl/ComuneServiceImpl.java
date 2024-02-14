@@ -3,8 +3,10 @@ package it.progetto.energy.service.impl;
 import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.exception.NotUpdatableException;
+import it.progetto.energy.mapper.UtilsMapper;
 import it.progetto.energy.mapper.entitytodomain.ComuneEntityMapper;
 import it.progetto.energy.model.ComuneDomain;
+import it.progetto.energy.model.PageDomain;
 import it.progetto.energy.persistence.entity.ComuneEntity;
 import it.progetto.energy.persistence.entity.ProvinciaEntity;
 import it.progetto.energy.persistence.repository.ComuneRepository;
@@ -12,7 +14,7 @@ import it.progetto.energy.persistence.repository.ProvinciaRepository;
 import it.progetto.energy.service.ComuneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class ComuneServiceImpl implements ComuneService {
 	private final ComuneRepository comuneRepository;
 	private final ProvinciaRepository provinciaRepository;
 	private final ComuneEntityMapper comuneEntityMapper;
+	private final UtilsMapper utilsMapper;
 
 	/**
 	 * Recupera tutti i Comuni
@@ -43,7 +46,8 @@ public class ComuneServiceImpl implements ComuneService {
 	/**
 	 * Recupera tutti i Comuni per pagina
 	 */
-	public List<ComuneDomain> findAllComuni(Pageable page) {
+	public List<ComuneDomain> findAllComuni(PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<ComuneEntity> comuneEntityList = comuneRepository.findAll(page)
 				.getContent();
 		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneEntityList);

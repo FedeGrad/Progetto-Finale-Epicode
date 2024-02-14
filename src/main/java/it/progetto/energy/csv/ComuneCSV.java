@@ -1,24 +1,24 @@
 package it.progetto.energy.csv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Deprecated
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ComuneCSV {
 
-	@JsonProperty("Codice Provincia")
-	private String codiceProvincia;
-
-	@JsonProperty("Progressivo del Comune")
-	private String codiceComune;
-
-	@JsonProperty("Denominazione in italiano")
-	private String nome;
+	@JsonProperty("Comune")
+	private String name;
 
 	@JsonProperty("Provincia")
-	private String provincia;
+	private String siglaProvincia;
+
+	@JsonProperty("CAP")
+	private String postalCode;
 
 }

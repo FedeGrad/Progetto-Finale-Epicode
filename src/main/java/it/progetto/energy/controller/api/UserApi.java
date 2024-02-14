@@ -2,10 +2,10 @@ package it.progetto.energy.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import it.progetto.energy.dto.PageDTO;
 import it.progetto.energy.dto.user.UserDTO;
 import it.progetto.energy.dto.user.UserOutputDTO;
 import it.progetto.energy.dto.user.UserUpdateDTO;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -23,7 +23,7 @@ public interface UserApi {
             description = "Restituisce gli Utenti presenti nel sistema per pagina")
     @ApiResponse(responseCode = "200", description = "Utenti trovati")
     @ApiResponse(responseCode = "404", description = "Nessun Utente trovato")
-    List<UserOutputDTO> findAllUser(Pageable page);
+    List<UserOutputDTO> findAllUserPaged(PageDTO pageDTO);
 
     @Operation(summary = "Inserimento Utente",
             description = "Inserisce un Utente nel sistema")

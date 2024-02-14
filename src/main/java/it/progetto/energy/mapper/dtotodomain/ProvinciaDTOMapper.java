@@ -12,7 +12,6 @@ import org.mapstruct.Named;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ProvinciaDTOMapper {
@@ -49,7 +48,7 @@ public interface ProvinciaDTOMapper {
         if(!comuneDomainList.isEmpty()){
             return comuneDomainList.stream()
                     .map(ComuneDomain::getId)
-                    .collect(Collectors.toList());
+                    .toList();
         }
         return Collections.emptyList();
     }

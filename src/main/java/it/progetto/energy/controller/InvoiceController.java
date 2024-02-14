@@ -3,19 +3,21 @@ package it.progetto.energy.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.progetto.energy.controller.api.InvoiceApi;
 import it.progetto.energy.dto.DataDTO;
+import it.progetto.energy.dto.PageDTO;
 import it.progetto.energy.dto.RangeDTO;
 import it.progetto.energy.dto.StatoDTO;
-import it.progetto.energy.dto.invoice.InvoiceAddPDFDTO;
 import it.progetto.energy.dto.invoice.InvoiceDTO;
 import it.progetto.energy.dto.invoice.InvoiceOutputDTO;
 import it.progetto.energy.dto.invoice.InvoiceUpdateDTO;
+import it.progetto.energy.dto.invoice.InvoiceUploadPdfDTO;
+import it.progetto.energy.mapper.UtilsMapper;
 import it.progetto.energy.mapper.dtotodomain.InvoiceDTOMapper;
 import it.progetto.energy.model.InvoiceDomain;
+import it.progetto.energy.model.PageDomain;
 import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.service.impl.InvoiceServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,6 +45,7 @@ public class InvoiceController implements InvoiceApi {
 
 	private final InvoiceServiceImpl invoiceService;
 	private final InvoiceDTOMapper invoiceDTOMapper;
+	private final UtilsMapper utilsMapper;
 
 	@Deprecated
 	@Override
@@ -60,8 +63,9 @@ public class InvoiceController implements InvoiceApi {
 //	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
-	public List<InvoiceOutputDTO> findAllInvoice(Pageable page) {
-		List<InvoiceDomain> invoicePage = invoiceService.findAllInvoice(page);
+	public List<InvoiceOutputDTO> findAllInvoicePaged(PageDTO pageDTO) {
+		PageDomain pageDomain = utilsMapper.fromPageDTOToPageDomain(pageDTO);
+		List<InvoiceDomain> invoicePage = invoiceService.findAllInvoice(pageDomain);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
@@ -80,9 +84,10 @@ public class InvoiceController implements InvoiceApi {
 //	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/state")
 	@ResponseStatus(HttpStatus.OK)
-	public List<InvoiceOutputDTO> findInvoiceByState(@RequestBody StatoDTO statoDTO, Pageable page) {
+	public List<InvoiceOutputDTO> findInvoiceByState(@RequestBody StatoDTO statoDTO, @RequestBody PageDTO pageDTO) {
 		StatoFattura statoFattura = statoDTO.getStato();
-		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByState(statoFattura, page);
+		PageDomain pageDomain = utilsMapper.fromPageDTOToPageDomain(pageDTO);
+		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByState(statoFattura, pageDomain);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
@@ -91,8 +96,9 @@ public class InvoiceController implements InvoiceApi {
 //	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/date")
 	@ResponseStatus(HttpStatus.OK)
-	public List<InvoiceOutputDTO> findInvoiceByDate(@RequestBody DataDTO dataDTO, Pageable page) {
-		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByDate(dataDTO, page);
+	public List<InvoiceOutputDTO> findInvoiceByDate(@RequestBody DataDTO dataDTO, @RequestBody PageDTO pageDTO) {
+		PageDomain pageDomain = utilsMapper.fromPageDTOToPageDomain(pageDTO);
+		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByDate(dataDTO, pageDomain);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
@@ -101,8 +107,9 @@ public class InvoiceController implements InvoiceApi {
 //	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/year/{year}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<InvoiceOutputDTO> findInvoiceByYear(@PathVariable("year") String year, Pageable page) {
-		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByYear(year, page);
+	public List<InvoiceOutputDTO> findInvoiceByYear(@PathVariable("year") String year, @RequestBody PageDTO pageDTO) {
+		PageDomain pageDomain = utilsMapper.fromPageDTOToPageDomain(pageDTO);
+		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByYear(year, pageDomain);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
@@ -111,8 +118,9 @@ public class InvoiceController implements InvoiceApi {
 //	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/range")
 	@ResponseStatus(HttpStatus.OK)
-	public List<InvoiceOutputDTO> findInvoiceByRange(@RequestBody RangeDTO rangeDTO, Pageable page) {
-		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByAmountBetween(rangeDTO, page);
+	public List<InvoiceOutputDTO> findInvoiceByRange(@RequestBody RangeDTO rangeDTO, @RequestBody PageDTO pageDTO) {
+		PageDomain pageDomain = utilsMapper.fromPageDTOToPageDomain(pageDTO);
+		List<InvoiceDomain> invoicePage = invoiceService.findInvoiceByAmountBetween(rangeDTO, pageDomain);
 		return invoiceDTOMapper.fromInvoiceListDomainToInvoiceOutputDTOList(invoicePage);
 	}
 
@@ -121,7 +129,7 @@ public class InvoiceController implements InvoiceApi {
 //	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(consumes = {MediaType.MULTIPART_MIXED_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public InvoiceOutputDTO createInvoice(@Valid @ModelAttribute InvoiceDTO invoiceDTO) throws IOException {
+	public InvoiceOutputDTO createInvoice(@Valid @ModelAttribute InvoiceDTO invoiceDTO) {
 		InvoiceDomain invoiceDomain = invoiceDTOMapper.fromInvoiceDTOToInvoiceDomain(invoiceDTO);
 		InvoiceDomain invoiceCreated = invoiceService.createInvoice(invoiceDomain);
 		return invoiceDTOMapper.fromInvoiceDomainToInvoiceOutputDTO(invoiceCreated);
@@ -145,9 +153,9 @@ public class InvoiceController implements InvoiceApi {
 	@PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void uploadInvoice(@RequestHeader String token,
-							  @ModelAttribute InvoiceAddPDFDTO invoiceAddPDFDTO) throws IOException {
-		log.info("{}, {}, {}", token, invoiceAddPDFDTO.getInvoiceId(), invoiceAddPDFDTO.getInvoicePDF().getOriginalFilename());
-//				fatturaServ.inserisciFattuaPDF(fatturaPDFDTO);
+							  @ModelAttribute InvoiceUploadPdfDTO invoiceUploadPdfDTO) throws IOException {
+		log.info("{}, {}, {}", token, invoiceUploadPdfDTO.getInvoiceId(), invoiceUploadPdfDTO.getInvoicePDF().getOriginalFilename());
+		invoiceService.uploadInvoicePDF(invoiceUploadPdfDTO);
 	}
 
 	@Override

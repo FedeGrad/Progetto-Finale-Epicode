@@ -14,9 +14,9 @@ import java.util.List;
 @Builder
 public class UserOutputDTO {
 
-    private String nome;
+    private String name;
 
-    private String cognome;
+    private String surname;
 
     private String username;
 

@@ -12,8 +12,7 @@ public interface ProvinciaCSVMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "comuneList", ignore = true)
-    @Mapping(target = "region", source = "regione")
-    @Mapping(target = "name", source = "nome")
+    @Mapping(target = "sigla", source = "siglaProvincia")
     ProvinciaEntity fromProvinciaCSVToProvinciaEntity(ProvinciaCSV provinciaCSV);
 
     List<ProvinciaEntity> fromProvinciaCSVListToProvinciaEntityList(List<ProvinciaCSV> provinciaCSVList);

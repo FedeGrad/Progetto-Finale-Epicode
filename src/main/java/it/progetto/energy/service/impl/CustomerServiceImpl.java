@@ -3,9 +3,11 @@ package it.progetto.energy.service.impl;
 import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.exception.NotUpdatableException;
+import it.progetto.energy.mapper.UtilsMapper;
 import it.progetto.energy.mapper.entitytodomain.CustomerEntityMapper;
 import it.progetto.energy.model.CustomerDomain;
 import it.progetto.energy.model.DataDomain;
+import it.progetto.energy.model.PageDomain;
 import it.progetto.energy.persistence.entity.AddressEntity;
 import it.progetto.energy.persistence.entity.CustomerEntity;
 import it.progetto.energy.persistence.repository.AddressRepository;
@@ -14,7 +16,7 @@ import it.progetto.energy.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 	private final CustomerRepository customerRepository;
 	private final AddressRepository addressRepository;
 	private final CustomerEntityMapper customerEntityMapper;
+	private final UtilsMapper utilsMapper;
 
 	/**
 	 * Recupera tutti i Clienti
@@ -48,7 +51,8 @@ public class CustomerServiceImpl implements CustomerService {
 	/**
 	 * Recupera tutti i Clienti, per pagina
 	 */
-	public List<CustomerDomain> findAllCustomer(Pageable page) {
+	public List<CustomerDomain> findAllCustomerPaged(PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<CustomerEntity> customerEntityPage = customerRepository.findAll(page).getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
 	}
@@ -56,7 +60,8 @@ public class CustomerServiceImpl implements CustomerService {
 	/**
 	 * Recupera i Clienti per nome
 	 */
-	public List<CustomerDomain> findCustomerByName(String name, Pageable page) {
+	public List<CustomerDomain> findCustomerByName(String name, PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<CustomerEntity> customerEntityPage = customerRepository.findByNameAllIgnoreCase(name, page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
@@ -65,7 +70,8 @@ public class CustomerServiceImpl implements CustomerService {
 	/**
 	 * Recupera i Clienti che nel nome è presente il valore passato nel parametro, nel nome
 	 */
-	public List<CustomerDomain> findCustomerByNameContain(String nomeContiene, Pageable page) {
+	public List<CustomerDomain> findCustomerByNameContain(String nomeContiene, PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<CustomerEntity> customerEntityPage = customerRepository.findByNameContainingAllIgnoreCase(nomeContiene, page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
@@ -74,7 +80,8 @@ public class CustomerServiceImpl implements CustomerService {
 	/**
 	 * Recupera i Clienti con uno specifico fatturato
 	 */
-	public List<CustomerDomain> findCustomerByAnnualTurnover(Double annualTurnover, Pageable page) {
+	public List<CustomerDomain> findCustomerByAnnualTurnover(Double annualTurnover, PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<CustomerEntity> customerEntityPage = customerRepository.findByAnnualTurnover(annualTurnover, page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
@@ -83,7 +90,8 @@ public class CustomerServiceImpl implements CustomerService {
 	/**
 	 * Recupera i Clienti registrati in una determinata data
 	 */
-	public List<CustomerDomain> findCustomerByDataCreate(DataDomain dataCreate, Pageable page) {
+	public List<CustomerDomain> findCustomerByDataCreate(DataDomain dataCreate, PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<CustomerEntity> customerEntityPage = customerRepository.findByDataCreate(dataCreate.getData(), page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);
@@ -92,7 +100,8 @@ public class CustomerServiceImpl implements CustomerService {
 	/**
 	 * Recupera i Clienti contattati in una determinata data
 	 */
-	public List<CustomerDomain> findCustomerByDataLastUpdate(DataDomain dataLastUpdate, Pageable page) {
+	public List<CustomerDomain> findCustomerByDataLastUpdate(DataDomain dataLastUpdate, PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<CustomerEntity> customerEntityPage = customerRepository.findByDataLastUpdate(dataLastUpdate.getData(), page)
 				.getContent();
 		return customerEntityMapper.fromCustomerListToCustomerDomainList(customerEntityPage);

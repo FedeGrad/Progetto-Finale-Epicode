@@ -96,4 +96,22 @@ public class InvoiceEntity {
 				percentageDiscount, state, customer);
 	}
 
+	@Override
+	public String toString() {
+		return "InvoiceEntity{" +
+				"id=" + id +
+				", year='" + year + '\'' +
+				", date=" + date +
+				", amount=" + amount +
+				", number=" + number +
+				", file=" + file +
+				", amountIVA=" + amountIVA +
+				", percentageIVA=" + percentageIVA +
+				", amountDiscount=" + amountDiscount +
+				", percentageDiscount=" + percentageDiscount +
+				", state=" + state +
+				", customer=" + customer +
+				'}';
+	}
+
 }

@@ -2,7 +2,7 @@ package it.progetto.energy.service;
 
 import it.progetto.energy.model.CustomerDomain;
 import it.progetto.energy.model.DataDomain;
-import org.springframework.data.domain.Pageable;
+import it.progetto.energy.model.PageDomain;
 
 import java.util.List;
 
@@ -10,17 +10,17 @@ public interface CustomerService {
 
     List<CustomerDomain> findAllCustomer();
 
-    List<CustomerDomain> findAllCustomer(Pageable page);
+    List<CustomerDomain> findAllCustomerPaged(PageDomain pageDomain);
 
-    List<CustomerDomain> findCustomerByName(String name, Pageable page);
+    List<CustomerDomain> findCustomerByName(String name, PageDomain pageDomain);
 
-    List<CustomerDomain> findCustomerByNameContain(String nomeContiene, Pageable page);
+    List<CustomerDomain> findCustomerByNameContain(String nomeContiene, PageDomain pageDomain);
 
-    List<CustomerDomain> findCustomerByAnnualTurnover(Double fatturato, Pageable page);
+    List<CustomerDomain> findCustomerByAnnualTurnover(Double fatturato, PageDomain pageDomain);
 
-    List<CustomerDomain> findCustomerByDataCreate(DataDomain dataCreate, Pageable page);
+    List<CustomerDomain> findCustomerByDataCreate(DataDomain dataCreate, PageDomain pageDomain);
 
-    List<CustomerDomain> findCustomerByDataLastUpdate(DataDomain dataLastUpdate, Pageable page);
+    List<CustomerDomain> findCustomerByDataLastUpdate(DataDomain dataLastUpdate, PageDomain pageDomain);
 
     List<CustomerDomain> findCustomerByProvincia(Long provinciaId);
 

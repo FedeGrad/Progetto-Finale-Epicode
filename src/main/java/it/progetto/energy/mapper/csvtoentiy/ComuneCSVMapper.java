@@ -1,6 +1,6 @@
 package it.progetto.energy.mapper.csvtoentiy;
 
-import it.progetto.energy.csv.ComuneCorrettoCSV;
+import it.progetto.energy.csv.ComuneCSV;
 import it.progetto.energy.persistence.entity.ComuneEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,10 +13,8 @@ public interface ComuneCSVMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "addressList", ignore = true)
     @Mapping(target = "provincia.sigla", source = "siglaProvincia")
-    @Mapping(target = "postalCode", source = "cap")
-    @Mapping(target = "name", source = "nome")
-    ComuneEntity fromComuneCSVToComuneEntity(ComuneCorrettoCSV comuneCorrettoCSV);
+    ComuneEntity fromComuneCSVToComuneEntity(ComuneCSV comuneCSV);
 
-    List<ComuneEntity> fromComuneCSVListToComuneEntityList(List<ComuneCorrettoCSV> comuneCorrettoCSVS);
+    List<ComuneEntity> fromComuneCSVListToComuneEntityList(List<ComuneCSV> comuneCSVS);
 
 }

@@ -1,7 +1,7 @@
 package it.progetto.energy.service;
 
 import it.progetto.energy.model.ComuneDomain;
-import org.springframework.data.domain.Pageable;
+import it.progetto.energy.model.PageDomain;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public interface ComuneService {
 
     List<ComuneDomain> findAllComuni();
 
-    List<ComuneDomain> findAllComuni(Pageable page);
+    List<ComuneDomain> findAllComuni(PageDomain pageDomain);
 
     ComuneDomain createComune(ComuneDomain comuneDomain);
 

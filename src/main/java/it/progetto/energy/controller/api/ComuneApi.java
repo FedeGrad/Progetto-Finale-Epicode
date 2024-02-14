@@ -2,8 +2,8 @@ package it.progetto.energy.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import it.progetto.energy.dto.PageDTO;
 import it.progetto.energy.dto.comune.ComuneOutputDTO;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -19,6 +19,6 @@ public interface ComuneApi {
             description = "Restituisce tutti i Comuni presenti nel sistema per pagina")
     @ApiResponse(responseCode = "200", description = "Comuni trovati")
     @ApiResponse(responseCode = "404", description = "Nessun Comune trovato")
-    List<ComuneOutputDTO> findAllComuni(Pageable page);
+    List<ComuneOutputDTO> findAllComuniPaged(PageDTO pageDTO);
 
 }

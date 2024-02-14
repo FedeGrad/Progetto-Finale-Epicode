@@ -124,4 +124,28 @@ public class CustomerEntity {
 				address, invoiceList);
 	}
 
+	@Override
+	public String toString() {
+		return "CustomerEntity{" +
+				"id=" + id +
+				", companyName='" + companyName + '\'' +
+				", npi='" + npi + '\'' +
+				", email='" + email + '\'' +
+				", dateOfBirth=" + dateOfBirth +
+				", age=" + age +
+				", dataCreate=" + dataCreate +
+				", dataLastUpdate=" + dataLastUpdate +
+				", annualTurnover=" + annualTurnover +
+				", type=" + type +
+				", pec='" + pec + '\'' +
+				", companyPhone='" + companyPhone + '\'' +
+				", customerEmail='" + customerEmail + '\'' +
+				", name='" + name + '\'' +
+				", surname='" + surname + '\'' +
+				", customerPhone='" + customerPhone + '\'' +
+				", address=" + address +
+				", invoiceList=" + invoiceList +
+				'}';
+	}
+
 }

@@ -13,10 +13,6 @@ public interface AddressCSVMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "customer", ignore = true)
     @Mapping(target = "comune", ignore = true)
-    @Mapping(target = "way", source = "via")
-    @Mapping(target = "postalCode", source = "cap")
-    @Mapping(target = "number", source = "civico")
-    @Mapping(target = "location", source = "localita")
     AddressEntity fromAddressCSVToAddressEntity(AddressCSV addressCSV);
 
     List<AddressEntity> fromAddressCSVListToAddressEntityList(List<AddressCSV> addressCSVList);

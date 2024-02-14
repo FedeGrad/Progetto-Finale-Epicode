@@ -1,7 +1,7 @@
 package it.progetto.energy.service;
 
 import it.progetto.energy.model.AddressDomain;
-import org.springframework.data.domain.Pageable;
+import it.progetto.energy.model.PageDomain;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public interface AddressService {
 
     List<AddressDomain> findAllIndirizziLegali();
 
-    List<AddressDomain> findAllIndirizziLegali(Pageable page);
+    List<AddressDomain> findAllAddressPaged(PageDomain pageDomain);
 
     AddressDomain createIndirizzo(AddressDomain addressDomain);
 

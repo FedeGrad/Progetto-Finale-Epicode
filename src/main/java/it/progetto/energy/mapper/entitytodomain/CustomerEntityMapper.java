@@ -5,9 +5,10 @@ import it.progetto.energy.persistence.entity.CustomerEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Collections;
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {InvoiceEntityMapper.class, AddressEntityMapper.class})
+@Mapper(componentModel = "spring", uses = {InvoiceEntityMapper.class})
 public interface CustomerEntityMapper {
 
      @Mapping(target = "address", ignore = true)
@@ -17,5 +18,12 @@ public interface CustomerEntityMapper {
 
      @Mapping(target = "address", ignore = true)
      CustomerEntity fromCustomerDomainToCustomer(CustomerDomain customerDomain);
+
+     default List<CustomerDomain> fromCustomerEntityToCustomerDomainList(CustomerEntity customerEntity) {
+          if(customerEntity!=null){
+               return List.of(fromCustomerToCustomerDomain(customerEntity));
+          }
+          return Collections.emptyList();
+     }
 
 }

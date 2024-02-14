@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @Builder
@@ -19,6 +21,6 @@ public class AddressDomain {
 
     private ComuneDomain comune;
 
-    private CustomerDomain customer;
+    private List<CustomerDomain> customerList;
 
 }

@@ -50,16 +50,25 @@ public class ProvinciaEntity {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof ProvinciaEntity)) return false;
-		ProvinciaEntity provinciaEntity = (ProvinciaEntity) o;
-		return Objects.equals(id, provinciaEntity.id) && Objects.equals(sigla, provinciaEntity.sigla)
-				&& Objects.equals(name, provinciaEntity.name) && Objects.equals(region, provinciaEntity.region)
-				&& Objects.equals(comuneList, provinciaEntity.comuneList);
+		if (!(o instanceof ProvinciaEntity that)) return false;
+        return Objects.equals(id, that.id) && Objects.equals(sigla, that.sigla) && Objects.equals(name, that.name)
+				&& Objects.equals(region, that.region) && Objects.equals(comuneList, that.comuneList);
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, sigla, name, region, comuneList);
+	}
+
+	@Override
+	public String toString() {
+		return "ProvinciaEntity{" +
+				"id=" + id +
+				", sigla='" + sigla + '\'' +
+				", name='" + name + '\'' +
+				", region='" + region + '\'' +
+				", comuneList=" + comuneList +
+				'}';
 	}
 
 }

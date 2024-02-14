@@ -4,11 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import it.progetto.energy.dto.DataDTO;
+import it.progetto.energy.dto.PageDTO;
 import it.progetto.energy.dto.customer.CustomerDTO;
 import it.progetto.energy.dto.customer.CustomerOutputDTO;
 import it.progetto.energy.dto.customer.CustomerUpdateDTO;
 import it.progetto.energy.dto.provincia.ProvinciaSearchDTO;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -22,31 +22,31 @@ public interface CustomerApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retrieved Customer"),
             @ApiResponse(responseCode = "404", description = "Customer not found")})
-    List<CustomerOutputDTO> findAllCustomer(Pageable page);
+    List<CustomerOutputDTO> findAllCustomerPaged(PageDTO pageDTO);
 
     @Operation(summary = "Recupero Clienti per nome",
             description = "Restituisce i Clienti presenti nel sistema con un determinato nome")
     @ApiResponse(responseCode = "200", description = "Clienti trovati")
     @ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
-    List<CustomerOutputDTO> findCustomerByName(String name, Pageable page);
+    List<CustomerOutputDTO> findCustomerByName(String name, PageDTO pageDTO);
 
     @Operation(summary = "Recupero Cliente per parte di nome",
             description = "Restituisce i Clienti presenti nel sistema che contengono il valore passato nel nome")
     @ApiResponse(responseCode = "200", description = "Clienti trovati")
     @ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
-    List<CustomerOutputDTO> findCustomerByNameContains(String name, Pageable page);
+    List<CustomerOutputDTO> findCustomerByNameContains(String name, PageDTO pageDTO);
 
     @Operation(summary = "Recupero Clienti per data",
             description = "Restituisce i Clienti per data di inserimento")
     @ApiResponse(responseCode = "200", description = "Clienti trovati")
     @ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
-    List<CustomerOutputDTO> findCustomerByDataInserimento(DataDTO dataDTO, Pageable page);
+    List<CustomerOutputDTO> findCustomerByDataInserimento(DataDTO dataDTO, PageDTO pageDTO);
 
     @Operation(summary = "Recupero Clienti per data ultimo contatto",
             description = "Restituisce i Clienti per data dell'ultimo contatto")
     @ApiResponse(responseCode = "200", description = "Clienti trovati")
     @ApiResponse(responseCode = "404", description = "Nessun Cliente trovato")
-    List<CustomerOutputDTO> findCustomerByDataLastUpdate(DataDTO dataDTO, Pageable page);
+    List<CustomerOutputDTO> findCustomerByDataLastUpdate(DataDTO dataDTO, PageDTO pageDTO);
 
     @Operation(summary = "Recupero Clienti per provincia",
             description = "Restituisce i Clienti per provincia")

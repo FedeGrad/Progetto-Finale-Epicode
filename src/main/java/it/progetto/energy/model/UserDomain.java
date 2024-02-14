@@ -15,9 +15,9 @@ public class UserDomain {
 
     private Long id;
 
-    private String nome;
+    private String name;
 
-    private String cognome;
+    private String surname;
 
     private String username;
 

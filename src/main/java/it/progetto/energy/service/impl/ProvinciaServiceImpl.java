@@ -3,14 +3,16 @@ package it.progetto.energy.service.impl;
 import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotDeletableException;
 import it.progetto.energy.exception.NotUpdatableException;
+import it.progetto.energy.mapper.UtilsMapper;
 import it.progetto.energy.mapper.entitytodomain.ProvinciaEntityMapper;
+import it.progetto.energy.model.PageDomain;
 import it.progetto.energy.model.ProvinciaDomain;
 import it.progetto.energy.persistence.entity.ProvinciaEntity;
 import it.progetto.energy.persistence.repository.ProvinciaRepository;
 import it.progetto.energy.service.ProvinciaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +27,7 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 
 	private final ProvinciaRepository provinciaRepository;
 	private final ProvinciaEntityMapper provinciaEntityMapper;
+	private final UtilsMapper utilsMapper;
 
 	/**
 	 * Recupera tutte le Province
@@ -43,7 +46,8 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 	 * @return List<ProvinciaDomain>
 	 */
 	@Override
-	public List<ProvinciaDomain> findAllProvince(Pageable page) {
+	public List<ProvinciaDomain> findAllProvincePaged(PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<ProvinciaEntity> provinciaEntityList = provinciaRepository.findAll(page)
 				.getContent();
 		return provinciaEntityMapper.fromProvinciaEntityListToProvinciaDomainList(provinciaEntityList);

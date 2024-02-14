@@ -17,10 +17,10 @@ public class UserUpdateDTO {
 	private Long id;
 
 	@Size(max = 120)
-	private String nome;
+	private String name;
 
 	@Size(max = 120)
-	private String cognome;
+	private String surname;
 
 	@Size(max = 20)
 	private String username;

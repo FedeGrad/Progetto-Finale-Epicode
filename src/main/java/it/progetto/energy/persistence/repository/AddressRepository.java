@@ -18,14 +18,6 @@ public interface AddressRepository extends JpaRepository<AddressEntity, Long> {
 					"WHERE comune.name = ?1", nativeQuery = true)
 	List<AddressEntity> findByComuneAllIgnoreCase(String comuneName, Pageable page);
 
-//	List<AddressEntity> findAll();
-//
-//	Optional<AddressEntity> findById(Long id);
-//
-//	boolean existsById(Long id);
-//
-//	void deleteById(Long id);
-
 
 	List<AddressEntity> findByWayAllIgnoreCase(String way, Pageable page);
 

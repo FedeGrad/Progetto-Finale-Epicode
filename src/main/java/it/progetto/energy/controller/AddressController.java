@@ -1,16 +1,18 @@
 package it.progetto.energy.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.progetto.energy.controller.api.AddressMainApi;
+import it.progetto.energy.controller.api.AddressApi;
+import it.progetto.energy.dto.PageDTO;
 import it.progetto.energy.dto.address.AddressDTO;
 import it.progetto.energy.dto.address.AddressOutputDTO;
 import it.progetto.energy.dto.address.AddressUpdateDTO;
+import it.progetto.energy.mapper.UtilsMapper;
 import it.progetto.energy.mapper.dtotodomain.AddressDTOMapper;
 import it.progetto.energy.model.AddressDomain;
+import it.progetto.energy.model.PageDomain;
 import it.progetto.energy.service.impl.AddressServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,20 +28,21 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/main/address")
+@RequestMapping("/address")
 @Tag(name = "Indirizzo Legale Controller", description = "Gestione degli indirizzi legali")
 @Slf4j
 @RequiredArgsConstructor
-public class AddressController implements AddressMainApi {
+public class AddressController implements AddressApi {
 
 	private final AddressServiceImpl addressServiceImpl;
 	private final AddressDTOMapper addressDTOMapper;
+	private final UtilsMapper utilsMapper;
 
 	@Deprecated
 	@Override
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<AddressOutputDTO> findAllMainAddress() {
+	public List<AddressOutputDTO> findAllAddress() {
 		List<AddressDomain> addressDomainList = addressServiceImpl.findAllIndirizziLegali();
 		return addressDTOMapper.fromAddressDomainListToAddressOutputDTOList(addressDomainList);
 	}
@@ -47,8 +50,9 @@ public class AddressController implements AddressMainApi {
 	@Override
 	@GetMapping("/page")
 	@ResponseStatus(HttpStatus.OK)
-	public List<AddressOutputDTO> findAllMainAddress(Pageable page) {
-		List<AddressDomain> addressDomainList = addressServiceImpl.findAllIndirizziLegali(page);
+	public List<AddressOutputDTO> findAllAddressPaged(@Valid @RequestBody PageDTO pageDTO) {
+		PageDomain pageDomain = utilsMapper.fromPageDTOToPageDomain(pageDTO);
+		List<AddressDomain> addressDomainList = addressServiceImpl.findAllAddressPaged(pageDomain);
 		return addressDTOMapper.fromAddressDomainListToAddressOutputDTOList(addressDomainList);
 	}
 
@@ -57,7 +61,7 @@ public class AddressController implements AddressMainApi {
 //	@PreAuthorize("isAuthenticated()")
 	@PostMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public AddressOutputDTO createMainAddress(@Valid @RequestBody AddressDTO addressDTO) {
+	public AddressOutputDTO createAddress(@Valid @RequestBody AddressDTO addressDTO) {
 		AddressDomain addressDomain = addressDTOMapper.fromAddressDTOToAddressDomain(addressDTO);
 		AddressDomain addressCreated = addressServiceImpl.createIndirizzo(addressDomain);
 		return addressDTOMapper.fromAddressDomainToAddressOutputDTO(addressCreated);
@@ -68,7 +72,7 @@ public class AddressController implements AddressMainApi {
 //	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public AddressOutputDTO updateMainAddress(@RequestBody AddressUpdateDTO addressUpdateDTO) {
+	public AddressOutputDTO updateAddress(@RequestBody AddressUpdateDTO addressUpdateDTO) {
 		AddressDomain addressDomain = addressDTOMapper.fromAddressUpdateDTOToAddressDomain(addressUpdateDTO);
 		AddressDomain addressUpdated = addressServiceImpl.updateAddress(addressDomain);
 		return addressDTOMapper.fromAddressDomainToAddressOutputDTO(addressUpdated);
@@ -79,7 +83,7 @@ public class AddressController implements AddressMainApi {
 //	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteMainAddress(@PathVariable("id") Long mainAddressId) {
+	public void deleteAddress(@PathVariable("id") Long mainAddressId) {
 		addressServiceImpl.deleteMainAddress(mainAddressId);
 	}
 

@@ -2,12 +2,14 @@ package it.progetto.energy.service.impl;
 
 import it.progetto.energy.dto.DataDTO;
 import it.progetto.energy.dto.RangeDTO;
-import it.progetto.energy.dto.invoice.InvoiceAddPDFDTO;
+import it.progetto.energy.dto.invoice.InvoiceUploadPdfDTO;
 import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.exception.NotUpdatableException;
+import it.progetto.energy.mapper.UtilsMapper;
 import it.progetto.energy.mapper.entitytodomain.InvoiceEntityMapper;
 import it.progetto.energy.model.InvoiceDomain;
+import it.progetto.energy.model.PageDomain;
 import it.progetto.energy.model.StatoFattura;
 import it.progetto.energy.persistence.entity.CustomerEntity;
 import it.progetto.energy.persistence.entity.InvoiceEntity;
@@ -16,7 +18,7 @@ import it.progetto.energy.persistence.repository.InvoiceRepository;
 import it.progetto.energy.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -36,6 +38,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 	private final InvoiceRepository invoiceRepository;
 	private final CustomerRepository customerRepository;
 	private final InvoiceEntityMapper invoiceEntityMapper;
+	private final UtilsMapper utilsMapper;
 	private final FileServiceImpl fileService;
 
 	/**
@@ -53,7 +56,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * Recupera tutte le fatture, paginate
 	 */
 	@Override
-	public List<InvoiceDomain> findAllInvoice(Pageable page) {
+	public List<InvoiceDomain> findAllInvoice(PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findAll(page)
 				.getContent();
 		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
@@ -72,8 +76,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * Recupera tutte le fatture di un determinato importo
 	 */
 	@Override
-	public List<InvoiceDomain> findInvoiceByAmountBetween(RangeDTO rangeDTO, Pageable page) {
-		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findByAmountBetween(rangeDTO.getImportoMin(), rangeDTO.getImportoMax(), page)
+	public List<InvoiceDomain> findInvoiceByAmountBetween(RangeDTO rangeDTO, PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
+		List<InvoiceEntity> invoiceEntityPage = invoiceRepository
+				.findByAmountBetween(rangeDTO.getImportoMin(), rangeDTO.getImportoMax(), page)
 				.getContent();
 		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
 	}
@@ -82,7 +88,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * Recupera tutte le fatture in un determinato stato
 	 */
 	@Override
-	public List<InvoiceDomain> findInvoiceByState(StatoFattura stato, Pageable page) {
+	public List<InvoiceDomain> findInvoiceByState(StatoFattura stato, PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findByStateAllIgnoreCase(stato, page)
 				.getContent();
 		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
@@ -92,7 +99,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * Recupera tutte le fatture per data
 	 */
 	@Override
-	public List<InvoiceDomain> findInvoiceByDate(DataDTO data, Pageable page) {
+	public List<InvoiceDomain> findInvoiceByDate(DataDTO data, PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findByDate(data.getData(), page)
 				.getContent();
 		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
@@ -102,7 +110,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	 * Recupera tutte le fatture per anno
 	 */
 	@Override
-	public List<InvoiceDomain> findInvoiceByYear(String year, Pageable page) {
+	public List<InvoiceDomain> findInvoiceByYear(String year, PageDomain pageDomain) {
+		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<InvoiceEntity> invoiceEntityPage = invoiceRepository.findByYearContains(year, page)
 				.getContent();
 		return invoiceEntityMapper.fromInvoiceEntityListToInvoiceDomainList(invoiceEntityPage);
@@ -149,17 +158,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 	//TODO IMPLEMENTARE
 	@Override
-	public void uploadInvoicePDF(InvoiceAddPDFDTO invoiceAddPDFDTO) throws IOException {
+	public void uploadInvoicePDF(InvoiceUploadPdfDTO invoiceUploadPdfDTO) throws IOException {
 		Path root = Paths.get("resources/upload");
 		File file = new File(root.toUri());
-		invoiceAddPDFDTO.getInvoicePDF()
+		invoiceUploadPdfDTO.getInvoicePDF()
 				.transferTo(file);
 
-		InvoiceEntity invoiceEntity = invoiceRepository.findById(invoiceAddPDFDTO.getInvoiceId())
+		InvoiceEntity invoiceEntity = invoiceRepository.findById(invoiceUploadPdfDTO.getInvoiceId())
 				.orElseThrow(() -> new NotFoundException(INVOICE_NOT_FOUND));
 		invoiceEntity.setFile(file);
 
-		fileService.save(invoiceAddPDFDTO.getInvoicePDF());
+		fileService.save(invoiceUploadPdfDTO.getInvoicePDF());
 		log.info("PDF upload");
 	}
 

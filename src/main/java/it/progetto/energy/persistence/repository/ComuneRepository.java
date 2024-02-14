@@ -19,14 +19,6 @@ public interface ComuneRepository extends JpaRepository<ComuneEntity, Long> {
 					"WHERE Provincia.name = ?1", nativeQuery = true)
 	Page<ComuneEntity> findByProvinciaAllIgnoreCase(String provincia, Pageable page);
 
-	//	Optional<ComuneEntity> findById(Long id);
-//	
-//	boolean existsById(Long id);
-//
-//	void deleteById(Long id);
-//
-//	List<ComuneEntity> findAll();
-
 	List<ComuneEntity> findByNameAllIgnoreCase(String name);
 
 	boolean existsByNameAllIgnoreCase(String nome);
