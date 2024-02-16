@@ -18,6 +18,8 @@ public class ConstantForTest {
     public static final String COMPANY_NAME = "companyName";
     public static final String PEC = "email@pec.com";
     public static final String EMAIL = "email@email.com";
+    public static final String YEAR = "2024";
+
     public static final LocalDate DATA_LAST_UPDATE = LocalDate.now();
     public static final LocalDate DATA_CREATE = LocalDate.now().plusMonths(1);
     public static final LocalDate DATE_OF_BIRTH = LocalDate.of(1989, 1, 1);

@@ -107,7 +107,7 @@ public class AddressServiceImpl implements AddressService {
 	/**
 	 * Elimina un Indirizzo Legale
 	 */
-	public void deleteMainAddress(Long id) {
+	public void deleteAddress(Long id) {
 		if (addressRepository.existsById(id)) {
 			addressRepository.deleteById(id);
 			log.info("Main Address id: {} deletes", id);

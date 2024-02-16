@@ -1,7 +1,6 @@
 package it.progetto.energy.utils.dtobuilder;
 
 import it.progetto.energy.dto.PageDTO;
-import org.springframework.data.domain.Sort;
 
 public class UtilsDtoBuilder {
 
@@ -9,7 +8,8 @@ public class UtilsDtoBuilder {
         return PageDTO.builder()
                 .page(0)
                 .size(10)
-                .direction(Sort.Direction.ASC)
+                .sortDirection("ASC")
+                .sortBy("id")
                 .build();
     }
 

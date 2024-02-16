@@ -18,4 +18,6 @@ public class PageDomain {
 
     private Sort.Direction direction;
 
+    private String sortBy;
+
 }

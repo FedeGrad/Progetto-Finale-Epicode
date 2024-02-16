@@ -2,6 +2,12 @@ package it.progetto.energy.utils.domainbuilder;
 
 import it.progetto.energy.model.AddressDomain;
 import it.progetto.energy.model.ComuneDomain;
+import it.progetto.energy.model.InvoiceDomain;
+import it.progetto.energy.model.PageDomain;
+import it.progetto.energy.model.StatoFattura;
+import org.springframework.data.domain.Sort;
+
+import java.time.LocalDate;
 
 import static it.progetto.energy.utils.ConstantForTest.NAME;
 import static it.progetto.energy.utils.ConstantForTest.NUMBER;
@@ -28,6 +34,32 @@ public class DomainBuilder {
                 .postalCode(POSTAL_CODE)
                 .provincia(null)
                 .addressList(null)
+                .build();
+    }
+
+    public static PageDomain buildPageDomain(){
+        return PageDomain.builder()
+                .page(0)
+                .size(1)
+                .direction(Sort.Direction.DESC)
+                .sortBy("id")
+                .build();
+    }
+
+    public static InvoiceDomain buildInvoiceDomain(Long entityId){
+        return InvoiceDomain.builder()
+                .id(entityId)
+                .year("2024")
+                .date(LocalDate.now())
+                .amount(Double.MAX_VALUE)
+                .number(1)
+                .file(null)
+                .amountIVA(Double.MIN_VALUE)
+                .percentageIVA(Double.MIN_NORMAL)
+                .amountDiscount(Double.MIN_VALUE)
+                .percentageDiscount(Double.MIN_NORMAL)
+                .state(StatoFattura.PAGATA)
+                .customer(null)
                 .build();
     }
 

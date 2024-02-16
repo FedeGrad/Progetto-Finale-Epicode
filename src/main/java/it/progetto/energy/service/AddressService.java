@@ -15,6 +15,6 @@ public interface AddressService {
 
     AddressDomain updateAddress(AddressDomain addressDomain);
 
-    void deleteMainAddress(Long id);
+    void deleteAddress(Long id);
 
 }

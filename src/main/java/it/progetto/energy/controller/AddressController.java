@@ -60,7 +60,7 @@ public class AddressController implements AddressApi {
 //	@SecurityRequirement(name = "bearerAuth")
 //	@PreAuthorize("isAuthenticated()")
 	@PostMapping
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(HttpStatus.CREATED)
 	public AddressOutputDTO createAddress(@Valid @RequestBody AddressDTO addressDTO) {
 		AddressDomain addressDomain = addressDTOMapper.fromAddressDTOToAddressDomain(addressDTO);
 		AddressDomain addressCreated = addressServiceImpl.createIndirizzo(addressDomain);
@@ -71,8 +71,8 @@ public class AddressController implements AddressApi {
 //	@SecurityRequirement(name = "bearerAuth")
 //	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public AddressOutputDTO updateAddress(@RequestBody AddressUpdateDTO addressUpdateDTO) {
+	@ResponseStatus(HttpStatus.OK)
+	public AddressOutputDTO updateAddress(@Valid @RequestBody AddressUpdateDTO addressUpdateDTO) {
 		AddressDomain addressDomain = addressDTOMapper.fromAddressUpdateDTOToAddressDomain(addressUpdateDTO);
 		AddressDomain addressUpdated = addressServiceImpl.updateAddress(addressDomain);
 		return addressDTOMapper.fromAddressDomainToAddressOutputDTO(addressUpdated);
@@ -81,10 +81,10 @@ public class AddressController implements AddressApi {
 	@Override
 //	@SecurityRequirement(name = "bearerAuth")
 //	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{addressId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteAddress(@PathVariable("id") Long mainAddressId) {
-		addressServiceImpl.deleteMainAddress(mainAddressId);
+	public void deleteAddress(@PathVariable("addressId") Long addressId) {
+		addressServiceImpl.deleteAddress(addressId);
 	}
 
 }

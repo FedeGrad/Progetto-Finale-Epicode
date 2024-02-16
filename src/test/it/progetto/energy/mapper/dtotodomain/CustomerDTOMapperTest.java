@@ -16,7 +16,4 @@ class CustomerDTOMapperTest {
     void fromCustomerUpdateDTOToCustomerDomain() {
     }
 
-    @Test
-    void testFromCustomerUpdateDTOToCustomerDomain() {
-    }
 }
