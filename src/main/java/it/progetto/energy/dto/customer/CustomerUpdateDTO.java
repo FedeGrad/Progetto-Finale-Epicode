@@ -7,6 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ import static it.progetto.energy.utils.ConstantUtils.DATE_PATTERN;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CustomerUpdateDTO {
 
 	@NotNull

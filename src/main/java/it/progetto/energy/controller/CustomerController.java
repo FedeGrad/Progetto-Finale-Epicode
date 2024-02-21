@@ -133,7 +133,7 @@ public class CustomerController implements CustomerApi {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CustomerOutputDTO createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
-		CustomerDomain customerDomain = customerDTOMapper.fromCustomerUpdateDTOToCustomerDomain(customerDTO);
+		CustomerDomain customerDomain = customerDTOMapper.fromCustomerDTOToCustomerDomain(customerDTO);
 		CustomerDomain customerCreated = customerServiceImpl.createCustomer(customerDomain);
 		return customerDTOMapper.fromCustomerDomainToCustomerOutputDTO(customerCreated);
 	}

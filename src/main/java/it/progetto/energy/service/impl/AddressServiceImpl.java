@@ -1,5 +1,6 @@
 package it.progetto.energy.service.impl;
 
+import it.progetto.energy.business.UpdateMethod;
 import it.progetto.energy.exception.ElementAlreadyPresentException;
 import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotFoundException;
@@ -35,6 +36,7 @@ public class AddressServiceImpl implements AddressService {
 	private final ComuneRepository comuneRepository;
 	private final AddressEntityMapper addressEntityMapper;
 	private final UtilsMapper utilsMapper;
+	private final UpdateMethod<AddressEntity> updateMethod;
 
 	/**
 	 * Recupera tutti gli Indirizzi Legali
@@ -70,7 +72,7 @@ public class AddressServiceImpl implements AddressService {
 			ComuneEntity comuneEntityTrovato = comuneRepository.findById(addressDomain.getComune().getId())
 					.orElseThrow(() -> new NotCreatableException(COMUNE_NOT_FOUND));
 			addressEntity.setComune(comuneEntityTrovato);
-			comuneEntityTrovato.getAddressList().add(addressEntity);
+//			comuneEntityTrovato.getAddressList().add(addressEntity);
 
 			AddressEntity saved = addressRepository.save(addressEntity);
 			log.info("Main Address id {} saved", saved.getId());
@@ -84,24 +86,22 @@ public class AddressServiceImpl implements AddressService {
 	 * Modifica un Indirizzo Legale
 	 */
 	public AddressDomain updateAddress(AddressDomain addressDomain) {
-//		if (indirizzoLegaleRepository.existsById(addressDomain.getId())) {
-		AddressEntity indirizzo = addressRepository.findById(addressDomain.getId())
+		AddressEntity oldAddress = addressRepository.findById(addressDomain.getId())
 				.orElseThrow(() -> new NotUpdatableException(ADDRESS_NOT_FOUND));
-		AddressEntity addressEntity = addressEntityMapper.fromAddressDomainToAddressEntity(addressDomain);
-		//TODO MERGE INDIRIZZO CON INDIRIZZO TROVATO
+		AddressEntity newAddress = addressEntityMapper.fromAddressDomainToAddressEntity(addressDomain);
+
+		AddressEntity updatedAddress = updateMethod.updateOldEntityWithNewEntityByFields(newAddress, oldAddress);
 
 		if(Objects.nonNull(addressDomain.getComune().getId())){
 			ComuneEntity comuneEntity = comuneRepository.findById(addressDomain.getComune().getId())
 					.orElseThrow(() -> new NotUpdatableException(COMUNE_NOT_FOUND));
-			indirizzo.setComune(comuneEntity);
-			comuneEntity.getAddressList().add(indirizzo);
+			updatedAddress.setComune(comuneEntity);
+//			comuneEntity.getAddressList().add(updatedAddress);
 		}
-		AddressEntity updated = addressRepository.save(indirizzo);
+		AddressEntity updated = addressRepository.save(updatedAddress);
 		log.info("Main Address id {} updated", updated.getId());
+
 		return addressEntityMapper.fromAddressEntityToAddressDomain(updated);
-//		} else {
-//			throw new NotFoundException(ERROR_ONE);
-//		}
 	}
 
 	/**

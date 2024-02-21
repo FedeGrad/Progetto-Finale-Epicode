@@ -13,8 +13,11 @@ import java.util.List;
 
 import static it.progetto.energy.utils.ConstantForTest.ENTITY_ID;
 import static it.progetto.energy.utils.ConstantForTest.LOCATION;
-import static it.progetto.energy.utils.domainbuilder.DomainBuilder.buildAddressDomain;
+import static it.progetto.energy.utils.domainbuilder.AddressDomainBuilder.buildAddressDomainInput;
+import static it.progetto.energy.utils.domainbuilder.AddressDomainBuilder.buildAddressDomainOutput;
+import static it.progetto.energy.utils.domainbuilder.ComuneDomainBuilder.buildComuneDomainOutput;
 import static it.progetto.energy.utils.entitybuilder.EntityBuilder.buildAddressEntity;
+import static it.progetto.energy.utils.entitybuilder.EntityBuilder.buildComuneEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -25,8 +28,13 @@ class AddressEntityMapperTest {
 
     @Test
     void fromAddressEntityToAddressDomain() {
-        AddressEntity addressEntity = buildAddressEntity(ENTITY_ID);
-        AddressDomain expected = buildAddressDomain(ENTITY_ID);
+        var addressEntity = buildAddressEntity(ENTITY_ID);
+        addressEntity.setComune(buildComuneEntity(ENTITY_ID));
+        var expected = buildAddressDomainOutput(ENTITY_ID);
+        var comuneDomain = buildComuneDomainOutput(ENTITY_ID);
+        comuneDomain.setProvincia(null);
+        comuneDomain.setAddressList(null);
+        expected.setComune(comuneDomain);
         expected.setCustomerList(Collections.emptyList());
 
         AddressDomain actual = addressEntityMapper.fromAddressEntityToAddressDomain(addressEntity);
@@ -36,10 +44,16 @@ class AddressEntityMapperTest {
 
     @Test
     void fromAddressEntityListToAddressDomainList() {
-        List<AddressEntity> addressEntityList = List.of(buildAddressEntity(ENTITY_ID));
-        AddressDomain addressDomain = buildAddressDomain(ENTITY_ID);
+        var addressEntity = buildAddressEntity(ENTITY_ID);
+        addressEntity.setComune(buildComuneEntity(ENTITY_ID));
+        var addressEntityList = List.of(addressEntity);
+        var addressDomain = buildAddressDomainOutput(ENTITY_ID);
+        var comuneDomain = buildComuneDomainOutput(ENTITY_ID);
+        comuneDomain.setProvincia(null);
+        comuneDomain.setAddressList(null);
+        addressDomain.setComune(comuneDomain);
         addressDomain.setCustomerList(Collections.emptyList());
-        List<AddressDomain> expected = List.of(addressDomain);
+        var expected = List.of(addressDomain);
 
         List<AddressDomain> actual = addressEntityMapper.fromAddressEntityListToAddressDomainList(addressEntityList);
 
@@ -48,11 +62,11 @@ class AddressEntityMapperTest {
 
     @Test
     void fromAddressDomainToAddressEntity() {
-        ComuneDomain comuneDomain = ComuneDomain.builder().name(LOCATION).build();
-        AddressDomain addressDomain = buildAddressDomain(ENTITY_ID);
+        var comuneDomain = ComuneDomain.builder().name(LOCATION).build();
+        var addressDomain = buildAddressDomainInput(ENTITY_ID);
         addressDomain.setComune(comuneDomain);
-        ComuneEntity comune = ComuneEntity.builder().name(LOCATION).build();
-        AddressEntity expected = buildAddressEntity(ENTITY_ID);
+        var comune = ComuneEntity.builder().name(LOCATION).build();
+        var expected = buildAddressEntity(ENTITY_ID);
         expected.setComune(comune);
 
         AddressEntity actual = addressEntityMapper.fromAddressDomainToAddressEntity(addressDomain);

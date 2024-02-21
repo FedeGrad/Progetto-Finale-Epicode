@@ -1,5 +1,6 @@
 package it.progetto.energy.service.impl;
 
+import it.progetto.energy.business.UpdateMethod;
 import it.progetto.energy.exception.NotCreatableException;
 import it.progetto.energy.exception.NotFoundException;
 import it.progetto.energy.exception.NotUpdatableException;
@@ -15,7 +16,6 @@ import it.progetto.energy.persistence.repository.CustomerRepository;
 import it.progetto.energy.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static it.progetto.energy.exception.model.ErrorCodeDomain.COMSTOMER_ALREADY_EXISTS;
 import static it.progetto.energy.exception.model.ErrorCodeDomain.CUSTOMER_NOT_FOUND;
 import static it.progetto.energy.exception.model.ErrorCodeDomain.INVALID_IMPUT_VALUE;
 
@@ -37,6 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
 	private final AddressRepository addressRepository;
 	private final CustomerEntityMapper customerEntityMapper;
 	private final UtilsMapper utilsMapper;
+	private final UpdateMethod<CustomerEntity> updateMethod;
 
 	/**
 	 * Recupera tutti i Clienti
@@ -120,6 +122,11 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Transactional
 	public CustomerDomain createCustomer(CustomerDomain customerDomain) {
+		boolean exists = customerRepository.existsByNpi(customerDomain.getNpi());
+		if(exists){
+			throw new NotCreatableException(COMSTOMER_ALREADY_EXISTS);
+		}
+
 		boolean email = checkEmail(customerDomain.getEmail(), customerDomain.getCustomerEmail(), customerDomain.getPec());
 		boolean phoneNumber = checkPhoneNumber(customerDomain.getCompanyPhone(), customerDomain.getCustomerPhone());
 		boolean npi = checkNPI(customerDomain.getNpi());
@@ -142,7 +149,6 @@ public class CustomerServiceImpl implements CustomerService {
 		} else {
 			throw new NotCreatableException(INVALID_IMPUT_VALUE);
 		}
-		// TODO VERIFY COMSTOMER_ALREADY_EXISTS
 	}
 
 	/**
@@ -150,29 +156,31 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Transactional
 	public CustomerDomain updateCustomer(CustomerDomain customerDomain) {
-		CustomerEntity customerEntity = customerRepository.findById(customerDomain.getId())
-				.orElseThrow(() -> new NotFoundException(CUSTOMER_NOT_FOUND));
 
 		boolean email = checkEmail(customerDomain.getEmail(), customerDomain.getCustomerEmail(), customerDomain.getPec());
 		boolean phoneNumber = checkPhoneNumber(customerDomain.getCompanyPhone(), customerDomain.getCustomerPhone());
 		boolean npi = checkNPI(customerDomain.getNpi());
 
 		if (email && phoneNumber && npi) {
-			customerEntity.setDataLastUpdate(LocalDate.now());
-			customerEntity.setType(customerDomain.getType());
-			BeanUtils.copyProperties(customerDomain, customerEntity);
-			//TODO MANAGE UPDATE
+			CustomerEntity oldCustomer = customerRepository.findById(customerDomain.getId())
+					.orElseThrow(() -> new NotFoundException(CUSTOMER_NOT_FOUND));
+			CustomerEntity newCustomer = customerEntityMapper.fromCustomerDomainToCustomer(customerDomain);
+
+			CustomerEntity customerUpdated = updateMethod.updateOldEntityWithNewEntityByMethod(newCustomer, oldCustomer);
+
+			customerUpdated.setDataLastUpdate(LocalDate.now());
+			customerUpdated.setType(customerDomain.getType());
 
 			AddressEntity addressEntity = addressRepository
 					.findById(customerDomain.getAddress().getId())
 					.orElse(null);
 			if(Objects.nonNull(addressEntity)) {
-				customerEntity.setAddress(addressEntity);
+				customerUpdated.setAddress(addressEntity);
 //				addressEntity.setCustomer(customerEntity);
 				log.info("Address joined");
 			}
 
-			CustomerEntity updated = customerRepository.save(customerEntity);
+			CustomerEntity updated = customerRepository.save(oldCustomer);
 			log.info("Customer updated id {}", updated.getId());
 			return customerEntityMapper.fromCustomerToCustomerDomain(updated);
 		} else {

@@ -10,12 +10,13 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ComuneEntityMapper {
 
+    @Mapping(target = "provincia", ignore = true)
     @Mapping(target = "addressList", ignore = true)
-    ComuneEntity fromComuneDomainToComune(ComuneDomain comuneDomain);
+    ComuneEntity fromComuneDomainToComuneEntity(ComuneDomain comuneDomain);
 
-    @Mapping(target = "addressList", ignore = true)
-    ComuneDomain fromComuneToComuneDomain(ComuneEntity comuneEntity);
+    ComuneDomain fromComuneEntityToComuneDomain(ComuneEntity comuneEntity);
 
-    List<ComuneDomain> fromComuneListToComuneDomainList(List<ComuneEntity> comuneEntityList);
+    List<ComuneDomain> fromComuneEntityListToComuneDomainList(List<ComuneEntity> comuneEntityList);
+
 
 }

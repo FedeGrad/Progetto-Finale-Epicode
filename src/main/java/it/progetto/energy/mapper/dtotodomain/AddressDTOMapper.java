@@ -11,6 +11,7 @@ import org.mapstruct.Named;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface AddressDTOMapper {
@@ -32,7 +33,7 @@ public interface AddressDTOMapper {
 
     @Named("fromCustomerDomainListToCustomerIdList")
     default List<Long> fromCustomerDomainListToCustomerIdList(List<CustomerDomain> customerDomainList){
-        if(!customerDomainList.isEmpty()){
+        if((Objects.nonNull(customerDomainList) && (!customerDomainList.isEmpty()))){
             return customerDomainList.stream()
                     .map(CustomerDomain::getId)
                     .toList();

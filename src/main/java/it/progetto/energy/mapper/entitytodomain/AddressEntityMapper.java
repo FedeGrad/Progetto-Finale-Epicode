@@ -7,16 +7,18 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {CustomerEntityMapper.class, ComuneEntityMapper.class})
+@Mapper(componentModel = "spring", uses = {CustomerEntityMapper.class})
 public interface AddressEntityMapper {
+
+    @Mapping(target = "customer", ignore = true)
+    @Mapping(target = "location", ignore = true)
+    @Mapping(target = "comune", ignore = true)
+    AddressEntity fromAddressDomainToAddressEntity(AddressDomain addressDomain);
 
     @Mapping(target = "customerList", source = "customer")
     AddressDomain fromAddressEntityToAddressDomain(AddressEntity addressEntity);
 
     List<AddressDomain> fromAddressEntityListToAddressDomainList(List<AddressEntity> addressEntities);
 
-    @Mapping(target = "customer", ignore = true)
-    @Mapping(target = "location", source = "comune.name")
-    AddressEntity fromAddressDomainToAddressEntity(AddressDomain addressDomain);
 
 }

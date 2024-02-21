@@ -7,9 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import it.progetto.energy.dto.ErrorDTO;
+import it.progetto.energy.dto.csv.CsvImportedOutputDTO;
 import it.progetto.energy.dto.provincia.ProvinciaDTO;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface CsvAPI {
@@ -26,7 +26,7 @@ public interface CsvAPI {
     @Parameter(name = "file", required = true, description = "The file to upload",
             content = @Content(mediaType = "multipart/form-data",
                     schema = @Schema(type = "string", format = "binary")))
-    ResponseEntity<String> importProvinceAndComuniCSV(MultipartFile province, MultipartFile comuni);
+    CsvImportedOutputDTO importProvinceAndComuniCSV(MultipartFile province, MultipartFile comuni);
 
     @Operation(operationId = "", description = "")
     @ApiResponses(value = {
@@ -39,7 +39,7 @@ public interface CsvAPI {
     @Parameter(name = "file", required = true, description = "The file to upload",
             content = @Content(mediaType = "multipart/form-data",
                     schema = @Schema(type = "string", format = "binary")))
-    ResponseEntity<String> importProvinceCSV(MultipartFile province);
+    CsvImportedOutputDTO importProvinceCSV(MultipartFile province);
 
     @Operation(operationId = "", description = "")
     @ApiResponses(value = {
@@ -52,6 +52,6 @@ public interface CsvAPI {
     @Parameter(name = "file", required = true, description = "The file to upload",
             content = @Content(mediaType = "multipart/form-data",
                     schema = @Schema(type = "string", format = "binary")))
-    ResponseEntity<String> importComuniCSV(MultipartFile comuni);
+    CsvImportedOutputDTO importComuniCSV(MultipartFile comuni);
 
 }

@@ -45,4 +45,8 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
 	CustomerEntity findByCustomerPhoneAllIgnoreCase(String customerPhone);
 
     boolean existsByPecIgnoreCase(String pec);
+
+    CustomerEntity findByNpi(String npi);
+
+	boolean existsByNpi(String npi);
 }

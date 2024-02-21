@@ -58,7 +58,7 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 	 */
 	@Override
 	public ProvinciaDomain createProvincia(ProvinciaDomain provinciaDomain) {
-		if (!provinciaRepository.existsBySiglaAllIgnoreCase(provinciaDomain.getSigla())) {
+		if (provinciaRepository.existsBySiglaAllIgnoreCase(provinciaDomain.getSigla())) {
 			ProvinciaEntity provinciaEntity = provinciaEntityMapper.fromProvinciaDomainToProvinciaEntity(provinciaDomain);
 			ProvinciaEntity saved = provinciaRepository.save(provinciaEntity);
 			log.info("Provincia id {} saved", saved.getId());

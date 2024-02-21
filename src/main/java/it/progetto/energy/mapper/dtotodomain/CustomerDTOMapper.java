@@ -13,7 +13,7 @@ import org.springframework.data.domain.Page;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Mapper(componentModel = "spring", uses = {InvoiceDTOMapper.class, Page.class})
 public interface CustomerDTOMapper {
@@ -26,9 +26,11 @@ public interface CustomerDTOMapper {
 
      @Mapping(target = "id", ignore = true)
      @Mapping(target = "age", ignore = true)
+     @Mapping(target = "dataCreate", ignore = true)
+     @Mapping(target = "dataLastUpdate", ignore = true)
      @Mapping(target = "address.id", source = "addressId")
      @Mapping(target = "invoiceList", source = "invoiceIdList", qualifiedByName = "fromInvoiceIdListToInvoiceDomainList")
-     CustomerDomain fromCustomerUpdateDTOToCustomerDomain(CustomerDTO customerDTO);
+     CustomerDomain fromCustomerDTOToCustomerDomain(CustomerDTO customerDTO);
 
      @Mapping(target = "age", ignore = true)
      @Mapping(target = "dataCreate", ignore = true)
@@ -39,17 +41,18 @@ public interface CustomerDTOMapper {
 
      @Named("fromInvoiceDomainListToInvoiceIdList")
      default List<Long> fromInvoiceDomainListToInvoiceIdList(List<InvoiceDomain> invoiceDomainList){
-          if(!invoiceDomainList.isEmpty()){
+          if(Objects.nonNull(invoiceDomainList) && (!invoiceDomainList.isEmpty())){
                return invoiceDomainList.stream()
                        .map(InvoiceDomain::getId)
-                       .collect(Collectors.toList());
+                       .toList();
+
           }
           return Collections.emptyList();
      }
 
      @Named("fromInvoiceIdListToInvoiceDomainList")
      default List<InvoiceDomain> fromInvoiceIdListToInvoiceDomainList(List<Long> invoiceIdList){
-          if (!invoiceIdList.isEmpty()){
+          if (Objects.nonNull(invoiceIdList) && !invoiceIdList.isEmpty()){
                List<InvoiceDomain> invoiceDomainList = new ArrayList<>();
                invoiceIdList.forEach(invoiceId -> {
                     InvoiceDomain invoice = InvoiceDomain.builder()

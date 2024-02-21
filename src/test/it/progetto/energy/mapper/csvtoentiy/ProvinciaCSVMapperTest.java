@@ -1,6 +1,5 @@
 package it.progetto.energy.mapper.csvtoentiy;
 
-import it.progetto.energy.csv.ProvinciaCSV;
 import it.progetto.energy.persistence.entity.ProvinciaEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,8 @@ class ProvinciaCSVMapperTest {
 
     @Test
     void fromProvinciaCSVToProvinciaEntity() {
-        ProvinciaCSV provinciaCSV = buildProvinciaCSV();
-        ProvinciaEntity expected = buildProvinciaEntity(null);
+        var provinciaCSV = buildProvinciaCSV();
+        var expected = buildProvinciaEntity(null);
 
         ProvinciaEntity actual = provinciaCSVMapper.fromProvinciaCSVToProvinciaEntity(provinciaCSV);
 
@@ -30,8 +29,8 @@ class ProvinciaCSVMapperTest {
 
     @Test
     void fromProvinciaCSVListToProvinciaEntityList() {
-        List<ProvinciaCSV> provinciaCSV = List.of(buildProvinciaCSV());
-        List<ProvinciaEntity> expected = List.of(buildProvinciaEntity(null));
+        var provinciaCSV = List.of(buildProvinciaCSV());
+        var expected = List.of(buildProvinciaEntity(null));
 
         List<ProvinciaEntity> actual = provinciaCSVMapper.fromProvinciaCSVListToProvinciaEntityList(provinciaCSV);
 

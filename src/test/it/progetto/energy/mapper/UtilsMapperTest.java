@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import static it.progetto.energy.utils.domainbuilder.DomainBuilder.buildPageDomain;
+import static it.progetto.energy.utils.domainbuilder.UtilsDomainBuilder.buildPageDomain;
 import static it.progetto.energy.utils.dtobuilder.UtilsDtoBuilder.buildPageDTO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,7 +36,7 @@ class UtilsMapperTest {
         PageRequest pageRequest = utilsMapper.fromPageDomainToPageable(pageDomain);
 
         Boolean result = pageRequest.getSort().get()
-                .map(order -> order.getDirection().equals(Sort.Direction.DESC))
+                .map(order -> order.getDirection().equals(Sort.Direction.ASC))
                 .findFirst()
                 .orElse(null);
         assertTrue(pageRequest.isPaged());

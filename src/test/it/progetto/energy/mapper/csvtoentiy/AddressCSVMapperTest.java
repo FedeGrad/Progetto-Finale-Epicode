@@ -1,6 +1,5 @@
 package it.progetto.energy.mapper.csvtoentiy;
 
-import it.progetto.energy.csv.AddressCSV;
 import it.progetto.energy.persistence.entity.AddressEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,8 @@ class AddressCSVMapperTest {
 
     @Test
     void fromAddressCSVToAddressEntity() {
-        AddressCSV addressCSV = buildAddressCSV();
-        AddressEntity expected = buildAddressEntity(null);
+        var addressCSV = buildAddressCSV();
+        var expected = buildAddressEntity(null);
 
         AddressEntity actual = addressCSVMapper.fromAddressCSVToAddressEntity(addressCSV);
 
@@ -30,8 +29,8 @@ class AddressCSVMapperTest {
 
     @Test
     void fromAddressCSVListToAddressEntityList() {
-        List<AddressCSV> addressCSVList = List.of(buildAddressCSV());
-        List<AddressEntity> expectedList = List.of(buildAddressEntity(null));
+        var addressCSVList = List.of(buildAddressCSV());
+        var expectedList = List.of(buildAddressEntity(null));
 
         List<AddressEntity> actualList = addressCSVMapper.fromAddressCSVListToAddressEntityList(addressCSVList);
 

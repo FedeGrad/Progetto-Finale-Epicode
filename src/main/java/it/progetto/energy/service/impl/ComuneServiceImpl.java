@@ -40,7 +40,7 @@ public class ComuneServiceImpl implements ComuneService {
 	@Deprecated
 	public List<ComuneDomain> findAllComuni() {
 		List<ComuneEntity> comuneEntityList = comuneRepository.findAll();
-		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneEntityList);
+		return comuneEntityMapper.fromComuneEntityListToComuneDomainList(comuneEntityList);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class ComuneServiceImpl implements ComuneService {
 		PageRequest page = utilsMapper.fromPageDomainToPageable(pageDomain);
 		List<ComuneEntity> comuneEntityList = comuneRepository.findAll(page)
 				.getContent();
-		return comuneEntityMapper.fromComuneListToComuneDomainList(comuneEntityList);
+		return comuneEntityMapper.fromComuneEntityListToComuneDomainList(comuneEntityList);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class ComuneServiceImpl implements ComuneService {
 	public ComuneDomain createComune(ComuneDomain comuneDomain) {
 		if (!comuneRepository.existsByNameAllIgnoreCase(comuneDomain.getName())) {
 
-			ComuneEntity comuneEntity = comuneEntityMapper.fromComuneDomainToComune(comuneDomain);
+			ComuneEntity comuneEntity = comuneEntityMapper.fromComuneDomainToComuneEntity(comuneDomain);
 			ProvinciaEntity provinciaEntity = provinciaRepository.findById(comuneDomain.getProvincia().getId())
 					.orElseThrow(() -> new NotCreatableException(PROVINCIA_NOT_FOUND));
 
@@ -67,7 +67,7 @@ public class ComuneServiceImpl implements ComuneService {
 			ComuneEntity saved = comuneRepository.save(comuneEntity);
 			log.info("Comune id {} saved", saved.getId());
 
-			return comuneEntityMapper.fromComuneToComuneDomain(saved);
+			return comuneEntityMapper.fromComuneEntityToComuneDomain(saved);
 		} else {
 			throw new NotCreatableException(COMUNE_ALREADY_EXISTS);
 		}
@@ -90,7 +90,7 @@ public class ComuneServiceImpl implements ComuneService {
 		ComuneEntity updated = comuneRepository.save(comuneEntity);
 		log.info("Comune id {} it was updated ", updated.getId());
 
-		return comuneEntityMapper.fromComuneToComuneDomain(updated);
+		return comuneEntityMapper.fromComuneEntityToComuneDomain(updated);
 	}
 
 	/**

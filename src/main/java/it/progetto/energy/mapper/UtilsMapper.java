@@ -1,13 +1,21 @@
 package it.progetto.energy.mapper;
 
 import it.progetto.energy.dto.PageDTO;
+import it.progetto.energy.exception.FileException;
 import it.progetto.energy.model.PageDomain;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
+
+import static it.progetto.energy.exception.model.ErrorCodeDomain.ERROR_CONVER_FILE;
 
 @Mapper(componentModel = "spring")
 public interface UtilsMapper {
@@ -27,10 +35,22 @@ public interface UtilsMapper {
 
     @Named("fromDirectionToSortDirection")
     default Sort.Direction fromSortToSortDirection(String sortDirection){
-        if("ASC".equals(sortDirection)){
-            return Sort.Direction.ASC;
+        return "ASC".equals(sortDirection) ? Sort.Direction.ASC : Sort.Direction.DESC;
+    }
+
+    default File fromMultipartFileToFile(MultipartFile multipartFile) {
+        try {
+            File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            FileCopyUtils.copy(multipartFile.getBytes(), file);
+            return file;
+        } catch (IOException e) {
+            throw new FileException(ERROR_CONVER_FILE);
         }
-        return Sort.Direction.ASC;
+    }
+
+    default MultipartFile fromFileToMultipartFile(File file) {
+        //TODO IMPLEMENTS METHOD
+        return null;
     }
 
 }

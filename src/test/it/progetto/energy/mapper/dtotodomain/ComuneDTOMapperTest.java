@@ -1,10 +1,7 @@
 package it.progetto.energy.mapper.dtotodomain;
 
-import it.progetto.energy.dto.comune.ComuneDTO;
 import it.progetto.energy.dto.comune.ComuneOutputDTO;
-import it.progetto.energy.dto.comune.ComuneUpdateDTO;
 import it.progetto.energy.model.ComuneDomain;
-import it.progetto.energy.model.ProvinciaDomain;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static it.progetto.energy.utils.ConstantForTest.ENTITY_ID;
-import static it.progetto.energy.utils.domainbuilder.DomainBuilder.buildComuneDomain;
+import static it.progetto.energy.utils.domainbuilder.ComuneDomainBuilder.buildComuneDomainInput;
+import static it.progetto.energy.utils.domainbuilder.ComuneDomainBuilder.buildComuneDomainOutput;
 import static it.progetto.energy.utils.dtobuilder.ComuneDTOBuilder.buildComuneDTO;
 import static it.progetto.energy.utils.dtobuilder.ComuneDTOBuilder.buildComuneOutputDTO;
 import static it.progetto.energy.utils.dtobuilder.ComuneDTOBuilder.buildComuneUpdateDTO;
@@ -26,10 +24,8 @@ class ComuneDTOMapperTest {
 
     @Test
     void fromComuneDTOToComuneDomain() {
-        ComuneDTO comuneDTO = buildComuneDTO();
-        ProvinciaDomain provincia = ProvinciaDomain.builder().id(ENTITY_ID).build();
-        ComuneDomain expected = buildComuneDomain(null);
-        expected.setProvincia(provincia);
+        var comuneDTO = buildComuneDTO();
+        var expected = buildComuneDomainInput(null);
 
         ComuneDomain actual = comuneDTOMapper.fromComuneDTOToComuneDomain(comuneDTO);
 
@@ -38,10 +34,8 @@ class ComuneDTOMapperTest {
 
     @Test
     void fromComuneUpdateDTOToComuneDomain() {
-        ComuneUpdateDTO comuneUpdateDTO = buildComuneUpdateDTO();
-        ProvinciaDomain provincia = ProvinciaDomain.builder().id(ENTITY_ID).build();
-        ComuneDomain expected = buildComuneDomain(ENTITY_ID);
-        expected.setProvincia(provincia);
+        var comuneUpdateDTO = buildComuneUpdateDTO();
+        var expected = buildComuneDomainInput(ENTITY_ID);
 
         ComuneDomain actual = comuneDTOMapper.fromComuneUpdateDTOToComuneDomain(comuneUpdateDTO);
 
@@ -50,10 +44,8 @@ class ComuneDTOMapperTest {
 
     @Test
     void fromComuneDomainToComuneOutputDTO() {
-        ProvinciaDomain provincia = ProvinciaDomain.builder().id(ENTITY_ID).build();
-        ComuneDomain comuneDomain = buildComuneDomain(ENTITY_ID);
-        comuneDomain.setProvincia(provincia);
-        ComuneOutputDTO expected = buildComuneOutputDTO();
+        var comuneDomain = buildComuneDomainOutput(ENTITY_ID);
+        var expected = buildComuneOutputDTO();
 
         ComuneOutputDTO actual = comuneDTOMapper.fromComuneDomainToComuneOutputDTO(comuneDomain);
 
@@ -62,11 +54,9 @@ class ComuneDTOMapperTest {
 
     @Test
     void fromComuneDomainListToComuneOutputDTOList() {
-        ProvinciaDomain provincia = ProvinciaDomain.builder().id(ENTITY_ID).build();
-        ComuneDomain comuneDomain = buildComuneDomain(ENTITY_ID);
-        comuneDomain.setProvincia(provincia);
-        List<ComuneDomain> comuneDomainList = List.of(comuneDomain);
-        List<ComuneOutputDTO> expected = List.of(buildComuneOutputDTO());
+        var comuneDomain = buildComuneDomainOutput(ENTITY_ID);
+        var comuneDomainList = List.of(comuneDomain);
+        var expected = List.of(buildComuneOutputDTO());
 
         List<ComuneOutputDTO> actual = comuneDTOMapper.fromComuneDomainListToComuneOutputDTOList(comuneDomainList);
 

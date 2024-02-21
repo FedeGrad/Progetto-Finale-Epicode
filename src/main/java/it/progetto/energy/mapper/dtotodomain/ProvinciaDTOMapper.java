@@ -12,6 +12,7 @@ import org.mapstruct.Named;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface ProvinciaDTOMapper {
@@ -30,7 +31,7 @@ public interface ProvinciaDTOMapper {
 
     @Named("fromComuneIdListToComuneDomainList")
     default List<ComuneDomain> fromComuneIdListToComuneDomainList(List<Long> comuneIdList){
-        if (!comuneIdList.isEmpty()){
+        if ((Objects.nonNull(comuneIdList)) && (!comuneIdList.isEmpty())){
             List<ComuneDomain> comuneDomainList = new ArrayList<>();
             comuneIdList.forEach(comuneId -> {
                 ComuneDomain comuneDomain = ComuneDomain.builder()
@@ -45,7 +46,7 @@ public interface ProvinciaDTOMapper {
 
     @Named("fromComuneDomainListToComuneIdList")
     default List<Long> fromComuneDomainListToComuneIdList(List<ComuneDomain> comuneDomainList){
-        if(!comuneDomainList.isEmpty()){
+        if((Objects.nonNull(comuneDomainList)) && (!comuneDomainList.isEmpty())){
             return comuneDomainList.stream()
                     .map(ComuneDomain::getId)
                     .toList();

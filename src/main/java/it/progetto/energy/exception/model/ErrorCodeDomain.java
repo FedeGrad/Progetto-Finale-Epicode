@@ -16,10 +16,12 @@ public enum ErrorCodeDomain implements ErrorCode {
     ERROR_LOAD_FILE("109", "Could not possible to get or read file"),
     ERROR_INIT_FILE("110", "Could not possible create directory"),
     ERROR_SAVE_FILE("111", "Could not possibile save file"),
-    INVOICE_NOT_FOUND("112", "Invoice not found"),
-    PROVINCIA_ALREADY_PRESENT("113", "Provincia already present"),
-    USERNAME_ALREADY_PRESENT("114", "Username already present"),
-    USER_NOT_FOUND("115", "User not found");
+    ERROR_CONVER_FILE("112", "Could not possibile save file"),
+    INVOICE_NOT_FOUND("113", "Invoice not found"),
+    PROVINCIA_ALREADY_PRESENT("114", "Provincia already present"),
+    USERNAME_ALREADY_PRESENT("115", "Username already present"),
+    USER_NOT_FOUND("116", "User not found"),
+    ENTITY_CANNOT_BE_UPDATED("117", "Entity cannot be updated");
 
 
     private final String errorCode;

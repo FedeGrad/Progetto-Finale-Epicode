@@ -25,11 +25,4 @@ public interface ProvinciaRepository extends JpaRepository<ProvinciaEntity, Long
 
 	List<ProvinciaEntity> findByRegionAllIgnoreCase(String region);
 
-//	Optional<ProvinciaEntity> findById(Long id);
-//
-//	List<ProvinciaEntity> findAll();
-//
-//	boolean existsById(Long id);
-//
-//	void deleteById(Long id);
 }

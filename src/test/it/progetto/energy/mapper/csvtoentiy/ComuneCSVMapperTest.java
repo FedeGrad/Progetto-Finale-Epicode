@@ -1,6 +1,5 @@
 package it.progetto.energy.mapper.csvtoentiy;
 
-import it.progetto.energy.csv.ComuneCSV;
 import it.progetto.energy.persistence.entity.ComuneEntity;
 import it.progetto.energy.persistence.entity.ProvinciaEntity;
 import org.junit.jupiter.api.Test;
@@ -22,9 +21,9 @@ class ComuneCSVMapperTest {
 
     @Test
     void fromComuneCSVToComuneEntity() {
-        ComuneCSV comuneCSV = buildComuneCSV();
-        ProvinciaEntity provincia = ProvinciaEntity.builder().sigla(SIGLA_PROVINCIA).build();
-        ComuneEntity expected = buildComuneEntity(null);
+        var comuneCSV = buildComuneCSV();
+        var provincia = ProvinciaEntity.builder().sigla(SIGLA_PROVINCIA).build();
+        var expected = buildComuneEntity(null);
         expected.setProvincia(provincia);
 
         ComuneEntity actual = comuneCSVMapper.fromComuneCSVToComuneEntity(comuneCSV);
@@ -34,11 +33,11 @@ class ComuneCSVMapperTest {
 
     @Test
     void fromComuneCSVListToComuneEntityList() {
-        List<ComuneCSV> comuneCSVList = List.of(buildComuneCSV());
-        ProvinciaEntity provincia = ProvinciaEntity.builder().sigla(SIGLA_PROVINCIA).build();
-        ComuneEntity comune = buildComuneEntity(null);
+        var comuneCSVList = List.of(buildComuneCSV());
+        var provincia = ProvinciaEntity.builder().sigla(SIGLA_PROVINCIA).build();
+        var comune = buildComuneEntity(null);
         comune.setProvincia(provincia);
-        List<ComuneEntity> expected = List.of(comune);
+        var expected = List.of(comune);
 
         List<ComuneEntity> actual = comuneCSVMapper.fromComuneCSVListToComuneEntityList(comuneCSVList);
 

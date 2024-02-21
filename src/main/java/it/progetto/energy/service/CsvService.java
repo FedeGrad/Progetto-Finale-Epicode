@@ -1,13 +1,14 @@
 package it.progetto.energy.service;
 
+import it.progetto.energy.model.CsvImportedDomain;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface CsvService {
 
-    String uploadProvinceAndComuniFromCSV(MultipartFile province, MultipartFile comuni);
+    CsvImportedDomain uploadProvinceAndComuniFromCSV(MultipartFile province, MultipartFile comuni);
 
-    String uploadProvinceFromCSV(MultipartFile province);
+    CsvImportedDomain uploadProvinceFromCSV(MultipartFile province);
 
-    String uploadComuniFromCSV(MultipartFile comuni);
+    CsvImportedDomain uploadComuniFromCSV(MultipartFile comuni);
 
 }

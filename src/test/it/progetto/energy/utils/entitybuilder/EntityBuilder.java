@@ -27,6 +27,7 @@ import static it.progetto.energy.utils.ConstantForTest.REGION;
 import static it.progetto.energy.utils.ConstantForTest.SIGLA_PROVINCIA;
 import static it.progetto.energy.utils.ConstantForTest.SURNAME;
 import static it.progetto.energy.utils.ConstantForTest.WAY;
+import static it.progetto.energy.utils.ConstantForTest.YEAR;
 
 public class EntityBuilder {
 
@@ -88,7 +89,7 @@ public class EntityBuilder {
     public static InvoiceEntity buildInvoiceEntity(Long entityId){
         return InvoiceEntity.builder()
                 .id(entityId)
-                .year("2024")
+                .year(YEAR)
                 .date(LocalDate.now())
                 .amount(Double.MAX_VALUE)
                 .number(1)

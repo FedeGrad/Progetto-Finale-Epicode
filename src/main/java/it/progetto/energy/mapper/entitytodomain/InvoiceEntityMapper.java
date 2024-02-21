@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {CustomerEntityMapper.class})
+@Mapper(componentModel = "spring"/*, uses = {CustomerEntityMapper.class}*/)
 public interface InvoiceEntityMapper {
 
     @Mapping(target = "file", ignore = true)
@@ -15,7 +15,6 @@ public interface InvoiceEntityMapper {
     InvoiceEntity fromInvoiceDomainToInvoiceEntity(InvoiceDomain invoiceDomain);
 
     @Mapping(target = "file", ignore = true)
-    @Mapping(target = "customer", ignore = true)
     InvoiceDomain fromInvoiceEntityToInvoiceDomain(InvoiceEntity invoiceEntity);
 
     List<InvoiceDomain> fromInvoiceEntityListToInvoiceDomainList(List<InvoiceEntity> invoiceEntityList);

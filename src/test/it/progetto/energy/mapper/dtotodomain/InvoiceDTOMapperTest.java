@@ -1,7 +1,6 @@
 package it.progetto.energy.mapper.dtotodomain;
 
 import it.progetto.energy.dto.invoice.InvoiceOutputDTO;
-import it.progetto.energy.model.CustomerDomain;
 import it.progetto.energy.model.InvoiceDomain;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static it.progetto.energy.utils.ConstantForTest.ENTITY_ID;
-import static it.progetto.energy.utils.domainbuilder.DomainBuilder.buildInvoiceDomain;
+import static it.progetto.energy.utils.domainbuilder.InvoiceDomainBuilder.buildInvoiceDomainInput;
+import static it.progetto.energy.utils.domainbuilder.InvoiceDomainBuilder.buildInvoiceDomainOutput;
 import static it.progetto.energy.utils.dtobuilder.InvoiceDTOBuilder.buildInvoiceDTO;
 import static it.progetto.energy.utils.dtobuilder.InvoiceDTOBuilder.buildInvoiceOutputDTO;
 import static it.progetto.energy.utils.dtobuilder.InvoiceDTOBuilder.buildInvoiceUpdateDTO;
@@ -25,9 +25,7 @@ class InvoiceDTOMapperTest {
     @Test
     void fromInvoiceDTOToInvoiceDomain() {
         var invoiceDTO = buildInvoiceDTO();
-        var customerDomain = CustomerDomain.builder().id(ENTITY_ID).build();
-        var expected = buildInvoiceDomain(null);
-        expected.setCustomer(customerDomain);
+        var expected = buildInvoiceDomainInput(null);
 
         InvoiceDomain actual = invoiceDTOMapper.fromInvoiceDTOToInvoiceDomain(invoiceDTO);
 
@@ -36,21 +34,17 @@ class InvoiceDTOMapperTest {
 
     @Test
     void fromInvoiceUpdateDTOToInvoiceDomain() {
-        var invoiceDTO = buildInvoiceUpdateDTO();
-        var customerDomain = CustomerDomain.builder().id(ENTITY_ID).build();
-        var expected = buildInvoiceDomain(ENTITY_ID);
-        expected.setCustomer(customerDomain);
+        var invoiceUpdateDTO = buildInvoiceUpdateDTO();
+        var expected = buildInvoiceDomainInput(ENTITY_ID);
 
-        InvoiceDomain actual = invoiceDTOMapper.fromInvoiceUpdateDTOToInvoiceDomain(invoiceDTO);
+        InvoiceDomain actual = invoiceDTOMapper.fromInvoiceUpdateDTOToInvoiceDomain(invoiceUpdateDTO);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void fromInvoiceDomainToInvoiceOutputDTO() {
-        var customerDomain = CustomerDomain.builder().id(ENTITY_ID).build();
-        var invoiceDomain = buildInvoiceDomain(ENTITY_ID);
-        invoiceDomain.setCustomer(customerDomain);
+        var invoiceDomain = buildInvoiceDomainOutput(ENTITY_ID);
         var expected = buildInvoiceOutputDTO();
 
         InvoiceOutputDTO actual = invoiceDTOMapper.fromInvoiceDomainToInvoiceOutputDTO(invoiceDomain);
@@ -60,9 +54,7 @@ class InvoiceDTOMapperTest {
 
     @Test
     void fromInvoiceListDomainToInvoiceOutputDTOList() {
-        var customerDomain = CustomerDomain.builder().id(ENTITY_ID).build();
-        var invoiceDomain = buildInvoiceDomain(ENTITY_ID);
-        invoiceDomain.setCustomer(customerDomain);
+        var invoiceDomain = buildInvoiceDomainOutput(ENTITY_ID);
         var invoiceDomainList = List.of(invoiceDomain);
         var expected = List.of(buildInvoiceOutputDTO());
 

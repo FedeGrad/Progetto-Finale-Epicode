@@ -11,7 +11,7 @@ public class NotDeletableException extends APIException {
     private static final HttpStatus httpStatus;
 
     static {
-        httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+        httpStatus = HttpStatus.BAD_REQUEST;
     }
 
     public NotDeletableException(String message, List<ErrorCode> errorCodeList) {

@@ -11,7 +11,7 @@ public class NotUpdatableException extends APIException {
     private static final HttpStatus httpStatus;
 
     static {
-        httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+        httpStatus = HttpStatus.BAD_REQUEST;
     }
 
     public NotUpdatableException(String message, List<ErrorCode> errorCodeList) {
