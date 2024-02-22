@@ -14,9 +14,9 @@ public record PageDTO(
         @Schema(type = "int", defaultValue = "100")
         int size,
         @NotNull
-        @Schema(name = "Sort by", defaultValue = "ASC")
+//        @Schema(type = "string", example = "ASC", defaultValue = "ASC")
         String sortDirection,
-        @Schema(name = "by Value")
+//        @Schema(type = "string", defaultValue = "id")
         String sortBy
 ) {
 }

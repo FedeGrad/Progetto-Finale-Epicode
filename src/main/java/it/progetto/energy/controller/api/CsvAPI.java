@@ -17,12 +17,10 @@ public interface CsvAPI {
     //TODO IMPLEMENTS
     @Operation(operationId = "", description = "")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "File uploaded",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ProvinciaDTO.class))),
-            @ApiResponse(responseCode = "400", description = "File not uploaded",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorDTO.class))) })
+            @ApiResponse(responseCode = "200", description = "process successful",
+                    content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE)),
+            @ApiResponse(responseCode = "422", description = "Can't read or write file")
+    })
     @Parameter(name = "file", required = true, description = "The file to upload",
             content = @Content(mediaType = "multipart/form-data",
                     schema = @Schema(type = "string", format = "binary")))

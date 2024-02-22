@@ -14,6 +14,7 @@ import it.progetto.energy.service.CsvService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -41,14 +42,16 @@ public class CsvServiceImpl implements CsvService {
 	@Override
 	public CsvImportedDomain uploadProvinceFromCSV(MultipartFile province) {
 		List<ProvinciaEntity> provinceSaved = uploadProvince(province);
+
 		return new CsvImportedDomain((long) provinceSaved.size(), null);
 	}
 
 	@Override
+	@Transactional
 	public CsvImportedDomain uploadComuniFromCSV(MultipartFile comuni) {
 		List<ComuneEntity> comuniSaved = uploadComuniAndJoinWithProvince(comuni);
-		return new CsvImportedDomain(null, (long) comuniSaved.size());
 
+		return new CsvImportedDomain(null, (long) comuniSaved.size());
 	}
 
 	private List<ComuneEntity> uploadComuniAndJoinWithProvince(MultipartFile comuni) {
@@ -68,6 +71,7 @@ public class CsvServiceImpl implements CsvService {
 		}
 		List<ComuneEntity> saved = comuneRepository.saveAll(comuneEntitiesToSave);
 		log.info("{} Comuni added", saved.size());
+
 		return saved;
 	}
 
@@ -77,11 +81,12 @@ public class CsvServiceImpl implements CsvService {
 
 		List<ProvinciaEntity> provinciaEntityList = provinciaCSVMapper
 				.fromProvinciaCSVListToProvinciaEntityList(provinciaCSVList).stream()
-				.filter(provinciaEntity -> provinciaRepository.existsBySiglaAllIgnoreCase(provinciaEntity.getSigla()))
+				.filter(provinciaEntity -> !provinciaRepository.existsBySiglaAllIgnoreCase(provinciaEntity.getSigla()))
 				.toList();
 
 		List<ProvinciaEntity> saved = provinciaRepository.saveAll(provinciaEntityList);
 		log.info("{} Provincie added", saved.size());
+
 		return provinciaEntityList;
 	}
 
