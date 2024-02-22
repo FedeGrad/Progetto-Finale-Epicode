@@ -156,7 +156,6 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Transactional
 	public CustomerDomain updateCustomer(CustomerDomain customerDomain) {
-
 		boolean email = checkEmail(customerDomain.getEmail(), customerDomain.getCustomerEmail(), customerDomain.getPec());
 		boolean phoneNumber = checkPhoneNumber(customerDomain.getCompanyPhone(), customerDomain.getCustomerPhone());
 		boolean npi = checkNPI(customerDomain.getNpi());

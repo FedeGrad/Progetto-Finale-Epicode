@@ -20,5 +20,4 @@ public interface AddressEntityMapper {
 
     List<AddressDomain> fromAddressEntityListToAddressDomainList(List<AddressEntity> addressEntities);
 
-
 }

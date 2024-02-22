@@ -18,5 +18,4 @@ public interface ComuneEntityMapper {
 
     List<ComuneDomain> fromComuneEntityListToComuneDomainList(List<ComuneEntity> comuneEntityList);
 
-
 }

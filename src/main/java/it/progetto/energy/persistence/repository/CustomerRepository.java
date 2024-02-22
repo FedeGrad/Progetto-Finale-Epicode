@@ -49,4 +49,5 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
     CustomerEntity findByNpi(String npi);
 
 	boolean existsByNpi(String npi);
+
 }
